@@ -6,7 +6,7 @@
 vluint64_t sim_time = 0;
 VerilatedVcdC *m_trace;
 static TOP_NAME *dut;
-bool is_trace = true;
+bool is_trace = false;
 
 void nvboard_bind_all_pins(TOP_NAME *top);
 
@@ -51,7 +51,7 @@ int main(int argc, char **argv, char **env)
 
   reset(10);
 
-  while (sim_time < 650)
+  while (1)
   {
     nvboard_update();
     single_cycle();
