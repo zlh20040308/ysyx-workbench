@@ -45,6 +45,7 @@ waveform.vcd: $(BIN)
 
 clean:
 	rm -rf $(BUILD_DIR)
+	rm -rf waveform.vcd
 
 all:
 	@echo "Write this Makefile by your self."
