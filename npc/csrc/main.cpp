@@ -55,7 +55,7 @@ int main(int argc, char **argv, char **env)
 
   reset(10);
 
-  while (sim_time < 5000000)
+  while (sim_time < 50)
   {
     nvboard_update();
     single_cycle();
