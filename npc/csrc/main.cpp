@@ -5,7 +5,7 @@
 #include <cstdlib>
 #include <verilated.h>
 #include <verilated_vcd_c.h>
-#include <Vtop.h>
+#include "Vtop.h"
 
 
 #define MAX_SIM_TIME 300
@@ -52,8 +52,6 @@ int main(int argc, char **argv, char **env)
 
   while (sim_time < 5000000)
   {
-    
-    dut->eval();
     nvboard_update();
     printf("Hello, ysyx!\n");
     single_cycle();
