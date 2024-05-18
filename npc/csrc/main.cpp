@@ -1,12 +1,10 @@
 #include <stdio.h>
-#include <nvboard.h>
 #include <stdlib.h>
 #include <iostream>
 #include <cstdlib>
 #include <verilated.h>
 #include <verilated_vcd_c.h>
 #include "Vtop.h"
-
 
 #define MAX_SIM_TIME 300
 #define VERIF_START_TIME 7
@@ -15,9 +13,6 @@ vluint64_t posedge_cnt = 0;
 
 static TOP_NAME dut;
 static VerilatedVcdC *m_trace;
-
-
-void nvboard_bind_all_pins(TOP_NAME *top);
 
 static void single_cycle()
 {
@@ -41,9 +36,6 @@ static void reset(int n)
 
 int main(int argc, char **argv, char **env)
 {
-  nvboard_bind_all_pins(&dut);
-  nvboard_init();
-
   srand(time(NULL));
   Verilated::commandArgs(argc, argv);
   Vtop *dut = new Vtop;
@@ -57,7 +49,6 @@ int main(int argc, char **argv, char **env)
 
   while (sim_time < 50)
   {
-    nvboard_update();
     single_cycle();
   }
 
