@@ -12,7 +12,7 @@ vluint64_t sim_time = 0;
 vluint64_t posedge_cnt = 0;
 
 static TOP_NAME dut;
-static VerilatedVcdC *m_trace;
+static VerilatedVcdC *m_trace = nullptr;
 
 static void single_cycle()
 {
@@ -45,12 +45,17 @@ int main(int argc, char **argv, char **env)
   dut->trace(m_trace, 5);
   m_trace->open("waveform.vcd");
 
-  reset(10);
-
-  while (sim_time < 50)
-  {
-    single_cycle();
+  // reset(10);
+  while (sim_time < 50){
+    dut->clk = 1;
+    dut->eval();
+    m_trace->dump(sim_time);
+    sim_time++;
   }
+  // while (sim_time < 50)
+  // {
+  //   single_cycle();
+  // }
 
   m_trace->close();
   delete dut;

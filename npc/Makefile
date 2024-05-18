@@ -1,6 +1,4 @@
 TOPNAME = top
-NXDC_FILES = constr/top.nxdc
-INC_PATH ?=
 
 VERILATOR = verilator
 VERILATOR_CFLAGS += -MMD --build --trace -cc  \
@@ -13,8 +11,6 @@ BIN = $(BUILD_DIR)/$(TOPNAME)
 default: $(BIN)
 
 $(shell mkdir -p $(BUILD_DIR))
-
-
 
 # project source
 VSRCS = $(shell find $(abspath ./vsrc) -name "*.v")
