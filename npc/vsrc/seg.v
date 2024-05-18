@@ -1,3 +1,14 @@
+typedef enum logic [7:0] {
+    NUM_0 = 8'b11111100,
+    NUM_1 = 8'b01100000,
+    NUM_2 = 8'b11011010,
+    NUM_3 = 8'b11110010,
+    NUM_4 = 8'b01100110,
+    NUM_5 = 8'b10110110,
+    NUM_6 = 8'b10111110,
+    NUM_7 = 8'b11100000
+} NUMS; 
+
 module seg(
   input clk,
   input rst,
@@ -12,16 +23,16 @@ module seg(
 );
 
 wire [7:0] segs [7:0];
-assign segs[0] = 8'b11111101;
-assign segs[1] = 8'b01100000;
-assign segs[2] = 8'b11011010;
-assign segs[3] = 8'b11110010;
-assign segs[4] = 8'b01100110;
-assign segs[5] = 8'b10110110;
-assign segs[6] = 8'b10111110;
-assign segs[7] = 8'b11100000;
+assign segs[0] = NUM_0;
+assign segs[1] = NUM_1;
+assign segs[2] = NUM_2;
+assign segs[3] = NUM_3;
+assign segs[4] = NUM_4;
+assign segs[5] = NUM_5;
+assign segs[6] = NUM_6;
+assign segs[7] = NUM_7;
 
-parameter CLK_NUM = 5000000;
+parameter CLK_NUM = 50;
 
 reg [31:0] count;
 reg [2:0] offset;

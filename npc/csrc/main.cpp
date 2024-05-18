@@ -1,66 +1,43 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <iostream>
-#include <cstdlib>
+#include <nvboard.h>
+#include <Vtop.h>
 #include <verilated.h>
 #include <verilated_vcd_c.h>
-#include "Vtop.h"
 
-#define MAX_SIM_TIME 300
-#define VERIF_START_TIME 7
 vluint64_t sim_time = 0;
-vluint64_t posedge_cnt = 0;
+VerilatedVcdC *m_trace;
+static TOP_NAME* dut;
 
-static TOP_NAME dut;
-static VerilatedVcdC *m_trace = nullptr;
+void nvboard_bind_all_pins(TOP_NAME* top);
 
-static void single_cycle()
-{
-  dut.clk = 0;
-  dut.eval();
-  m_trace->dump(sim_time);
-  sim_time++;
-  dut.clk = 1;
-  dut.eval();
-  m_trace->dump(sim_time);
-  sim_time++;
+static void single_cycle() {
+  dut->clk = 0; dut->eval();m_trace->dump(sim_time);sim_time++;
+  dut->clk = 1; dut->eval();m_trace->dump(sim_time);sim_time++;
 }
 
-static void reset(int n)
-{
-  dut.rst = 1;
-  while (n-- > 0)
-    single_cycle();
-  dut.rst = 0;
+static void reset(int n) {
+  dut->rst = 1;
+  while (n -- > 0) single_cycle();
+  dut->rst = 0;
 }
 
-int main(int argc, char **argv, char **env)
-{
-  srand(time(NULL));
+int main(int argc, char** argv, char** env) {
   Verilated::commandArgs(argc, argv);
-  Vtop *dut = new Vtop;
-
+  dut = new TOP_NAME;
+  nvboard_bind_all_pins(dut);
+  nvboard_init();
   Verilated::traceEverOn(true);
   m_trace = new VerilatedVcdC;
   dut->trace(m_trace, 5);
   m_trace->open("waveform.vcd");
 
-  // reset(10);
-  dut->clk = 0;
-  while (sim_time < 50){
-    if(sim_time>10){
-        dut->clk = 1;
-    }    
-    dut->eval();
-    m_trace->dump(sim_time);
-    sim_time++;
+  reset(10);
+
+  while(sim_time<650) {
+    nvboard_update();
+    single_cycle();
   }
-  // while (sim_time < 50)
-  // {
-  //   single_cycle();
-  // }
 
   m_trace->close();
   delete dut;
-  return 0;
+  nvboard_quit();
 }
