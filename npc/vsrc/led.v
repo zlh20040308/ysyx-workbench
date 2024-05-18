@@ -3,7 +3,7 @@ module led(
   input rst,
   input [4:0] btn,
   input [7:0] sw,
-  output [15:0] ledr
+  output reg [15:0] ledr
 );
   // reg [31:0] count;
   // reg [7:0] led;
@@ -17,7 +17,13 @@ module led(
 
   // assign ledr = {led[7:5], led[4:0] ^ btn, sw};
 
-  assign ledr[0] = sw[0];
-  assign ledr[1] = sw[1];
-  assign ledr[2] = sw[0] ^ sw[1];
+  reg [31:0] count;
+  always @(posedge clk) begin
+    if (rst) begin ledr <= 1; count <= 0; end
+    else begin
+      if (count == 0) ledr <= {ledr[14:0], ledr[15]};
+      count <= (count >= 5000000 ? 32'b0 : count + 1);
+    end
+  end
+
 endmodule
