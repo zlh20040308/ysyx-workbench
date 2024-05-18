@@ -58,11 +58,8 @@ int main(int argc, char **argv, char **env)
   while (sim_time < 5000000)
   {
     nvboard_update();
-    printf("Hello, ysyx!\n");
     single_cycle();
-
   }
-
 
   m_trace->close();
   delete dut;
