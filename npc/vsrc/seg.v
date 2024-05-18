@@ -32,7 +32,7 @@ assign segs[5] = NUM_5;
 assign segs[6] = NUM_6;
 assign segs[7] = NUM_7;
 
-parameter CLK_NUM = 50;
+parameter CLK_NUM = 5000000;
 
 reg [31:0] count;
 reg [2:0] offset;
