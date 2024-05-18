@@ -50,7 +50,7 @@ int main(int argc, char **argv, char **env)
 
   reset(10);
 
-  while (sim_time < MAX_SIM_TIME)
+  while (sim_time < 5000000)
   {
     
     dut->eval();
