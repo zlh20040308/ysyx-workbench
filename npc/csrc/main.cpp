@@ -46,8 +46,11 @@ int main(int argc, char **argv, char **env)
   m_trace->open("waveform.vcd");
 
   // reset(10);
+  dut->clk = 0;
   while (sim_time < 50){
-    dut->clk = 1;
+    if(sim_time>10){
+        dut->clk = 1;
+    }    
     dut->eval();
     m_trace->dump(sim_time);
     sim_time++;
