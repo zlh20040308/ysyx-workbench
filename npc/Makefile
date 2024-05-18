@@ -3,7 +3,7 @@ NXDC_FILES = constr/top.nxdc
 INC_PATH ?=
 
 VERILATOR = verilator
-VERILATOR_CFLAGS += -MMD --build -cc  \
+VERILATOR_CFLAGS += -MMD --build --trace -cc  \
 				-O3 --x-assign fast --x-initial fast --noassert
 
 BUILD_DIR = ./build
@@ -38,17 +38,22 @@ $(BIN): $(VSRCS) $(CSRCS) $(NVBOARD_ARCHIVE)
 		$(addprefix -CFLAGS , $(CXXFLAGS)) $(addprefix -LDFLAGS , $(LDFLAGS)) \
 		--Mdir $(OBJ_DIR) --exe -o $(abspath $(BIN))
 
+waveform.vcd: $(BIN)
+	@echo
+	@echo "### SIMULATING ###"
+	@$(BIN)
+
 clean:
 	rm -rf $(BUILD_DIR)
 
 all:
 	@echo "Write this Makefile by your self."
 
-sim:$(BIN)
+sim: waveform.vcd
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 	@echo "Write this Makefile by your self."
-	@$^
+	@gtkwave $^
 
 include ../Makefile
 
-.PHONY: default all clean run sim
+.PHONY: default all clean sim lint waves build
