@@ -35,11 +35,11 @@ static void reset(int n)
 
 void sim_init()
 {
-  nvboard_bind_all_pins(dut);
-  nvboard_init();
   dut = new TOP_NAME;
   contextp = new VerilatedContext;
   m_trace = new VerilatedVcdC;
+  nvboard_bind_all_pins(dut);
+  nvboard_init();
   if (is_trace)
   {
     Verilated::traceEverOn(true);
