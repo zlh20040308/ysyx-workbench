@@ -14,6 +14,7 @@ vluint64_t sim_time = 0;
 vluint64_t posedge_cnt = 0;
 
 static TOP_NAME dut;
+static VerilatedVcdC *m_trace;
 
 
 void nvboard_bind_all_pins(TOP_NAME *top);
@@ -22,8 +23,12 @@ static void single_cycle()
 {
   dut.clk = 0;
   dut.eval();
+  m_trace->dump(sim_time);
+  sim_time++;
   dut.clk = 1;
   dut.eval();
+  m_trace->dump(sim_time);
+  sim_time++;
 }
 
 static void reset(int n)
@@ -44,7 +49,7 @@ int main(int argc, char **argv, char **env)
   Vtop *dut = new Vtop;
 
   Verilated::traceEverOn(true);
-  VerilatedVcdC *m_trace = new VerilatedVcdC;
+  m_trace = new VerilatedVcdC;
   dut->trace(m_trace, 5);
   m_trace->open("waveform.vcd");
 
@@ -56,8 +61,6 @@ int main(int argc, char **argv, char **env)
     printf("Hello, ysyx!\n");
     single_cycle();
 
-    m_trace->dump(sim_time);
-    sim_time++;
   }
 
 
