@@ -6,7 +6,7 @@
 vluint64_t sim_time = 0;
 VerilatedVcdC *m_trace;
 static TOP_NAME *dut;
-bool is_trace = false;
+bool is_trace = true;
 
 void nvboard_bind_all_pins(TOP_NAME *top);
 
