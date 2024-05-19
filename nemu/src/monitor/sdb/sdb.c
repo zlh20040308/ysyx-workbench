@@ -133,9 +133,11 @@ static int cmd_x(char *args)
     Log("Conversion error");
     return 0;
   }
+  Log("error1");
   bool *success = NULL;
   *success = false;
   word_t val_expr = expr(EXPR, success);
+  Log("error2");
   if (success)
   {
     for (int i = 0; i < num; i++)
