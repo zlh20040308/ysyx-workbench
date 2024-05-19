@@ -223,11 +223,11 @@ static word_t eval(int p, int q, bool *success)
       if (tokens[p].type == TK_DEC)
       {
         num = strtoul(tokens[p].str, &endptr, 10);
-      }else{
+      }
+      else
+      {
         num = strtoul(tokens[p].str, &endptr, 16);
       }
-
-      
 
       if (*endptr == '\0')
       {
@@ -271,6 +271,7 @@ static word_t eval(int p, int q, bool *success)
         }
         break;
       case '-':
+        Log("csdvsvevdev");
         if (select_op < 0 || select_op == '*' || select_op == '/')
         {
           select_op = '-';
