@@ -135,6 +135,7 @@ static int cmd_x(char *args)
   }
   bool success = false;
   word_t val_expr = expr(EXPR, &success);
+  
   if (success)
   {
     for (int i = 0; i < num; i++)

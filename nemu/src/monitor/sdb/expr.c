@@ -316,7 +316,8 @@ word_t expr(char *e, bool *success)
     return 0;
   }
   int p = 0, q = nr_token;
-  Log("e = %d", *e);
+  Log("e = %d ,nr_token = %d", *e, nr_token);
+  
 
   /* TODO: Insert codes to evaluate the expression. */
   return eval(p, q, success);
