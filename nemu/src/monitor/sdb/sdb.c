@@ -29,7 +29,6 @@ void init_regex();
 void init_wp_pool();
 word_t paddr_read(paddr_t addr, int len);
 
-
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 static char *rl_gets()
 {
@@ -125,56 +124,28 @@ static int cmd_info(char *args)
 
 static int cmd_x(char *args)
 {
-  char *N;
-  char *EXPR;
-  const char delim[] = " "; // 分隔符为逗号
-  // 使用 strtok 分割字符串
-  char *token = strtok(args, delim);
-
-  // 循环遍历分割后的每个单词
-  for (size_t i = 0; i < 3; i++)
-  {
-    switch (i)
-    {
-    case 0:
-      N = token;
-      break;
-    case 1:
-      EXPR = token;
-      break;
-    case 2:
-      char *temp = token;
-      if (temp != NULL)
-      {
-        printf("Wrong!!!\n");
-        return 0;
-      }
-      break;
-    default:
-      break;
-    }
-    token = strtok(NULL, delim); // 继续分割字符串
-  }
-
-  if (N == NULL || EXPR == NULL)
-  {
-    printf("Wrong!!!\n");
-    return 0;
-  }
-
+  char *N = strtok(args, " ");
+  char *EXPR = N + strlen(N) + 1;
   char *endptr;
   uint64_t num = strtol(N, &endptr, 10);
-  paddr_t hex_value = strtol(EXPR, &endptr, 16);
-
   if (*endptr != '\0')
   {
     Log("Conversion error");
     return 0;
   }
-
-  for (int i = 0; i < num; i++)
+  bool *success = NULL;
+  *success = false;
+  word_t val_expr = expr(EXPR, success);
+  if (success)
   {
-    printf("0x%08x 0x%08x\n", hex_value + i * 4, paddr_read(hex_value + i * 4, 4));
+    for (int i = 0; i < num; i++)
+    {
+      printf("0x%08x 0x%08x\n", val_expr + i * 4, paddr_read(val_expr + i * 4, 4));
+    }
+  }
+  else
+  {
+    printf("Failed to evaluate expression %s\n", EXPR);
   }
 
   return 0;
