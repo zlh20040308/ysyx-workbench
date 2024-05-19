@@ -24,7 +24,8 @@ enum
 {
   TK_NOTYPE = 256,
   TK_EQ,
-  TK_NUMBER,
+  TK_DEC,
+  TK_HEX,
 
   /* TODO: Add more token types */
 
@@ -40,15 +41,16 @@ static struct rule
      * Pay attention to the precedence level of different rules.
      */
 
-    {" +", TK_NOTYPE},     // spaces
-    {"\\+", '+'},          // plus
-    {"==", TK_EQ},         // equal
-    {"\\-", '-'},          // minus
-    {"\\*", '*'},          // multiply
-    {"\\/", '/'},          // divide
-    {"[0-9]+", TK_NUMBER}, // numbers
-    {"\\(", '('},          // left parenthesis
-    {"\\)", ')'},          // right parenthesis
+    {" +", TK_NOTYPE},             // spaces
+    {"\\+", '+'},                  // plus
+    {"==", TK_EQ},                 // equal
+    {"\\-", '-'},                  // minus
+    {"\\*", '*'},                  // multiply
+    {"\\/", '/'},                  // divide
+    {"0[xX][0-9a-fA-F]+", TK_HEX}, // hexadecimal numbers
+    {"[0-9]+", TK_DEC},            // decimal numbers
+    {"\\(", '('},                  // left parenthesis
+    {"\\)", ')'},                  // right parenthesis
 };
 
 #define NR_REGEX ARRLEN(rules)
@@ -121,8 +123,11 @@ static bool make_token(char *e)
 
         switch (rules[i].token_type)
         {
-        case TK_NUMBER:
-          tokens[nr_token].type = TK_NUMBER;
+        case TK_DEC:
+          tokens[nr_token].type = TK_DEC;
+          break;
+        case TK_HEX:
+          tokens[nr_token].type = TK_HEX;
           break;
         case TK_EQ:
           tokens[nr_token].type = TK_EQ;
@@ -163,8 +168,6 @@ static bool make_token(char *e)
   return true;
 }
 
-
-
 static bool check_parentheses(int p, int q)
 {
   if (p < 0 || q >= nr_token)
@@ -197,7 +200,6 @@ static bool check_parentheses(int p, int q)
     return false;
 }
 
-
 static word_t eval(int p, int q, bool *success)
 {
   Log("p = %d, q = %d", p, q);
@@ -214,11 +216,17 @@ static word_t eval(int p, int q, bool *success)
      * For now this token should be a number.
      * Return the value of the number.
      */
-    if (tokens[p].type == TK_NUMBER)
+    if (tokens[p].type == TK_DEC || tokens[p].type == TK_HEX)
     {
       char *endptr;
-
-      word_t num = strtoll(tokens[p].str, &endptr, 10);
+      word_t num;
+      if (tokens[p].type == TK_DEC)
+      {
+        num = strtoll(tokens[p].str, &endptr, 10);
+      }else{
+        num = strtoll(tokens[p].str, &endptr, 16);
+      }
+      
       Log("num = %d", num);
 
       if (*endptr == '\0')
@@ -320,9 +328,7 @@ word_t expr(char *e, bool *success)
   int p = 0, q = nr_token - 1;
   Log("e = %s ,nr_token = %d", e, nr_token);
   Log("success = %d", *success);
-  
 
   /* TODO: Insert codes to evaluate the expression. */
   return eval(p, q, success);
 }
-
