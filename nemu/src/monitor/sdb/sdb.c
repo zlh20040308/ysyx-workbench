@@ -72,7 +72,12 @@ static int cmd_help(char *args);
 
 static int cmd_si(char *args) {
   char *endptr;
-  uint64_t num = strtol(args, &endptr, 10);
+  uint64_t num;
+  if(args[0] == '\0') {
+    num = 0;
+  }else{
+    num = strtol(args, &endptr, 10);
+  }
   if (*endptr == '\0') {
     cpu_exec(num);
   } else {
