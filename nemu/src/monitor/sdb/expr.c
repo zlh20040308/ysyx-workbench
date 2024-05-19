@@ -222,9 +222,9 @@ static word_t eval(int p, int q, bool *success)
       word_t num;
       if (tokens[p].type == TK_DEC)
       {
-        num = strtoll(tokens[p].str, &endptr, 10);
+        num = strtoul(tokens[p].str, &endptr, 10);
       }else{
-        num = strtoll(tokens[p].str, &endptr, 16);
+        num = strtoul(tokens[p].str, &endptr, 16);
       }
 
       Log("num = %d", num);
