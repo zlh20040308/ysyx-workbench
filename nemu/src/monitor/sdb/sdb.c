@@ -99,10 +99,10 @@ static int cmd_info(char *args) {
   case INFO_X:
     break;
   case INFO_NOTFOUND:
-    Log("Usage: info <vaild_argument>");
+    printf("Usage: info <vaild_argument>");
     break;
   default:
-    Log("Usage: info <vaild_argument>");
+    printf("Usage: info <vaild_argument>");
     break;
   }
   return 0;
