@@ -55,6 +55,21 @@ static int cmd_q(char *args) {
 
 static int cmd_help(char *args);
 
+static int cmd_si(char *args) {
+  nemu_state.state = NEMU_QUIT;
+  return -1;
+}
+
+static int cmd_info(char *args) {
+  nemu_state.state = NEMU_QUIT;
+  return -1;
+}
+
+static int cmd_x(char *args) {
+  nemu_state.state = NEMU_QUIT;
+  return -1;
+}
+
 static struct {
   const char *name;
   const char *description;
@@ -65,6 +80,9 @@ static struct {
   { "q", "Exit NEMU", cmd_q },
 
   /* TODO: Add more commands */
+  { "si", "Single-step execution", cmd_si },
+  { "info", "Print program status", cmd_info },
+  { "x", "Scan memory", cmd_x },
 
 };
 
