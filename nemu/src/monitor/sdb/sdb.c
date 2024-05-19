@@ -74,7 +74,7 @@ static int cmd_si(char *args) {
   char *endptr;
   uint64_t num;
   if(args[0] == '\0') {
-    num = 0;
+    num = 1;
   }else{
     num = strtol(args, &endptr, 10);
   }
