@@ -169,7 +169,6 @@ static bool make_token(char *e)
   {
     Log("type = %d val = %s", tokens[i].type, tokens[i].str);
   }
-  
 
   return true;
 }
@@ -265,8 +264,26 @@ static word_t eval(int p, int q, bool *success)
     /* We should do more things here. */
     int select_op = -1;
     int select_op_idx = -1;
+    int in_parenthesis = 0;
     for (int i = q; i >= p; i--)
     {
+      switch (tokens[i].type)
+      {
+      case '(':
+        in_parenthesis--;
+        break;
+      case ')':
+        in_parenthesis++;
+        break;
+      default:
+        break;
+      }
+
+      if (in_parenthesis)
+      {
+        continue;
+      }
+
       switch (tokens[i].type)
       {
       case '+':
@@ -277,7 +294,6 @@ static word_t eval(int p, int q, bool *success)
         }
         break;
       case '-':
-        Log("csdvsvevdev");
         if (select_op < 0 || select_op == '*' || select_op == '/')
         {
           select_op = '-';
