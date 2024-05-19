@@ -267,7 +267,7 @@ static word_t eval(int p, int q, bool *success)
     int select_op_idx = -1;
     for (int i = q; i >= p; i--)
     {
-      switch (rules[i].token_type)
+      switch (tokens[i].type)
       {
       case '+':
         if (select_op < 0 || select_op == '*' || select_op == '/')
