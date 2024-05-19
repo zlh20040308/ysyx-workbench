@@ -172,7 +172,7 @@ word_t paddr_read(paddr_t addr, int len);
   for (size_t i = 0; i < num; i++)
   {
     word_t mem = paddr_read(hex_value + i * 4, 4);
-    printf("0x%x\n", mem);
+    printf("0x%08x\n", mem);
   }
   
   printf("N = %s, EXPR = %s\n", N, EXPR);
