@@ -159,7 +159,6 @@ static bool make_token(char *e)
       return false;
     }
   }
-  Log("error3");
 
   return true;
 }
@@ -316,8 +315,8 @@ word_t expr(char *e, bool *success)
     *success = false;
     return 0;
   }
-  Log("error3");
   int p = 0, q = nr_token;
+  Log("e = %d", *e);
 
   /* TODO: Insert codes to evaluate the expression. */
   return eval(p, q, success);
