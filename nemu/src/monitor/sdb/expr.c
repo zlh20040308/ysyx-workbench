@@ -165,6 +165,12 @@ static bool make_token(char *e)
     }
   }
 
+  for (size_t i = 0; i < nr_token; i++)
+  {
+    Log("type = %d val = %s", tokens[i].type, tokens[i].str);
+  }
+  
+
   return true;
 }
 
