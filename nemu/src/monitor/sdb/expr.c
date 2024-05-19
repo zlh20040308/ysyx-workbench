@@ -91,7 +91,7 @@ static bool make_token(char *e)
   regmatch_t pmatch;
 
   nr_token = 0;
-
+  Log("error4");
   while (e[position] != '\0')
   {
     /* Try all rules one by one. */
