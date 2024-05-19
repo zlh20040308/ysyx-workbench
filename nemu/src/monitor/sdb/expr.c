@@ -226,7 +226,7 @@ static word_t eval(int p, int q, bool *success)
       }else{
         num = strtoll(tokens[p].str, &endptr, 16);
       }
-      
+
       Log("num = %d", num);
 
       if (*endptr == '\0')
@@ -303,6 +303,7 @@ static word_t eval(int p, int q, bool *success)
     {
       return 1;
     }
+    Log("v1 = %d v2 = %d", v1, v2);
     switch (select_op)
     {
     case '+':
