@@ -73,6 +73,7 @@ static int cmd_help(char *args);
 static int cmd_si(char *args) {
   char *endptr;
   Log("1");
+  Log("%s", args);
   if(args[0] == '\0') {
     Log("4");
     cpu_exec(1);
