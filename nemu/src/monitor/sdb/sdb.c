@@ -99,7 +99,7 @@ static int cmd_info(char *args) {
     Log("Usage: info <vaild_argument>");
     break;
   }
-  return -1;
+  return 0;
 }
 
 static int cmd_x(char *args) {
