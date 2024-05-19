@@ -227,7 +227,7 @@ static word_t eval(int p, int q, bool *success)
         num = strtoul(tokens[p].str, &endptr, 16);
       }
 
-      Log("num = %d", num);
+      Log("num = 0x%08x", num);
 
       if (*endptr == '\0')
       {
