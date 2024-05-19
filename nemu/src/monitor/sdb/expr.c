@@ -160,6 +160,7 @@ static bool make_token(char *e)
       return false;
     }
   }
+  Log("error3");
 
   return true;
 }
