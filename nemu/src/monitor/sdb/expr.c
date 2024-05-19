@@ -218,7 +218,7 @@ static word_t eval(int p, int q, bool *success)
     {
       char *endptr;
 
-      word_t num = strtol(tokens[p].str, &endptr, 10);
+      word_t num = strtoll(tokens[p].str, &endptr, 10);
       Log("num = %d", num);
 
       if (*endptr == '\0')
