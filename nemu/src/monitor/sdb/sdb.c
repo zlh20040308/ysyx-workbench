@@ -27,6 +27,8 @@ static int is_batch_mode = false;
 
 void init_regex();
 void init_wp_pool();
+word_t paddr_read(paddr_t addr, int len);
+
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 static char *rl_gets()
@@ -153,27 +155,26 @@ static int cmd_x(char *args)
     }
     token = strtok(NULL, delim); // 继续分割字符串
   }
+
   if (N == NULL || EXPR == NULL)
   {
     printf("Wrong!!!\n");
     return 0;
   }
 
-word_t paddr_read(paddr_t addr, int len);
-
   char *endptr;
   uint64_t num = strtol(N, &endptr, 10);
   paddr_t hex_value = strtol(EXPR, &endptr, 16);
 
-  if (*endptr != '\0'){
+  if (*endptr != '\0')
+  {
     Log("Conversion error");
     return 0;
   }
-  
+
   for (int i = 0; i < num; i++)
   {
-    word_t mem = paddr_read(hex_value + i * 4, 4);
-    printf("0x%08x 0x%08x\n", hex_value + i * 4, mem);
+    printf("0x%08x 0x%08x\n", hex_value + i * 4, paddr_read(hex_value + i * 4, 4));
   }
 
   return 0;
