@@ -135,7 +135,9 @@ static int cmd_x(char *args)
   }
   Log("error1");
   bool *success = NULL;
+  Log("error5");
   *success = false;
+  Log("error6");
   word_t val_expr = expr(EXPR, success);
   Log("error2");
   if (success)
