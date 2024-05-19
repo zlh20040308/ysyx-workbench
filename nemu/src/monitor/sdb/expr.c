@@ -86,6 +86,7 @@ static int nr_token __attribute__((used)) = 0;
 
 static bool make_token(char *e)
 {
+  Log("error5");
   int position = 0;
   int i;
   regmatch_t pmatch;
