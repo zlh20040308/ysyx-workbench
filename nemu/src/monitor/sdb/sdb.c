@@ -56,7 +56,13 @@ static int cmd_q(char *args) {
 static int cmd_help(char *args);
 
 static int cmd_si(char *args) {
-  cpu_exec(1);
+  char *endptr;
+  uint64_t num = strtol(args, &endptr, 10);
+  if (*endptr == '\0') {
+    cpu_exec(num);
+  } else {
+    Log("Conversion error, non-convertible part: %s\n", endptr);
+  }
   return 0;
 }
 
