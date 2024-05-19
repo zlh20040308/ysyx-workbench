@@ -72,15 +72,11 @@ static int cmd_help(char *args);
 
 static int cmd_si(char *args) {
   char *endptr;
-  Log("1");
   Log("%s", args);
-  if(args[0] == '\0') {
-    Log("4");
+  if(args[0] == '\0' || args == NULL) {
     cpu_exec(1);
-    Log("2");
     return 0;
   }
-Log("3");
   uint64_t num = strtol(args, &endptr, 10);
   
   if (*endptr == '\0') {
