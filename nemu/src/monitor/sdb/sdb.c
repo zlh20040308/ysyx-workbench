@@ -169,13 +169,13 @@ word_t paddr_read(paddr_t addr, int len);
     Log("Conversion error");
     return 0;
   }
+  
   for (int i = 0; i < num; i++)
   {
     word_t mem = paddr_read(hex_value + i * 4, 4);
     printf("0x%08x 0x%08x\n", hex_value + i * 4, mem);
   }
-  
-  printf("N = %s, EXPR = %s\n", N, EXPR);
+
   return 0;
 }
 
