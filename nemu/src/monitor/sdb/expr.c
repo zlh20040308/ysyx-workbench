@@ -219,6 +219,7 @@ static word_t eval(int p, int q, bool *success)
       char *endptr;
 
       word_t num = strtol(tokens[p].str, &endptr, 10);
+      Log("num = %d", num);
 
       if (*endptr == '\0')
       {
@@ -317,7 +318,7 @@ word_t expr(char *e, bool *success)
     return 0;
   }
   int p = 0, q = nr_token - 1;
-  Log("e = %d ,nr_token = %d", *e, nr_token);
+  Log("e = %s ,nr_token = %d", e, nr_token);
   Log("success = %d", *success);
   
 
