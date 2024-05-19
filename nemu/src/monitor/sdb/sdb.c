@@ -153,8 +153,29 @@ static int cmd_x(char *args)
     }
     token = strtok(NULL, delim); // 继续分割字符串
   }
+  if (N == NULL || EXPR == NULL)
+  {
+    printf("Wrong!!!\n");
+    return 0;
+  }
 
-  printf("N = %s, EXPR = %s\n",N, EXPR);
+word_t paddr_read(paddr_t addr, int len);
+
+  char *endptr;
+  uint64_t num = strtol(N, &endptr, 10);
+  paddr_t hex_value = strtol(EXPR, &endptr, 16);
+
+  if (*endptr != '\0'){
+    Log("Conversion error");
+    return 0;
+  }
+  for (size_t i = 0; i < num; i++)
+  {
+    word_t mem = paddr_read(hex_value + num * 4, 4);
+    printf("0x%x\n", mem);
+  }
+  
+  printf("N = %s, EXPR = %s\n", N, EXPR);
   return 0;
 }
 
