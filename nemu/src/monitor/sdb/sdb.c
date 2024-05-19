@@ -48,6 +48,7 @@ static char* rl_gets() {
 
 int get_command_code(const char *args) {
     if (strcmp(args, "r") == 0) {
+      Log("%d",INFO_R);
         return INFO_R;
     } else if (strcmp(args, "x") == 0){
         return INFO_X;
