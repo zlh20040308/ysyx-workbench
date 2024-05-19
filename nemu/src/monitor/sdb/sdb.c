@@ -19,6 +19,10 @@
 #include <readline/history.h>
 #include "sdb.h"
 
+# define INFO_NOTFOUND 0
+# define INFO_X        1
+# define INFO_R        2
+
 static int is_batch_mode = false;
 
 void init_regex();
@@ -42,6 +46,16 @@ static char* rl_gets() {
   return line_read;
 }
 
+int get_command_code(const char *args) {
+    if (strcmp(args, "r") == 0) {
+        return INFO_R;
+    } else if (strcmp(args, "x") == 0){
+        return INFO_X;
+    } else {
+      return INFO_NOTFOUND;
+    }
+}
+
 static int cmd_c(char *args) {
   cpu_exec(-1);
   return 0;
@@ -61,13 +75,30 @@ static int cmd_si(char *args) {
   if (*endptr == '\0') {
     cpu_exec(num);
   } else {
-    Log("Conversion error, non-convertible part: %s\n", endptr);
+    Log("Conversion error, non-convertible part: %s", endptr);
   }
   return 0;
 }
 
 static int cmd_info(char *args) {
-  nemu_state.state = NEMU_QUIT;
+  if (args == NULL || args[0] == '\0'){
+    Log("Usage: info <required_argument>");
+    return 0;
+  }
+  switch (get_command_code(args))
+  {
+  case INFO_R:
+    isa_reg_display();
+    break;
+  case INFO_X:
+    break;
+  case INFO_NOTFOUND:
+    Log("Usage: info <vaild_argument>");
+    break;
+  default:
+    Log("Usage: info <vaild_argument>");
+    break;
+  }
   return -1;
 }
 
