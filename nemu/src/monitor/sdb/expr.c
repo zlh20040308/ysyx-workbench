@@ -303,7 +303,7 @@ static word_t eval(int p, int q, bool *success)
     {
       return 1;
     }
-    Log("v1 = 0x%08x v2 = 0x%08x", v1, v2);
+    Log("v1 = 0x%09x v2 = 0x%09x", v1, v2);
     switch (select_op)
     {
     case '+':
