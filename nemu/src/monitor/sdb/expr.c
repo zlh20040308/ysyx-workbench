@@ -200,6 +200,7 @@ static bool check_parentheses(int p, int q)
 
 static word_t eval(int p, int q, bool *success)
 {
+  Log("p = %d, q = %d", p, q);
 
   if (p > q)
   {
@@ -317,6 +318,7 @@ word_t expr(char *e, bool *success)
   }
   int p = 0, q = nr_token;
   Log("e = %d ,nr_token = %d", *e, nr_token);
+  Log("success = %d", *success);
   
 
   /* TODO: Insert codes to evaluate the expression. */
