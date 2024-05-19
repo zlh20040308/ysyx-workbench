@@ -138,7 +138,7 @@ static int cmd_x(char *args)
   Log("val_expr = %d, success = %d", val_expr, success);
   if (success)
   {
-    for (int i = 0; i < num; i++)
+    for (paddr_t i = 0; i < num; i++)
     {
       printf("0x%08x 0x%08x\n", val_expr + i * 4, paddr_read(val_expr + i * 4, 4));
     }
