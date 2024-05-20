@@ -173,8 +173,13 @@ void del_watchpoint(long watchpoint_id)
     return;
   }
   Log("cur_watchpoint_id = %d", temp->NO);
-  prev->next = temp->next;
-  temp->next = NULL;
+  if (prev == NULL)
+  {
+    head = temp->next;
+  }else{
+    prev->next = temp->next;
+    temp->next = NULL;
+  }
 
   free_wp(temp);
 }
