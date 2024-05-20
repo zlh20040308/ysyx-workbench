@@ -267,7 +267,7 @@ static word_t eval(int p, int q, bool *success)
      */
     if (tokens[p].type == TK_DEC || tokens[p].type == TK_HEX || tokens[p].type == TK_REG)
     {
-      char *endptr;
+      char *endptr = "";
       word_t num;
       Log("tokens[p].type = %d", tokens[p].type);
       switch (tokens[p].type)
@@ -284,10 +284,6 @@ static word_t eval(int p, int q, bool *success)
         if (!success)
         {
           return 1;
-        }
-        else
-        {
-          endptr = "";
         }
         break;
       default:
@@ -389,6 +385,12 @@ static word_t eval(int p, int q, bool *success)
           cur_select_op_priority = P11;
         }
       }
+    }
+
+    if(cur_select_op_priority == 0 || select_op_idx == 0 ){
+      printf("Bad expression!\n");
+      *success = false;
+      return 1;
     }
     Log("select_op_idx  = %d cur_select_op_priority = %d", select_op_idx, cur_select_op_priority);
     word_t v2 = eval(select_op_idx + 1, q, success);
