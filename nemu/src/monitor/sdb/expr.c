@@ -396,7 +396,8 @@ static word_t eval(int p, int q, bool *success)
     {
       return 1;
     }
-    word_t v1;
+    Log("v2 = 0x%09x",v2);
+    word_t v1 = 0;
     if (select_op != DEREF)
     {
       v1 = eval(p, select_op_idx - 1, success);
@@ -404,9 +405,10 @@ static word_t eval(int p, int q, bool *success)
       {
         return 1;
       }
+      Log("v1 = 0x%09x",v1);
     }
 
-    Log("v1 = 0x%09x v2 = 0x%09x v1 + v2 = 0x%09x select_op = %c", v1, v2, v1 + v2, select_op);
+    Log("select_op = %c", select_op);
     switch (select_op)
     {
     case '+':
