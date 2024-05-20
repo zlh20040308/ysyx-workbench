@@ -79,6 +79,28 @@ static int cmd_q(char *args)
   return -1;
 }
 
+static int cmd_w(char *args)
+{
+
+  return 0;
+}
+
+static int cmd_p(char *args)
+{
+  bool success = false;
+  word_t val_expr = expr(args, &success);
+  if (success)
+  {
+    printf("0x%08x\n", val_expr);
+  }
+  else
+  {
+    printf("Fail to evaluate expression %s\n", args);
+  }
+
+  return 0;
+}
+
 static int cmd_help(char *args);
 
 static int cmd_si(char *args)
@@ -165,6 +187,8 @@ static struct
     {"si", "Single-step execution", cmd_si},
     {"info", "Print program status", cmd_info},
     {"x", "Scan memory", cmd_x},
+    {"w", "Set watchpoint", cmd_w},
+    {"p", "Expression evaluation", cmd_p},
 
 };
 
