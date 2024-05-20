@@ -168,13 +168,13 @@ static bool make_token(char *e)
           tokens[nr_token].type = TK_EQ;
           break;
         case TK_REG:
-          tokens[nr_token].type = TK_DEC;
+          tokens[nr_token].type = TK_REG;
           break;
         case TK_LAND:
-          tokens[nr_token].type = TK_DEC;
+          tokens[nr_token].type = TK_LAND;
           break;
         case TK_NOTEQ:
-          tokens[nr_token].type = TK_DEC;
+          tokens[nr_token].type = TK_NOTEQ;
           break;
         case '+':
           tokens[nr_token].type = '+';
