@@ -348,7 +348,7 @@ static word_t eval(int p, int q, bool *success)
       switch (tokens[i].type)
       {
       case DEREF:
-        if (cur_select_op_priority == 0 || P2 < cur_select_op_priority)
+        if (cur_select_op_priority == 0 || P2 > cur_select_op_priority)
         {
           select_op = tokens[i].type;
           select_op_idx = i;
@@ -356,7 +356,7 @@ static word_t eval(int p, int q, bool *success)
         }
       case '*':
       case '/':
-        if (cur_select_op_priority == 0 || P3 < cur_select_op_priority)
+        if (cur_select_op_priority == 0 || P3 > cur_select_op_priority)
         {
           select_op = tokens[i].type;
           select_op_idx = i;
@@ -365,7 +365,7 @@ static word_t eval(int p, int q, bool *success)
         break;
       case '+':
       case '-':
-        if (cur_select_op_priority == 0 || P4 < cur_select_op_priority)
+        if (cur_select_op_priority == 0 || P4 > cur_select_op_priority)
         {
           select_op = tokens[i].type;
           select_op_idx = i;
@@ -374,7 +374,7 @@ static word_t eval(int p, int q, bool *success)
         break;
       case TK_EQ:
       case TK_NOTEQ:
-        if (cur_select_op_priority == 0 || P7 < cur_select_op_priority)
+        if (cur_select_op_priority == 0 || P7 > cur_select_op_priority)
         {
           select_op = tokens[i].type;
           select_op_idx = i;
@@ -382,7 +382,7 @@ static word_t eval(int p, int q, bool *success)
         }
         break;
       case TK_LAND:
-        if (cur_select_op_priority == 0 || P11 < cur_select_op_priority)
+        if (cur_select_op_priority == 0 || P11 > cur_select_op_priority)
         {
           select_op = tokens[i].type;
           select_op_idx = i;
@@ -397,7 +397,7 @@ static word_t eval(int p, int q, bool *success)
       return 1;
     }
     word_t v1;
-    if (cur_select_op_priority != P11)
+    if (select_op != DEREF)
     {
       v1 = eval(p, select_op_idx - 1, success);
       if (!(*success))
