@@ -388,7 +388,6 @@ static word_t eval(int p, int q, bool *success)
     }
 
     if(cur_select_op_priority == 0 || select_op_idx == 0 ){
-      printf("Bad expression!\n");
       *success = false;
       return 1;
     }
