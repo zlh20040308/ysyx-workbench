@@ -280,7 +280,7 @@ static word_t eval(int p, int q, bool *success)
         break;
       case TK_REG:
         num = isa_reg_str2val(tokens[p].str, success);
-        Log("num = %d, reg = %s", num, tokens[p].str);
+        Log("num = %d, reg = %s success = %d", num, tokens[p].str, *success);
         if (!success)
         {
           return 1;
