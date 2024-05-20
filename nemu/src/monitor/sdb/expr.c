@@ -389,7 +389,7 @@ static word_t eval(int p, int q, bool *success)
       }
     }
     word_t v2 = eval(select_op_idx + 1, q, success);
-    if (!success)
+    if (!(*success))
     {
       return 1;
     }
@@ -397,7 +397,7 @@ static word_t eval(int p, int q, bool *success)
     if (cur_select_op_priority != P11)
     {
       v1 = eval(p, select_op_idx - 1, success);
-      if (!success)
+      if (!(*success))
       {
         return 1;
       }
