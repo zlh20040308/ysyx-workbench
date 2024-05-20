@@ -408,7 +408,7 @@ static word_t eval(int p, int q, bool *success)
       Log("v1 = 0x%09x",v1);
     }
 
-    Log("select_op = %c", select_op);
+    Log("select_op = %d", select_op);
     switch (select_op)
     {
     case '+':
