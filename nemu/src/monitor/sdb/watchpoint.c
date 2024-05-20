@@ -131,6 +131,7 @@ void show_watchpoints()
   printf("%-8s%-10s %s\n", "Num", "Val", "Expr");
 
   WP *temp = head;
+  printf("Watchpoint %d: %s\n", head->NO, head->EXPR);
   while (temp != NULL)
   {
     printf("%-8d0x%08x %s\n", temp->NO, temp->oldvalue, temp->EXPR);
