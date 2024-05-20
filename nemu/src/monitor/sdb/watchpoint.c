@@ -25,7 +25,7 @@ typedef struct watchpoint
   /* TODO: Add more members if necessary */
   bool is_free;
   bool Enb;
-  char *EXPR;
+  char EXPR[32];
   word_t oldvalue;
 } WP;
 
@@ -42,7 +42,6 @@ void init_wp_pool()
   {
     wp_pool[i].NO = i;
     wp_pool[i].is_free = true;
-    wp_pool[i].EXPR = NULL;
     wp_pool[i].oldvalue = 0;
     wp_pool[i].Enb = false;
     wp_pool[i].next = (i == NR_WP - 1 ? NULL : &wp_pool[i + 1]);
@@ -73,7 +72,6 @@ static void free_wp(WP *wp)
 {
   wp->next = NULL;
   wp->is_free = true;
-  wp->EXPR = NULL;
   wp->oldvalue = 0;
   if (free_ == NULL)
   {
@@ -151,7 +149,8 @@ void add_watchpoint(char *args)
   }
   WP *new = new_wp();
 
-  new->EXPR = args;
+  memcpy(new->EXPR, args, sizeof(strlen(args)));
+  new->EXPR[strlen(args)] = '\0';
   new->oldvalue = expr_val;
   new->next = head;
   head = new;
