@@ -390,7 +390,7 @@ static word_t eval(int p, int q, bool *success)
         }
       }
     }
-    Log("select_op_idx  = %d", select_op_idx);
+    Log("select_op_idx  = %d cur_select_op_priority = %d", select_op_idx, cur_select_op_priority);
     word_t v2 = eval(select_op_idx + 1, q, success);
     if (!(*success))
     {
