@@ -26,8 +26,34 @@ enum
   TK_EQ,
   TK_DEC,
   TK_HEX,
+  DEREF,
+  TK_NOTEQ,
+  TK_LAND,
+  TK_REG,
+  TK_GT,
+  TK_G,
+  TK_LT,
+  TK_L,
 
   /* TODO: Add more token types */
+
+};
+
+enum
+{
+  P1 = 1, //
+  P2,     // DEREF
+  P3,     // '*' 、 '/'
+  P4,     // '+' 、 '-'
+  P5,
+  P6,
+  P7, // TK_EQ、 TK_NOTEQ
+  P8,
+  P9,
+  P10,
+  P11, // TK_LAND
+
+  /* Operators priorities */
 
 };
 
@@ -45,17 +71,26 @@ static struct rule
     {"\\+", '+'},                  // plus
     {"==", TK_EQ},                 // equal
     {"\\-", '-'},                  // minus
-    {"\\*", '*'},                  // multiply
+    {"\\*", '*'},                  // multiply or dereference
     {"\\/", '/'},                  // divide
     {"0[xX][0-9a-fA-F]+", TK_HEX}, // hexadecimal numbers
     {"[0-9]+", TK_DEC},            // decimal numbers
     {"\\(", '('},                  // left parenthesis
     {"\\)", ')'},                  // right parenthesis
+    {">=", TK_GT},                 // greater than
+    {">", TK_G},                   // greater
+    {"<=", TK_LT},                 // less than
+    {"<", TK_L},                   // less
+    {"!=", TK_NOTEQ},              // not equal
+    {"&&", TK_LAND},               // logical and
+    {"\\$[a-zA-Z][0-9]", TK_REG},  // register
 };
 
 #define NR_REGEX ARRLEN(rules)
 
 static regex_t re[NR_REGEX] = {};
+word_t isa_reg_str2val(const char *s, bool *success);
+word_t paddr_read(paddr_t addr, int len);
 
 /* Rules are used for many times.
  * Therefore we compile them only once before any usage.
@@ -131,6 +166,15 @@ static bool make_token(char *e)
           break;
         case TK_EQ:
           tokens[nr_token].type = TK_EQ;
+          break;
+        case TK_REG:
+          tokens[nr_token].type = TK_DEC;
+          break;
+        case TK_LAND:
+          tokens[nr_token].type = TK_DEC;
+          break;
+        case TK_NOTEQ:
+          tokens[nr_token].type = TK_DEC;
           break;
         case '+':
           tokens[nr_token].type = '+';
@@ -221,17 +265,31 @@ static word_t eval(int p, int q, bool *success)
      * For now this token should be a number.
      * Return the value of the number.
      */
-    if (tokens[p].type == TK_DEC || tokens[p].type == TK_HEX)
+    if (tokens[p].type == TK_DEC || tokens[p].type == TK_HEX || tokens[p].type == TK_REG)
     {
       char *endptr;
       word_t num;
-      if (tokens[p].type == TK_DEC)
+      switch (tokens[p].type)
       {
+      case TK_DEC:
         num = strtoul(tokens[p].str, &endptr, 10);
-      }
-      else
-      {
+        break;
+      case TK_HEX:
         num = strtoul(tokens[p].str, &endptr, 16);
+        break;
+      case TK_REG:
+        num = isa_reg_str2val(tokens[p].str, success);
+        if (!success)
+        {
+          return 1;
+        }
+        else
+        {
+          endptr = "";
+        }
+        break;
+      default:
+        break;
       }
 
       if (*endptr == '\0')
@@ -265,6 +323,7 @@ static word_t eval(int p, int q, bool *success)
     int select_op = -1;
     int select_op_idx = -1;
     int in_parenthesis = 0;
+    int cur_select_op_priority = 0;
     for (int i = q; i >= p; i--)
     {
       switch (tokens[i].type)
@@ -286,46 +345,64 @@ static word_t eval(int p, int q, bool *success)
 
       switch (tokens[i].type)
       {
-      case '+':
-        if (select_op < 0 || select_op == '*' || select_op == '/')
+      case DEREF:
+        if (cur_select_op_priority == 0 || P2 < cur_select_op_priority)
         {
-          select_op = '+';
+          select_op = tokens[i].type;
           select_op_idx = i;
+          cur_select_op_priority = P2;
         }
-        break;
-      case '-':
-        if (select_op < 0 || select_op == '*' || select_op == '/')
-        {
-          select_op = '-';
-          select_op_idx = i;
-        }
-        break;
       case '*':
-        if (select_op < 0)
-        {
-          select_op = '*';
-          select_op_idx = i;
-        }
-        break;
       case '/':
-        if (select_op < 0)
+        if (cur_select_op_priority == 0 || P3 < cur_select_op_priority)
         {
-          select_op = '/';
+          select_op = tokens[i].type;
           select_op_idx = i;
+          cur_select_op_priority = P3;
         }
         break;
+      case '+':
+      case '-':
+        if (cur_select_op_priority == 0 || P4 < cur_select_op_priority)
+        {
+          select_op = tokens[i].type;
+          select_op_idx = i;
+          cur_select_op_priority = P4;
+        }
+        break;
+      case TK_EQ:
+      case TK_NOTEQ:
+        if (cur_select_op_priority == 0 || P7 < cur_select_op_priority)
+        {
+          select_op = tokens[i].type;
+          select_op_idx = i;
+          cur_select_op_priority = P7;
+        }
+        break;
+      case TK_LAND:
+        if (cur_select_op_priority == 0 || P11 < cur_select_op_priority)
+        {
+          select_op = tokens[i].type;
+          select_op_idx = i;
+          cur_select_op_priority = P11;
+        }
       }
-    }
-    word_t v1 = eval(p, select_op_idx - 1, success);
-    if (!success)
-    {
-      return 1;
     }
     word_t v2 = eval(select_op_idx + 1, q, success);
     if (!success)
     {
       return 1;
     }
+    word_t v1;
+    if (cur_select_op_priority != P11)
+    {
+      v1 = eval(p, select_op_idx - 1, success);
+      if (!success)
+      {
+        return 1;
+      }
+    }
+
     Log("v1 = 0x%09x v2 = 0x%09x v1 + v2 = 0x%09x select_op = %c", v1, v2, v1 + v2, select_op);
     switch (select_op)
     {
@@ -337,6 +414,14 @@ static word_t eval(int p, int q, bool *success)
       return v1 * v2;
     case '/':
       return v1 / v2;
+    case DEREF:
+      return paddr_read(v2, sizeof(word_t));
+    case TK_EQ:
+      return v1 == v2;
+    case TK_NOTEQ:
+      return v1 != v2;
+    case TK_LAND:
+      return v1 && v2;
     }
   }
   return 0;
@@ -348,6 +433,14 @@ word_t expr(char *e, bool *success)
   {
     *success = false;
     return 0;
+  }
+
+  for (int i = 0; i < nr_token; i++)
+  {
+    if (tokens[i].type == '*' && (i == 0 || tokens[i - 1].type == '(' || tokens[i - 1].type == '+' || tokens[i - 1].type == '-' || tokens[i - 1].type == '*' || tokens[i - 1].type == '/' || tokens[i - 1].type == TK_EQ || tokens[i - 1].type == TK_NOTEQ || tokens[i - 1].type == TK_LAND || tokens[i - 1].type == DEREF))
+    {
+      tokens[i].type = DEREF;
+    }
   }
   int p = 0, q = nr_token - 1;
   Log("e = %s ,nr_token = %d", e, nr_token);
