@@ -153,7 +153,7 @@ void add_watchpoint(char *args)
   new->oldvalue = expr_val;
   new->next = head;
   head = new;
-  printf("Watchpoint %d: %s\n", new->NO, new->EXPR);
+  printf("Watchpoint %d: %s\n", head->NO, head->EXPR);
   return;
 }
 
