@@ -140,7 +140,7 @@ static int cmd_x(char *args)
   {
     for (paddr_t i = 0; i < num; i++)
     {
-      printf("0x%08x 0x%08x\n", val_expr + i * 4, paddr_read(val_expr + i * 4, 4));
+      printf("0x%08x 0x%08x\n", val_expr + i * 4, paddr_read(val_expr + i * 4, sizeof(word_t)));
     }
   }
   else
