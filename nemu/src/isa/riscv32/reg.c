@@ -34,7 +34,7 @@ word_t isa_reg_str2val(const char *s, bool *success) {
   Log("input_reg = %s",s);
   for (size_t i = 0; i < ARRLEN(regs); i++){
     Log("cur_reg = %s",reg_name(i));
-    if (strcmp(reg_name(i), s) == 0) {
+    if (strcmp(reg_name(i), s+1) == 0) {
       *success = true;
       return gpr(i);
     }
