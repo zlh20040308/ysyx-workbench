@@ -106,6 +106,10 @@ static int cmd_d(char *args)
 
 static int cmd_p(char *args)
 {
+  if(args == NULL || *args == '\0' ){
+    printf("Usage: p [OPTION]\n");
+    return 0;
+  }
   bool success = false;
   word_t val_expr = expr(args, &success);
   if (success)
