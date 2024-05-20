@@ -134,6 +134,7 @@ void show_watchpoints()
   while (temp != NULL)
   {
     printf("%-8d0x%08x %s\n", temp->NO, temp->oldvalue, temp->EXPR);
+    printf("Watchpoint %d: %s\n", temp->NO, temp->EXPR);
     temp = temp->next;
   }
 }
