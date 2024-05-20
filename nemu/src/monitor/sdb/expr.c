@@ -269,6 +269,7 @@ static word_t eval(int p, int q, bool *success)
     {
       char *endptr;
       word_t num;
+      Log("tokens[p].type = %d", tokens[p].type);
       switch (tokens[p].type)
       {
       case TK_DEC:
@@ -279,7 +280,7 @@ static word_t eval(int p, int q, bool *success)
         break;
       case TK_REG:
         num = isa_reg_str2val(tokens[p].str, success);
-        Log("%d", num);
+        Log("num = %d, reg = %s", num, tokens[p].str);
         if (!success)
         {
           return 1;
