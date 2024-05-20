@@ -159,6 +159,7 @@ void add_watchpoint(char *args)
 
 void del_watchpoint(long watchpoint_id)
 {
+  Log("watchpoint_id = %ld", watchpoint_id);
   WP *temp = head;
   WP *prev = NULL;
   while (temp != NULL && temp->NO != watchpoint_id)
@@ -171,6 +172,7 @@ void del_watchpoint(long watchpoint_id)
     printf("Watchpoint %ld not found\n", watchpoint_id);
     return;
   }
+  Log("cur_watchpoint_id = %d", temp->NO);
   prev->next = temp->next;
   temp->next = NULL;
 
