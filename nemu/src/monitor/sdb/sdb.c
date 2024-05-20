@@ -20,14 +20,20 @@
 #include "sdb.h"
 
 #define INFO_NOTFOUND 0
-#define INFO_X 1
+#define INFO_W 1
 #define INFO_R 2
 
 static int is_batch_mode = false;
 
 void init_regex();
 void init_wp_pool();
-word_t paddr_read(paddr_t addr, int len);
+extern word_t paddr_read(paddr_t addr, int len);
+
+extern void add_watchpoint(char *args);
+
+extern void del_watchpoint(long watchpoint_id);
+
+extern void show_watchpoints();
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 static char *rl_gets()
@@ -57,9 +63,9 @@ int get_command_code(const char *args)
     Log("%d", INFO_R);
     return INFO_R;
   }
-  else if (strcmp(args, "x") == 0)
+  else if (strcmp(args, "w") == 0)
   {
-    return INFO_X;
+    return INFO_W;
   }
   else
   {
@@ -81,7 +87,20 @@ static int cmd_q(char *args)
 
 static int cmd_w(char *args)
 {
+  add_watchpoint(args);
+  return 0;
+}
 
+static int cmd_d(char *args)
+{
+  char *endptr;
+  long watchpoint_id = strtol(args, &endptr, 10);
+  if (*endptr != '\0')
+  {
+    Log("Conversion error");
+    return 0;
+  }
+  del_watchpoint(watchpoint_id);
   return 0;
 }
 
@@ -132,7 +151,8 @@ static int cmd_info(char *args)
   case INFO_R:
     isa_reg_display();
     break;
-  case INFO_X:
+  case INFO_W:
+    show_watchpoints();
     break;
   case INFO_NOTFOUND:
     printf("Usage: info <vaild_argument>\n");
@@ -188,6 +208,7 @@ static struct
     {"info", "Print program status", cmd_info},
     {"x", "Scan memory", cmd_x},
     {"w", "Set watchpoint", cmd_w},
+    {"d", "Deleting a watchpoint", cmd_d},
     {"p", "Expression evaluation", cmd_p},
 
 };
