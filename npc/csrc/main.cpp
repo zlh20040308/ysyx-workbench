@@ -56,7 +56,9 @@ int main(int argc, char **argv, char **env)
 
   reset(10);
 
-  while (5)
+  int i = 0;
+
+  while (i--)
   {
     nvboard_update();
     std::cout<< 1 << std::endl;
