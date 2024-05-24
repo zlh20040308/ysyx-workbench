@@ -41,7 +41,12 @@ void sim_init()
   // nvboard init
   nvboard_bind_all_pins(dut);
   nvboard_init();
+}
 
+int main(int argc, char **argv, char **env)
+{
+  Verilated::commandArgs(argc, argv);
+  sim_init();
   if (is_trace)
   {
     Verilated::traceEverOn(true);
@@ -49,13 +54,6 @@ void sim_init()
     dut->trace(m_trace, 5);
     m_trace->open("waveform.vcd");
   }
-
-}
-
-int main(int argc, char **argv, char **env)
-{
-  Verilated::commandArgs(argc, argv);
-  sim_init();
   
   reset(10);
 
