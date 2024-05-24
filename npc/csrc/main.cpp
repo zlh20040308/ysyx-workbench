@@ -38,7 +38,6 @@ void sim_init()
   // verilate init
   dut = new TOP_NAME;
   contextp = new VerilatedContext;
-  m_trace = new VerilatedVcdC;
   // nvboard init
   nvboard_bind_all_pins(dut);
   nvboard_init();
@@ -46,6 +45,7 @@ void sim_init()
   if (is_trace)
   {
     Verilated::traceEverOn(true);
+    m_trace = new VerilatedVcdC;
     dut->trace(m_trace, 5);
     m_trace->open("waveform.vcd");
   }
