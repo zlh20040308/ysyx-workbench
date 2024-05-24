@@ -25,13 +25,22 @@ module top(
     output [7:0] seg7
 );
 
-led my_led(
-    .clk(clk),
-    .rst(rst),
-    .btn(btn),
-    .sw(sw),
-    .ledr(ledr)
+// led my_led(
+//     .clk(clk),
+//     .rst(rst),
+//     .btn(btn),
+//     .sw(sw),
+//     .ledr(ledr)
+// );
+
+m_mux21 mux21(
+    .a(sw[0]),
+    .b(sw[1]),
+    .s(sw[2]),
+    .y(ledr[4])
 );
+
+
 
 assign VGA_CLK = clk;
 
