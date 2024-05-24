@@ -59,7 +59,7 @@ int main(int argc, char **argv, char **env)
   
   reset(10);
 
-  while (1)
+  while (5)
   {
     nvboard_update();
     single_cycle();
