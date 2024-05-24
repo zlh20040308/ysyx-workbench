@@ -7,7 +7,7 @@ vluint64_t sim_time = 0;
 VerilatedVcdC *m_trace = nullptr;
 VerilatedContext *contextp = nullptr;
 static TOP_NAME *dut = nullptr;
-bool is_trace = false;
+const bool is_trace = true;
 
 void nvboard_bind_all_pins(TOP_NAME *top);
 
@@ -35,17 +35,21 @@ static void reset(int n)
 
 void sim_init()
 {
+  // verilate init
   dut = new TOP_NAME;
   contextp = new VerilatedContext;
   m_trace = new VerilatedVcdC;
+  // nvboard init
   nvboard_bind_all_pins(dut);
   nvboard_init();
+
   if (is_trace)
   {
     Verilated::traceEverOn(true);
     dut->trace(m_trace, 5);
     m_trace->open("waveform.vcd");
   }
+
 }
 
 int main(int argc, char **argv, char **env)
@@ -55,17 +59,11 @@ int main(int argc, char **argv, char **env)
   
   reset(10);
 
-  // while (1)
-  // {
-  //   nvboard_update();
-  //   single_cycle();
-  // }
-  
-
-
-
-
-
+  while (1)
+  {
+    nvboard_update();
+    single_cycle();
+  }
 
   if (is_trace)
     m_trace->close();
