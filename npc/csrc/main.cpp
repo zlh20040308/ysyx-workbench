@@ -2,6 +2,7 @@
 #include <Vtop.h>
 #include <verilated.h>
 #include <verilated_vcd_c.h>
+#include <iostream>
 
 vluint64_t sim_time = 0;
 VerilatedVcdC *m_trace = nullptr;
@@ -58,6 +59,7 @@ int main(int argc, char **argv, char **env)
   while (5)
   {
     nvboard_update();
+    std::cout<< 1 << std::endl;
     single_cycle();
   }
 
