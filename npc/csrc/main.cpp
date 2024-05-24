@@ -55,11 +55,18 @@ int main(int argc, char **argv, char **env)
   
   reset(10);
 
-  while (1)
-  {
-    nvboard_update();
-    single_cycle();
-  }
+  // while (1)
+  // {
+  //   nvboard_update();
+  //   single_cycle();
+  // }
+  
+
+
+
+
+
+
   if (is_trace)
     m_trace->close();
   delete dut;
