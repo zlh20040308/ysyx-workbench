@@ -39,15 +39,16 @@ void sim_init()
   // verilate init
   dut = new TOP_NAME;
   contextp = new VerilatedContext;
-  // nvboard init
-  nvboard_bind_all_pins(dut);
-  nvboard_init();
+  
 }
 
 int main(int argc, char **argv, char **env)
 {
   // Verilated::traceEverOn(true);
   Verilated::commandArgs(argc, argv);
+  // nvboard init
+  nvboard_bind_all_pins(dut);
+  nvboard_init();
   sim_init();
 
   // m_trace = new VerilatedVcdC;
