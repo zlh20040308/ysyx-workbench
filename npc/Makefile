@@ -25,7 +25,7 @@ $(SRC_AUTO_BIND): $(NXDC_FILES)
 # project source
 VSRCS = $(shell find $(abspath ./vsrc) -name "*.v")
 CSRCS = $(shell find $(abspath ./csrc) -name "*.c" -or -name "*.cc" -or -name "*.cpp")
-RUNCSRCS = $(CSRCS) + $(SRC_AUTO_BIND)
+RUNCSRCS = $(CSRCS) $(SRC_AUTO_BIND)
 SIMCSRCS = $(CSRCS)
 
 # rules for NVBoard

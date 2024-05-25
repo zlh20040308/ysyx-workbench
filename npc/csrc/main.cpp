@@ -1,30 +1,29 @@
 // #include <nvboard.h>
-// #include <Vtop.h>
 // #include <verilated.h>
-// #include <verilated_vcd_c.h>
+// #include "Vmux41.h"
 // #include <iostream>
 
 // static TOP_NAME* dut;
-// void nvboard_bind_all_pins(TOP_NAME *top);
+// void nvboard_bind_all_pins(TOP_NAME* top);
 
-// int main(int argc, char **argv, char **env)
+// int main()
 // {
 //   dut = new TOP_NAME;
 //   nvboard_bind_all_pins(dut);
 //   nvboard_init();
+//   // reset(10);
 
-
-//   while(1) {
+//   while (1)
+//   {
+//     dut->eval();
 //     nvboard_update();
-//     dut->clk = 0;
-//     dut->eval();
-//     dut->clk = 1;
-//     dut->eval();
+//     // single_cycle();
 //   }
 
 //   delete dut;
 //   nvboard_quit();
 // }
+
 #include "verilated.h"
 #include "verilated_vcd_c.h"
 #include "Vmux41.h"
@@ -55,13 +54,9 @@ void sim_exit(){
 
 int main() {
   sim_init();
-  top->s=0b00;  top->a=0b1110;  step_and_dump_wave();
-                top->a=0b0001;  step_and_dump_wave();
-  top->s=0b01;  top->a=0b1110;  step_and_dump_wave();
-                top->a=0b0010;  step_and_dump_wave();
-  top->s=0b10;  top->a=0b1010;  step_and_dump_wave();
-                top->a=0b0100;  step_and_dump_wave();
-  top->s=0b11;  top->a=0b0111;  step_and_dump_wave();
-                top->a=0b1001;  step_and_dump_wave();
+  top->y=0b00;  top->x0=0b11;  top->x1=0b10;  top->x2=0b01;  top->x3=0b00;  step_and_dump_wave();
+  top->y=0b01;  step_and_dump_wave();
+  top->y=0b10;  step_and_dump_wave();
+  top->y=0b11;  step_and_dump_wave();
   sim_exit();
 }
