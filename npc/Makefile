@@ -64,7 +64,8 @@ sim: $(SIMBIN)
 	@$(BIN)
 	@gtkwave waveform.vcd
 
-run:
+run: $(RUNBIN)
+	@$(BIN)
 
 include ../Makefile
 

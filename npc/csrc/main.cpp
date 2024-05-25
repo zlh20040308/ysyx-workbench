@@ -45,7 +45,7 @@ void sim_init(){
   top = new Vmux21;
   contextp->traceEverOn(true);
   top->trace(tfp, 0);
-  tfp->open("dump.vcd");
+  tfp->open("waveform.vcd");
 }
 
 void sim_exit(){
