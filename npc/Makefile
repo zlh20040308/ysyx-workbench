@@ -1,4 +1,4 @@
-TOPNAME = mux41
+TOPNAME = decode24
 NXDC_FILES = constr/top.nxdc
 INC_PATH ?=
 
