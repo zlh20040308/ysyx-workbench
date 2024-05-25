@@ -33,6 +33,7 @@ CXXFLAGS += $(INCFLAGS) -DTOP_NAME="\"V$(TOPNAME)\""
 
 $(BIN): $(VSRCS) $(CSRCS) $(NVBOARD_ARCHIVE)
 	@rm -rf $(OBJ_DIR)
+	@rm -rf ./waveform.vcd
 	$(VERILATOR) $(VERILATOR_CFLAGS) \
 		--top-module $(TOPNAME) $^ \
 		$(addprefix -CFLAGS , $(CXXFLAGS)) $(addprefix -LDFLAGS , $(LDFLAGS)) \
@@ -43,10 +44,10 @@ clean:
 	rm -rf $(BUILD_DIR)
 	rm -rf ./waveform.vcd
 
-all: clean
+all: default
 	@echo "Write this Makefile by your self."
 
-sim: all
+sim: $(BIN)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 	@echo "Write this Makefile by your self."
 	@$(BIN)
