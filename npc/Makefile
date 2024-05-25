@@ -61,7 +61,7 @@ all: default
 sim: $(SIMBIN)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 	@echo "Write this Makefile by your self."
-	@$(SIMBIN)
+	@$(BIN)
 	@gtkwave waveform.vcd
 
 run:
