@@ -1,5 +1,4 @@
 TOPNAME = top
-# TOPNAME = mux21
 NXDC_FILES = constr/top.nxdc
 INC_PATH ?=
 
