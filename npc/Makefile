@@ -43,10 +43,10 @@ clean:
 	rm -rf $(BUILD_DIR)
 	rm -rf ./waveform.vcd
 
-all: default
+all: clean
 	@echo "Write this Makefile by your self."
 
-sim: 
+sim: all
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 	@echo "Write this Makefile by your self."
 	@$(BIN)
