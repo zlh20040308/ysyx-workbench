@@ -37,7 +37,7 @@ CXXFLAGS += $(INCFLAGS) -DTOP_NAME="\"V$(TOPNAME)\""
 
 $(RUNBIN): $(VSRCS) $(RUNCSRCS) $(NVBOARD_ARCHIVE)
 	@rm -rf $(OBJ_DIR)
-	@rm -rf ./waveform.vcd
+	@rm -rf ./*.vcd
 	$(VERILATOR) $(VERILATOR_CFLAGS) \
 		--top-module $(TOPNAME) $^ \
 		$(addprefix -CFLAGS , $(CXXFLAGS)) $(addprefix -LDFLAGS , $(LDFLAGS)) \
@@ -45,7 +45,7 @@ $(RUNBIN): $(VSRCS) $(RUNCSRCS) $(NVBOARD_ARCHIVE)
 
 $(SIMBIN): $(VSRCS) $(SIMCSRCS) $(NVBOARD_ARCHIVE)
 	@rm -rf $(OBJ_DIR)
-	@rm -rf ./waveform.vcd
+	@rm -rf ./*.vcd
 	$(VERILATOR) $(VERILATOR_CFLAGS) \
 		--top-module $(TOPNAME) $^ \
 		$(addprefix -CFLAGS , $(CXXFLAGS)) $(addprefix -LDFLAGS , $(LDFLAGS)) \
@@ -53,7 +53,7 @@ $(SIMBIN): $(VSRCS) $(SIMCSRCS) $(NVBOARD_ARCHIVE)
 
 clean:
 	rm -rf $(BUILD_DIR)
-	rm -rf ./waveform.vcd
+	rm -rf ./*.vcd
 
 all: default
 	@echo "Write this Makefile by your self."
