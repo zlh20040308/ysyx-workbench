@@ -55,4 +55,4 @@ sim: $(BIN)
 
 include ../Makefile
 
-.PHONY: default all clean sim
+.PHONY: default all clean sim $(BIN)
