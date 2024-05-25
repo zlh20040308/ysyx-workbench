@@ -39,16 +39,15 @@ $(BIN): $(VSRCS) $(CSRCS) $(NVBOARD_ARCHIVE)
 		$(addprefix -CFLAGS , $(CXXFLAGS)) $(addprefix -LDFLAGS , $(LDFLAGS)) \
 		--Mdir $(OBJ_DIR) --exe -o $(abspath $(BIN))
 
-all: default
 
 clean:
 	rm -rf $(BUILD_DIR)
 	rm -rf ./waveform.vcd
 
-all:
+all: default
 	@echo "Write this Makefile by your self."
 
-sim: $(BIN)
+sim: 
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 	@echo "Write this Makefile by your self."
 	@$(BIN)
