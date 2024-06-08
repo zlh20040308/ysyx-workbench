@@ -9,8 +9,11 @@ VERILATOR_CFLAGS += -MMD --build --trace -cc  \
 BUILD_DIR = ./build
 OBJ_DIR = $(BUILD_DIR)/obj_dir
 BIN = $(BUILD_DIR)/$(TOPNAME)
+RUNBIN = $(BIN)_run
+SIMBIN = $(BIN)_sim
 
-default: $(BIN)
+
+default: $(SIMBIN)
 
 $(shell mkdir -p $(BUILD_DIR))
 
@@ -22,7 +25,8 @@ $(SRC_AUTO_BIND): $(NXDC_FILES)
 # project source
 VSRCS = $(shell find $(abspath ./vsrc) -name "*.v")
 CSRCS = $(shell find $(abspath ./csrc) -name "*.c" -or -name "*.cc" -or -name "*.cpp")
-CSRCS += $(SRC_AUTO_BIND)
+RUNCSRCS = $(CSRCS) $(SRC_AUTO_BIND)
+SIMCSRCS = $(CSRCS)
 
 # rules for NVBoard
 include $(NVBOARD_HOME)/scripts/nvboard.mk
@@ -31,28 +35,38 @@ include $(NVBOARD_HOME)/scripts/nvboard.mk
 INCFLAGS = $(addprefix -I, $(INC_PATH))
 CXXFLAGS += $(INCFLAGS) -DTOP_NAME="\"V$(TOPNAME)\""
 
-$(BIN): $(VSRCS) $(CSRCS) $(NVBOARD_ARCHIVE)
-	@rm -rf $(OBJ_DIR)
+$(RUNBIN): $(VSRCS) $(RUNCSRCS) $(NVBOARD_ARCHIVE)
+	rm -rf $(OBJ_DIR)
+	rm -rf ./*.vcd
 	$(VERILATOR) $(VERILATOR_CFLAGS) \
 		--top-module $(TOPNAME) $^ \
 		$(addprefix -CFLAGS , $(CXXFLAGS)) $(addprefix -LDFLAGS , $(LDFLAGS)) \
 		--Mdir $(OBJ_DIR) --exe -o $(abspath $(BIN))
 
-all: default
+$(SIMBIN): $(VSRCS) $(SIMCSRCS) $(NVBOARD_ARCHIVE)
+	rm -rf $(OBJ_DIR)
+	rm -rf ./*.vcd
+	$(VERILATOR) $(VERILATOR_CFLAGS) \
+		--top-module $(TOPNAME) $^ \
+		$(addprefix -CFLAGS , $(CXXFLAGS)) $(addprefix -LDFLAGS , $(LDFLAGS)) \
+		--Mdir $(OBJ_DIR) --exe -o $(abspath $(BIN))
 
 clean:
 	rm -rf $(BUILD_DIR)
-	rm -rf ./waveform.vcd
+	rm -rf ./*.vcd
 
-all:
+all: default
 	@echo "Write this Makefile by your self."
 
-sim: $(BIN)
+sim: $(SIMBIN)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 	@echo "Write this Makefile by your self."
-	@$^
+	@$(BIN)
 	@gtkwave waveform.vcd
+
+run: $(RUNBIN)
+	@$(BIN)
 
 include ../Makefile
 
-.PHONY: default all clean sim
+.PHONY: default all clean sim $(BIN) run

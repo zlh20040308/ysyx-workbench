@@ -1,67 +1,62 @@
-#include <nvboard.h>
-#include <Vtop.h>
 #include <verilated.h>
-#include <verilated_vcd_c.h>
+#include "Vtop.h"
+#include <nvboard.h>
 
-vluint64_t sim_time = 0;
-VerilatedVcdC *m_trace = nullptr;
-VerilatedContext *contextp = nullptr;
-static TOP_NAME *dut = nullptr;
-bool is_trace = false;
+static TOP_NAME* dut;
+void nvboard_bind_all_pins(TOP_NAME* top);
 
-void nvboard_bind_all_pins(TOP_NAME *top);
-
-static void single_cycle()
-{
-  dut->clk = 0;
-  dut->eval();
-  if (is_trace)
-    m_trace->dump(sim_time);
-  sim_time++;
-  dut->clk = 1;
-  dut->eval();
-  if (is_trace)
-    m_trace->dump(sim_time);
-  sim_time++;
-}
-
-static void reset(int n)
-{
-  dut->rst = 1;
-  while (n-- > 0)
-    single_cycle();
-  dut->rst = 0;
-}
-
-void sim_init()
+int main()
 {
   dut = new TOP_NAME;
-  contextp = new VerilatedContext;
-  m_trace = new VerilatedVcdC;
   nvboard_bind_all_pins(dut);
   nvboard_init();
-  if (is_trace)
-  {
-    Verilated::traceEverOn(true);
-    dut->trace(m_trace, 5);
-    m_trace->open("waveform.vcd");
-  }
-}
-
-int main(int argc, char **argv, char **env)
-{
-  Verilated::commandArgs(argc, argv);
-  sim_init();
-  
-  reset(10);
-
   while (1)
   {
+    dut->eval();
     nvboard_update();
-    single_cycle();
   }
-  if (is_trace)
-    m_trace->close();
+
   delete dut;
   nvboard_quit();
 }
+
+// #include "verilated_vcd_c.h"
+// #include "Vdecode24.h"
+
+// VerilatedContext* contextp = NULL;
+// VerilatedVcdC* tfp = NULL;
+
+// static Vdecode24* top;
+
+// void step_and_dump_wave(){
+//   top->eval();
+//   contextp->timeInc(1);
+//   tfp->dump(contextp->time());
+// }
+// void sim_init(){
+//   contextp = new VerilatedContext;
+//   tfp = new VerilatedVcdC;
+//   top = new Vdecode24;
+//   contextp->traceEverOn(true);
+//   top->trace(tfp, 0);
+//   tfp->open("waveform.vcd");
+// }
+
+// void sim_exit(){
+//   step_and_dump_wave();
+//   tfp->close();
+// }
+
+// int main() {
+//   sim_init();
+
+//   top->en = 0b0;  top->x = 0b00;  step_and_dump_wave();
+//                   top->x = 0b01;  step_and_dump_wave();
+//                   top->x = 0b10;  step_and_dump_wave();
+//                   top->x = 0b11;  step_and_dump_wave();
+//   top->en = 0b1;  top->x = 0b00;  step_and_dump_wave();
+//                   top->x = 0b01;  step_and_dump_wave();
+//                   top->x = 0b10;  step_and_dump_wave();
+//                   top->x = 0b11;  step_and_dump_wave();
+//   sim_exit();
+// }
