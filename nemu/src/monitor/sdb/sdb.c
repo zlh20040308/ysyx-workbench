@@ -60,7 +60,6 @@ int get_command_code(const char *args)
 {
   if (strcmp(args, "r") == 0)
   {
-    Log("%d", INFO_R);
     return INFO_R;
   }
   else if (strcmp(args, "w") == 0)
@@ -171,6 +170,12 @@ static int cmd_info(char *args)
 
 static int cmd_x(char *args)
 {
+  if (strlen(args) == 0 || args == NULL) 
+  {
+    printf("Usage: x N EXPR\n");
+    return 1;
+  }
+  
   char *N = strtok(args, " ");
   char *EXPR = N + strlen(N) + 1;
   char *endptr;
