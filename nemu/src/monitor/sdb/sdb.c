@@ -198,7 +198,7 @@ static int cmd_x(char *args)
       {
         printf("0x%08x 0x%08x\n", val_expr + i * 4, paddr_read(val_expr + i * 4, sizeof(word_t)));
       }else {
-        printf("Sorry, but I can't show you more\n");
+        printf("Sorry, but I can only show you the memory in[0x80000000, 0x87ffffff]\n");
         return 1;
       }
     }
