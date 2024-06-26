@@ -93,6 +93,11 @@ static int cmd_w(char *args)
 static int cmd_d(char *args)
 {
   char *endptr;
+  if (args == NULL || strlen(args) == 0) 
+  {
+    printf("Usage: x N EXPR\n");
+    return 1;
+  }
   long watchpoint_id = strtol(args, &endptr, 10);
   if (*endptr != '\0')
   {
