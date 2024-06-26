@@ -192,7 +192,15 @@ static int cmd_x(char *args)
   {
     for (paddr_t i = 0; i < num; i++)
     {
-      printf("0x%08x 0x%08x\n", val_expr + i * 4, paddr_read(val_expr + i * 4, sizeof(word_t)));
+
+      word_t addr = val_expr + i * 4;
+      if (addr>=0x80000000 && addr <= 0x87ffffff)
+      {
+        printf("0x%08x 0x%08x\n", val_expr + i * 4, paddr_read(val_expr + i * 4, sizeof(word_t)));
+      }else {
+        printf("Sorry, but I can't show you more\n");
+        return 1;
+      }
     }
   }
   else
