@@ -152,7 +152,7 @@ static int cmd_info(char *args)
 {
   if (args == NULL || args[0] == '\0')
   {
-    Log("Usage: info <required_argument>");
+    printf("Usage: info <required_argument>\n");
     return 0;
   }
   switch (get_command_code(args))
