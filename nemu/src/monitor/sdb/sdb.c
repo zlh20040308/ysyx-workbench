@@ -170,7 +170,7 @@ static int cmd_info(char *args)
 
 static int cmd_x(char *args)
 {
-  if (strlen(args) == 0 || args == NULL) 
+  if (args == NULL || strlen(args) == 0) 
   {
     printf("Usage: x N EXPR\n");
     return 1;
