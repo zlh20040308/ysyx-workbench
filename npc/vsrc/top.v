@@ -25,88 +25,23 @@ module top(
     output [7:0] seg7
 );
 
-// led my_led(
-//     .clk(clk),
-//     .rst(rst),
-//     .btn(btn),
-//     .sw(sw),
-//     .ledr(ledr)
-// );
+wire [2:0] my_y; 
+wire input_valid;
 
-m_mux21 mux21(
-    .a(sw[0]),
-    .b(sw[1]),
-    .s(sw[2]),
-    .y(ledr[4])
+
+encode83 my_encode83(
+    .x(sw[7:0]),
+    .en_in(sw[8]),
+    .y(my_y),
+    .input_valid(input_valid)
 );
 
+assign ledr[4] = input_valid;
+assign ledr[2:0] = my_y ;
 
-
-assign VGA_CLK = clk;
-
-wire [9:0] h_addr;
-wire [9:0] v_addr;
-wire [23:0] vga_data;
-
-vga_ctrl my_vga_ctrl(
-    .pclk(clk),
-    .reset(rst),
-    .vga_data(vga_data),
-    .h_addr(h_addr),
-    .v_addr(v_addr),
-    .hsync(VGA_HSYNC),
-    .vsync(VGA_VSYNC),
-    .valid(VGA_BLANK_N),
-    .vga_r(VGA_R),
-    .vga_g(VGA_G),
-    .vga_b(VGA_B)
+bcd7seg my_bcd7seg(
+    .b({1'b0,my_y}),
+    .h(seg0[7:1])
 );
-
-ps2_keyboard my_keyboard(
-    .clk(clk),
-    .resetn(~rst),
-    .ps2_clk(ps2_clk),
-    .ps2_data(ps2_data)
-);
-
-seg my_seg(
-    .clk(clk),
-    .rst(rst),
-    .o_seg0(seg0),
-    .o_seg1(seg1),
-    .o_seg2(seg2),
-    .o_seg3(seg3),
-    .o_seg4(seg4),
-    .o_seg5(seg5),
-    .o_seg6(seg6),
-    .o_seg7(seg7)
-);
-
-vmem my_vmem(
-    .h_addr(h_addr),
-    .v_addr(v_addr[8:0]),
-    .vga_data(vga_data)
-);
-
-uart my_uart(
-  .tx(uart_tx),
-  .rx(uart_rx)
-);
-
-endmodule
-
-module vmem(
-    input [9:0] h_addr,
-    input [8:0] v_addr,
-    output [23:0] vga_data
-);
-
-reg [23:0] vga_mem [524287:0];
-
-initial begin
-    $readmemh("resource/picture.hex", vga_mem);
-end
-
-assign vga_data = vga_mem[{h_addr, v_addr}];
 
 endmodule
