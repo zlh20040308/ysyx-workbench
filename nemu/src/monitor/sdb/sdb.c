@@ -95,7 +95,7 @@ static int cmd_d(char *args)
   char *endptr;
   if (args == NULL || strlen(args) == 0) 
   {
-    printf("Usage: x N EXPR\n");
+    printf("Usage: d N\n");
     return 1;
   }
   long watchpoint_id = strtol(args, &endptr, 10);
