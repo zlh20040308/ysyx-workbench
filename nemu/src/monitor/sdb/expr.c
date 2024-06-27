@@ -115,10 +115,10 @@ void init_regex()
 typedef struct token
 {
   int type;
-  char str[32];
+  char str[200];
 } Token;
 
-static Token tokens[32] __attribute__((used)) = {};
+static Token tokens[200] __attribute__((used)) = {};
 static int nr_token __attribute__((used)) = 0;
 
 static bool make_token(char *e)
@@ -150,7 +150,7 @@ static bool make_token(char *e)
         if (rules[i].token_type == TK_NOTYPE)
           break;
 
-        if (nr_token == 32)
+        if (nr_token == 200)
         {
           printf("Your expersion is too long!\n");
           return false;
