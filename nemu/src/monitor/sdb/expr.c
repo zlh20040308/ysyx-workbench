@@ -217,6 +217,26 @@ static bool make_token(char *e)
   return true;
 }
 
+static const char *token_to_str(int type){
+  switch (type)
+  {
+    case TK_NOTYPE : return "NOT";
+    case TK_EQ : return "EQ";
+    case TK_DEC: return "DEC";
+    case TK_HEX: return "HEX";
+    case DEREF: return "DEREF";
+    case TK_NOTEQ: return "NOTEQ";
+    case TK_LAND: return "LAND";
+    case TK_REG: return "REG";
+    case TK_GT: return "GT";
+    case TK_G: return "G";
+    case TK_LT: return "LT";
+    case TK_L: return "L";
+    default: return "UNKNOWN"; 
+  }
+}
+
+
 static bool check_parentheses(int p, int q)
 {
   if (p < 0 || q >= nr_token)
@@ -269,7 +289,7 @@ static word_t eval(int p, int q, bool *success)
     {
       char *endptr = "";
       word_t num;
-      Log("tokens[p].type = %d", tokens[p].type);
+      Log("tokens type is %s", token_to_str(tokens[p].type));
       switch (tokens[p].type)
       {
       case TK_DEC:
