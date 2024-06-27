@@ -59,7 +59,7 @@ void process_file(const char *filename)
     }
     else
     {
-      printf("Expression parsing failed: %s\n", expression);
+      printf("Expression eval failed: %s\n", expression);
     }
   }
 
