@@ -286,11 +286,11 @@ static bool check_parentheses(int p, int q)
           return false;
         }
         
-        if (tokens[top - 1].type == '(')
+        if (buf[top - 1] == '(')
         {
           top--;
         }
-        else if (tokens[top - 1].type == '1')
+        else if (buf[top - 1] == '1')
         {
           if (i == q)
           {
