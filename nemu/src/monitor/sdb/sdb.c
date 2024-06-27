@@ -114,7 +114,7 @@ static int cmd_p(char *args)
     printf("Usage: p [OPTION]\n");
     return 0;
   }
-  bool success = false;
+  bool success = true;
   word_t val_expr = expr(args, &success);
   Log("success = %d\n", success);
   if (success)
