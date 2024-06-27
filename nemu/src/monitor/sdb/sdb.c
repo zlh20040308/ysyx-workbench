@@ -110,7 +110,7 @@ static int cmd_d(char *args)
 
 static int cmd_p(char *args)
 {
-  if(args == NULL || *args == '\0' ){
+  if(args == NULL || strlen(args) == 0 ){
     printf("Usage: p [OPTION]\n");
     return 0;
   }
@@ -134,7 +134,7 @@ static int cmd_help(char *args);
 static int cmd_si(char *args)
 {
   char *endptr;
-  if (args == NULL || args[0] == '\0')
+  if (args == NULL || strlen(args) == 0)
   {
     cpu_exec(1);
     return 0;
@@ -150,7 +150,7 @@ static int cmd_si(char *args)
 
 static int cmd_info(char *args)
 {
-  if (args == NULL || args[0] == '\0')
+  if (args == NULL || strlen(args) == 0)
   {
     printf("Usage: info <required_argument>\n");
     return 0;
