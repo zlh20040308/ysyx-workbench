@@ -76,9 +76,9 @@ int main(int argc, char *argv[])
 #endif
 
   /* Start engine. */
-  // engine_start();
-  const char *filename = "/home/feng/OS/ysyx-workbench/nemu/tools/gen-expr/input";
-  process_file(filename);
+  engine_start();
+  // const char *filename = "/home/feng/OS/ysyx-workbench/nemu/tools/gen-expr/input";
+  // process_file(filename);
 
   return is_exit_status_bad();
 }
