@@ -20,6 +20,8 @@
  */
 #include <regex.h>
 
+#define EXPR_LENGTH 200
+
 enum
 {
   TK_NOTYPE = 256,
@@ -115,10 +117,10 @@ void init_regex()
 typedef struct token
 {
   int type;
-  char str[200];
+  char str[EXPR_LENGTH];
 } Token;
 
-static Token tokens[200] __attribute__((used)) = {};
+static Token tokens[EXPR_LENGTH] __attribute__((used)) = {};
 static int nr_token __attribute__((used)) = 0;
 
 static bool make_token(char *e)
@@ -150,7 +152,7 @@ static bool make_token(char *e)
         if (rules[i].token_type == TK_NOTYPE)
           break;
 
-        if (nr_token == 200)
+        if (nr_token == EXPR_LENGTH)
         {
           printf("Your expersion is too long!\n");
           return false;
