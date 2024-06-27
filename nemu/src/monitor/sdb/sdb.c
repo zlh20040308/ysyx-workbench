@@ -86,6 +86,11 @@ static int cmd_q(char *args)
 
 static int cmd_w(char *args)
 {
+  if (args == NULL || strlen(args) == 0) 
+  {
+    printf("Usage: w EXPR\n");
+    return 1;
+  }
   add_watchpoint(args);
   return 0;
 }
