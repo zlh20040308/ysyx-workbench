@@ -254,9 +254,7 @@ static const char *token_to_str(int type)
 
 static bool check_parentheses(int p, int q)
 {
-  if (p < 0 || q >= nr_token)
-    return false;
-  if (tokens[p].type != '(' || tokens[q].type != ')')
+  if (p < 0 || q >= nr_token || tokens[p].type != '(' || tokens[q].type != ')')
     return false;
 
   int top = 0;
