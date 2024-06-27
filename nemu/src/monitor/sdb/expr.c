@@ -302,10 +302,6 @@ static bool check_parentheses(int p, int q)
           }
         }
       }
-      else
-      {
-        return false;
-      }
     }
   }
   free(buf);
