@@ -217,25 +217,38 @@ static bool make_token(char *e)
   return true;
 }
 
-static const char *token_to_str(int type){
+static const char *token_to_str(int type)
+{
   switch (type)
   {
-    case TK_NOTYPE : return "NOT";
-    case TK_EQ : return "EQ";
-    case TK_DEC: return "DEC";
-    case TK_HEX: return "HEX";
-    case DEREF: return "DEREF";
-    case TK_NOTEQ: return "NOTEQ";
-    case TK_LAND: return "LAND";
-    case TK_REG: return "REG";
-    case TK_GT: return "GT";
-    case TK_G: return "G";
-    case TK_LT: return "LT";
-    case TK_L: return "L";
-    default: return "UNKNOWN"; 
+  case TK_NOTYPE:
+    return "NOT";
+  case TK_EQ:
+    return "EQ";
+  case TK_DEC:
+    return "DEC";
+  case TK_HEX:
+    return "HEX";
+  case DEREF:
+    return "DEREF";
+  case TK_NOTEQ:
+    return "NOTEQ";
+  case TK_LAND:
+    return "LAND";
+  case TK_REG:
+    return "REG";
+  case TK_GT:
+    return "GT";
+  case TK_G:
+    return "G";
+  case TK_LT:
+    return "LT";
+  case TK_L:
+    return "L";
+  default:
+    return "UNKNOWN";
   }
 }
-
 
 static bool check_parentheses(int p, int q)
 {
@@ -245,17 +258,49 @@ static bool check_parentheses(int p, int q)
     return false;
 
   int top = 0;
-  for (size_t i = p; i <= q; i++)
+  char *buf = malloc(sizeof(char) * (q - p + 1));
+  for (int i = p; i <= q; i++)
   {
-    if (tokens[i].type == '(')
+    if (i == p)
     {
-      top++;
-    }
-    else if (tokens[i].type == ')')
-    {
-      if (top > 0)
+      if (tokens[i].type == '(')
       {
-        top--;
+        buf[top++] = '(';
+        buf[top++] = '1'; // 标记位
+      }
+      else
+      {
+        return false;
+      }
+    }
+    else
+    {
+      if (tokens[i].type == '(')
+      {
+        buf[top++] = '(';
+      }
+      else if (tokens[i].type == ')')
+      {
+        if (top <= 0)
+        {
+          return false;
+        }
+        
+        if (tokens[top - 1].type == '(')
+        {
+          top--;
+        }
+        else if (tokens[top - 1].type == '1')
+        {
+          if (i == q)
+          {
+            return true;
+          }
+          else
+          {
+            return false;
+          }
+        }
       }
       else
       {
@@ -263,10 +308,8 @@ static bool check_parentheses(int p, int q)
       }
     }
   }
-  if (top == 0)
-    return true;
-  else
-    return false;
+  free(buf);
+  return false;
 }
 
 static word_t eval(int p, int q, bool *success)
@@ -407,7 +450,8 @@ static word_t eval(int p, int q, bool *success)
       }
     }
 
-    if(cur_select_op_priority == 0 || select_op_idx == 0 ){
+    if (cur_select_op_priority == 0 || select_op_idx == 0)
+    {
       *success = false;
       return 1;
     }
@@ -417,7 +461,7 @@ static word_t eval(int p, int q, bool *success)
     {
       return 1;
     }
-    Log("v2 = 0x%09x",v2);
+    Log("v2 = 0x%09x", v2);
     word_t v1 = 0;
     if (select_op != DEREF)
     {
@@ -426,10 +470,10 @@ static word_t eval(int p, int q, bool *success)
       {
         return 1;
       }
-      Log("v1 = 0x%09x",v1);
+      Log("v1 = 0x%09x", v1);
     }
 
-    Log("select_op = %d", select_op);
+    Log("select_op_index = %d", select_op);
     switch (select_op)
     {
     case '+':
@@ -439,7 +483,8 @@ static word_t eval(int p, int q, bool *success)
     case '*':
       return v1 * v2;
     case '/':
-      if (v2 == 0){
+      if (v2 == 0)
+      {
         *success = false;
         printf("Can't divide 0!\n");
         return 1;
