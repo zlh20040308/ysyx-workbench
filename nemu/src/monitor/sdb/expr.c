@@ -20,6 +20,8 @@
  */
 #include <regex.h>
 
+#define EXPR_LENGTH 200
+
 enum
 {
   TK_NOTYPE = 256,
@@ -115,10 +117,10 @@ void init_regex()
 typedef struct token
 {
   int type;
-  char str[32];
+  char str[EXPR_LENGTH];
 } Token;
 
-static Token tokens[32] __attribute__((used)) = {};
+static Token tokens[EXPR_LENGTH] __attribute__((used)) = {};
 static int nr_token __attribute__((used)) = 0;
 
 static bool make_token(char *e)
@@ -150,7 +152,7 @@ static bool make_token(char *e)
         if (rules[i].token_type == TK_NOTYPE)
           break;
 
-        if (nr_token == 32)
+        if (nr_token == EXPR_LENGTH)
         {
           printf("Your expersion is too long!\n");
           return false;
@@ -217,36 +219,93 @@ static bool make_token(char *e)
   return true;
 }
 
+static const char *token_to_str(int type)
+{
+  switch (type)
+  {
+  case TK_NOTYPE:
+    return "NOT";
+  case TK_EQ:
+    return "EQ";
+  case TK_DEC:
+    return "DEC";
+  case TK_HEX:
+    return "HEX";
+  case DEREF:
+    return "DEREF";
+  case TK_NOTEQ:
+    return "NOTEQ";
+  case TK_LAND:
+    return "LAND";
+  case TK_REG:
+    return "REG";
+  case TK_GT:
+    return "GT";
+  case TK_G:
+    return "G";
+  case TK_LT:
+    return "LT";
+  case TK_L:
+    return "L";
+  default:
+    return "UNKNOWN";
+  }
+}
+
 static bool check_parentheses(int p, int q)
 {
-  if (p < 0 || q >= nr_token)
-    return false;
-  if (tokens[p].type != '(' || tokens[q].type != ')')
+  if (p < 0 || q >= nr_token || tokens[p].type != '(' || tokens[q].type != ')')
     return false;
 
   int top = 0;
-  for (size_t i = p; i <= q; i++)
+  char *buf = malloc(sizeof(char) * (q - p + 1));
+  for (int i = p; i <= q; i++)
   {
-    if (tokens[i].type == '(')
+    if (i == p)
     {
-      top++;
-    }
-    else if (tokens[i].type == ')')
-    {
-      if (top > 0)
+      if (tokens[i].type == '(')
       {
-        top--;
+        buf[top++] = '(';
+        buf[top++] = '1'; // 标记位
       }
       else
       {
         return false;
       }
     }
+    else
+    {
+      if (tokens[i].type == '(')
+      {
+        buf[top++] = '(';
+      }
+      else if (tokens[i].type == ')')
+      {
+        if (top <= 0)
+        {
+          return false;
+        }
+        
+        if (buf[top - 1] == '(')
+        {
+          top--;
+        }
+        else if (buf[top - 1] == '1')
+        {
+          if (i == q)
+          {
+            return true;
+          }
+          else
+          {
+            return false;
+          }
+        }
+      }
+    }
   }
-  if (top == 0)
-    return true;
-  else
-    return false;
+  free(buf);
+  return false;
 }
 
 static word_t eval(int p, int q, bool *success)
@@ -269,7 +328,7 @@ static word_t eval(int p, int q, bool *success)
     {
       char *endptr = "";
       word_t num;
-      Log("tokens[p].type = %d", tokens[p].type);
+      Log("tokens type is %s", token_to_str(tokens[p].type));
       switch (tokens[p].type)
       {
       case TK_DEC:
@@ -387,7 +446,8 @@ static word_t eval(int p, int q, bool *success)
       }
     }
 
-    if(cur_select_op_priority == 0 || select_op_idx == 0 ){
+    if (cur_select_op_priority == 0 || select_op_idx == 0)
+    {
       *success = false;
       return 1;
     }
@@ -397,7 +457,7 @@ static word_t eval(int p, int q, bool *success)
     {
       return 1;
     }
-    Log("v2 = 0x%09x",v2);
+    Log("v2 = 0x%09x", v2);
     word_t v1 = 0;
     if (select_op != DEREF)
     {
@@ -406,10 +466,10 @@ static word_t eval(int p, int q, bool *success)
       {
         return 1;
       }
-      Log("v1 = 0x%09x",v1);
+      Log("v1 = 0x%09x", v1);
     }
 
-    Log("select_op = %d", select_op);
+    Log("select_op_index = %d", select_op);
     switch (select_op)
     {
     case '+':
@@ -419,6 +479,12 @@ static word_t eval(int p, int q, bool *success)
     case '*':
       return v1 * v2;
     case '/':
+      if (v2 == 0)
+      {
+        *success = false;
+        printf("Can't divide 0!\n");
+        return 1;
+      }
       return v1 / v2;
     case DEREF:
       return paddr_read(v2, sizeof(word_t));

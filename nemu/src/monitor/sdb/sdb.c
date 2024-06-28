@@ -60,7 +60,6 @@ int get_command_code(const char *args)
 {
   if (strcmp(args, "r") == 0)
   {
-    Log("%d", INFO_R);
     return INFO_R;
   }
   else if (strcmp(args, "w") == 0)
@@ -87,6 +86,11 @@ static int cmd_q(char *args)
 
 static int cmd_w(char *args)
 {
+  if (args == NULL || strlen(args) == 0) 
+  {
+    printf("Usage: w EXPR\n");
+    return 1;
+  }
   add_watchpoint(args);
   return 0;
 }
@@ -94,6 +98,11 @@ static int cmd_w(char *args)
 static int cmd_d(char *args)
 {
   char *endptr;
+  if (args == NULL || strlen(args) == 0) 
+  {
+    printf("Usage: d <watchpoint ID>\n");
+    return 1;
+  }
   long watchpoint_id = strtol(args, &endptr, 10);
   if (*endptr != '\0')
   {
@@ -106,11 +115,11 @@ static int cmd_d(char *args)
 
 static int cmd_p(char *args)
 {
-  if(args == NULL || *args == '\0' ){
+  if(args == NULL || strlen(args) == 0 ){
     printf("Usage: p [OPTION]\n");
     return 0;
   }
-  bool success = false;
+  bool success = true;
   word_t val_expr = expr(args, &success);
   Log("success = %d\n", success);
   if (success)
@@ -130,7 +139,7 @@ static int cmd_help(char *args);
 static int cmd_si(char *args)
 {
   char *endptr;
-  if (args == NULL || args[0] == '\0')
+  if (args == NULL || strlen(args) == 0)
   {
     cpu_exec(1);
     return 0;
@@ -146,9 +155,9 @@ static int cmd_si(char *args)
 
 static int cmd_info(char *args)
 {
-  if (args == NULL || args[0] == '\0')
+  if (args == NULL || strlen(args) == 0)
   {
-    Log("Usage: info <required_argument>");
+    printf("Usage: info <required_argument>\n");
     return 0;
   }
   switch (get_command_code(args))
@@ -171,6 +180,12 @@ static int cmd_info(char *args)
 
 static int cmd_x(char *args)
 {
+  if (args == NULL || strlen(args) == 0) 
+  {
+    printf("Usage: x N EXPR\n");
+    return 1;
+  }
+  
   char *N = strtok(args, " ");
   char *EXPR = N + strlen(N) + 1;
   char *endptr;
@@ -187,7 +202,16 @@ static int cmd_x(char *args)
   {
     for (paddr_t i = 0; i < num; i++)
     {
-      printf("0x%08x 0x%08x\n", val_expr + i * 4, paddr_read(val_expr + i * 4, sizeof(word_t)));
+
+      word_t addr = val_expr + i * 4;
+      if (addr>=0x80000000 && addr <= 0x87ffffff)
+      {
+        printf("0x%08x 0x%08x\n", val_expr + i * 4, paddr_read(addr, sizeof(word_t)));
+      }else {
+        Log("0x%08x\n",addr);
+        printf("Sorry, but I can only show you the memory in[0x80000000, 0x87ffffff]\n");
+        return 1;
+      }
     }
   }
   else
