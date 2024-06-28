@@ -36,6 +36,7 @@ enum
   TK_G,
   TK_LT,
   TK_L,
+  // TK_NEG,
 
   /* TODO: Add more token types */
 
@@ -72,6 +73,7 @@ static struct rule
     {" +", TK_NOTYPE},             // spaces
     {"\\+", '+'},                  // plus
     {"==", TK_EQ},                 // equal
+    // {"-[ ]*[0-9]+", TK_NEG},       // negative numbers with optional spaces (负数)
     {"\\-", '-'},                  // minus
     {"\\*", '*'},                  // multiply or dereference
     {"\\/", '/'},                  // divide
