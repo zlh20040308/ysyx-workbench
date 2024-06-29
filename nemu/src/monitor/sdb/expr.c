@@ -70,9 +70,9 @@ static struct rule
      * Pay attention to the precedence level of different rules.
      */
 
-    {" +", TK_NOTYPE},             // spaces
-    {"\\+", '+'},                  // plus
-    {"==", TK_EQ},                 // equal
+    {" +", TK_NOTYPE}, // spaces
+    {"\\+", '+'},      // plus
+    {"==", TK_EQ},     // equal
     // {"-[ ]*[0-9]+", TK_NEG},       // negative numbers with optional spaces (负数)
     {"\\-", '-'},                  // minus
     {"\\*", '*'},                  // multiply or dereference
@@ -287,7 +287,7 @@ static bool check_parentheses(int p, int q)
         {
           return false;
         }
-        
+
         if (buf[top - 1] == '(')
         {
           top--;
@@ -454,52 +454,127 @@ static word_t eval(int p, int q, bool *success)
       return 1;
     }
     Log("select_op_idx  = %d cur_select_op_priority = %d", select_op_idx, cur_select_op_priority);
-    word_t v2 = eval(select_op_idx + 1, q, success);
-    // if (!(*success))
-    // {
-    //   return 1;
-    // }
+
+    bool eval_v1_success = 1;
+    bool eval_v2_success = 1;
+    word_t v2 = eval(select_op_idx + 1, q, &eval_v2_success);
+
     Log("v2 = 0x%09x", v2);
     word_t v1 = 0;
     if (select_op != DEREF)
     {
-      v1 = eval(p, select_op_idx - 1, success);
-      if (!(*success))
-      {
-        return 1;
-      }
+      v1 = eval(p, select_op_idx - 1, &eval_v1_success);
       Log("v1 = 0x%09x", v1);
     }
 
-    Log("select_op_index = %d", select_op);
+    Log("select_op = %d", select_op);
     switch (select_op)
     {
     case '+':
-      return v1 + v2;
-    case '-':
-      return v1 - v2;
-    case '*':
-      return v1 * v2;
-    case '/':
-      if (v2 == 0)
+      if (eval_v1_success && eval_v2_success)
+      {
+        *success = true;
+        return v1 + v2;
+      }
+      else
       {
         *success = false;
         return 1;
       }
-      return v1 / v2;
-    case DEREF:
-      return paddr_read(v2, sizeof(word_t));
-    case TK_EQ:
-      return v1 == v2;
-    case TK_NOTEQ:
-      return v1 != v2;
-    case TK_LAND:
-      if (v1 != 0)
+
+    case '-':
+      if (eval_v1_success && eval_v2_success)
       {
         *success = true;
+        return v1 - v2;
+      }
+      else
+      {
+        *success = false;
         return 1;
       }
-      return v1 && v2;
+    case '*':
+      if (eval_v1_success && eval_v2_success)
+      {
+        *success = true;
+        return v1 * v2;
+      }
+      else
+      {
+        *success = false;
+        return 1;
+      }
+    case '/':
+      if (eval_v1_success && eval_v2_success)
+      {
+        if (v2 == 0)
+        {
+          *success = false;
+          return 1;
+        }
+        else
+        {
+          *success = true;
+          return v1 / v2;
+        }
+      }
+      else
+      {
+        *success = false;
+        return 1;
+      }
+    case DEREF:
+      if (eval_v2_success)
+      {
+        *success = true;
+        return paddr_read(v2, sizeof(word_t));
+      }
+      else
+      {
+        *success = false;
+        return 1;
+      }
+    case TK_EQ:
+      if (eval_v1_success && eval_v2_success)
+      {
+        *success = true;
+        return v1 == v2;
+      }
+      else
+      {
+        *success = false;
+        return 1;
+      }
+
+    case TK_NOTEQ:
+      if (eval_v1_success && eval_v2_success)
+      {
+        *success = true;
+        return v1 != v2;
+      }
+      else
+      {
+        *success = false;
+        return 1;
+      }
+    case TK_LAND:
+      if (eval_v1_success && eval_v2_success)
+      {
+        *success = true;
+        return v1 && v2;
+      }
+      if (!eval_v1_success)
+      {
+        *success = false;
+        return 1;
+      }
+      if (!eval_v2_success)
+      {
+        *success = true;
+        return v1 == true;
+      }
+      *success = false;
+      return 1;
     }
   }
   return 0;
