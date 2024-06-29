@@ -34,6 +34,8 @@ void process_file(const char *filename)
   }
 
   char line[BUF_SIZE];
+  int items = 0;
+  int count = 0;
   while (fgets(line, sizeof(line), file))
   {
     unsigned expected_result;
@@ -45,12 +47,13 @@ void process_file(const char *filename)
       fprintf(stderr, "Failed to parse line: %s", line);
       continue;
     }
-
+    
     bool success = false;
     word_t actual_result = expr(expression, &success);
 
     if (success)
     {
+      count++;
       printf("Expected: %u, Actual: %u, Expression: %s\n", expected_result, actual_result, expression);
       if (expected_result != actual_result)
       {
@@ -62,6 +65,7 @@ void process_file(const char *filename)
       printf("Expression eval failed: %s\n", expression);
     }
   }
+  printf("total = %d,passed = %d\n",items,count);
 
   fclose(file);
 }
