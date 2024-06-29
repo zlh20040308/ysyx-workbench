@@ -35,7 +35,7 @@ void process_file(const char *filename)
 
   char line[BUF_SIZE];
   int items = 0;
-  int count = 0;
+  int passed = 0;
   while (fgets(line, sizeof(line), file))
   {
     items++;
@@ -54,11 +54,13 @@ void process_file(const char *filename)
 
     if (success)
     {
-      count++;
+      
       if (expected_result != actual_result)
       {
         printf("Expected: %u, Actual: %u, Expression: %s\n", expected_result, actual_result, expression);
         printf("Mismatch detected!\n");
+      }else{
+        passed++;
       }
     }
     else
@@ -66,7 +68,7 @@ void process_file(const char *filename)
       printf("Expression eval failed: %s\n", expression);
     }
   }
-  printf("total = %d,passed = %d\n", items, count);
+  printf("total = %d,passed = %d\n", items, passed);
 
   fclose(file);
 }
