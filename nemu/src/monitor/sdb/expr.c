@@ -441,7 +441,7 @@ static word_t eval(int p, int q, bool *success)
       }
     }
 
-    if (cur_select_op_priority == 0 || select_op_idx == 0)
+    if (cur_select_op_priority == -1 || select_op_idx == -1)
     {
       *success = false;
       return 1;
