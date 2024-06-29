@@ -484,7 +484,6 @@ static word_t eval(int p, int q, bool *success)
       if (v2 == 0)
       {
         *success = false;
-        printf("Can't divide 0!\n");
         return 1;
       }
       return v1 / v2;
