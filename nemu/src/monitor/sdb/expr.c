@@ -455,10 +455,10 @@ static word_t eval(int p, int q, bool *success)
     }
     Log("select_op_idx  = %d cur_select_op_priority = %d", select_op_idx, cur_select_op_priority);
     word_t v2 = eval(select_op_idx + 1, q, success);
-    if (!(*success))
-    {
-      return 1;
-    }
+    // if (!(*success))
+    // {
+    //   return 1;
+    // }
     Log("v2 = 0x%09x", v2);
     word_t v1 = 0;
     if (select_op != DEREF)
