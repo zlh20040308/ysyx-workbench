@@ -450,7 +450,6 @@ static word_t eval(int p, int q, bool *success)
 
     bool eval_v1_success = true, eval_v2_success = true;
 
-
     word_t v1 = 0;
     if (select_op != DEREF)
     {
@@ -520,8 +519,14 @@ static word_t eval(int p, int q, bool *success)
     case DEREF:
       if (eval_v2_success)
       {
-        *success = true;
-        return paddr_read(v2, sizeof(word_t));
+        if (v2 >= 0x80000000 && v2 <= 0x87ffffff)
+        {
+          *success = true;
+          return paddr_read(v2, sizeof(word_t));
+        }else{
+          *success = false;
+          return 1;
+        }
       }
       else
       {
