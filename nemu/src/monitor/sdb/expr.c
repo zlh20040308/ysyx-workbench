@@ -495,6 +495,11 @@ static word_t eval(int p, int q, bool *success)
     case TK_NOTEQ:
       return v1 != v2;
     case TK_LAND:
+      if (v1 != 0)
+      {
+        *success = true;
+        return 1;
+      }
       return v1 && v2;
     }
   }
