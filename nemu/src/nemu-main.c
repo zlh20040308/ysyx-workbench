@@ -48,16 +48,16 @@ void process_file(const char *filename)
       fprintf(stderr, "Failed to parse line: %s", line);
       continue;
     }
-    
+
     bool success = false;
     word_t actual_result = expr(expression, &success);
 
     if (success)
     {
       count++;
-      printf("Expected: %u, Actual: %u, Expression: %s\n", expected_result, actual_result, expression);
       if (expected_result != actual_result)
       {
+        printf("Expected: %u, Actual: %u, Expression: %s\n", expected_result, actual_result, expression);
         printf("Mismatch detected!\n");
       }
     }
@@ -66,7 +66,7 @@ void process_file(const char *filename)
       printf("Expression eval failed: %s\n", expression);
     }
   }
-  printf("total = %d,passed = %d\n",items,count);
+  printf("total = %d,passed = %d\n", items, count);
 
   fclose(file);
 }
