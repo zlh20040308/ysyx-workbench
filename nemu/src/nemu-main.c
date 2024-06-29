@@ -38,6 +38,7 @@ void process_file(const char *filename)
   int count = 0;
   while (fgets(line, sizeof(line), file))
   {
+    items++;
     unsigned expected_result;
     char expression[BUF_SIZE];
 
