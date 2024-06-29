@@ -294,14 +294,7 @@ static bool check_parentheses(int p, int q)
         }
         else if (buf[top - 1] == '1')
         {
-          if (i == q)
-          {
-            return true;
-          }
-          else
-          {
-            return false;
-          }
+          return i == q;
         }
       }
     }
@@ -455,19 +448,20 @@ static word_t eval(int p, int q, bool *success)
     }
     Log("select_op_idx  = %d cur_select_op_priority = %d", select_op_idx, cur_select_op_priority);
 
-    bool eval_v1_success = 1;
-    bool eval_v2_success = 1;
-    word_t v2 = eval(select_op_idx + 1, q, &eval_v2_success);
+    bool eval_v1_success = true, eval_v2_success = true;
 
-    Log("v2 = 0x%09x", v2);
+
     word_t v1 = 0;
     if (select_op != DEREF)
     {
       v1 = eval(p, select_op_idx - 1, &eval_v1_success);
       Log("v1 = 0x%09x", v1);
     }
+    word_t v2 = eval(select_op_idx + 1, q, &eval_v2_success);
 
-    Log("select_op = %d", select_op);
+    Log("v2 = 0x%09x", v2);
+
+    Log("select_op is %s", token_to_str(select_op));
     switch (select_op)
     {
     case '+':
@@ -597,7 +591,6 @@ word_t expr(char *e, bool *success)
   }
   int p = 0, q = nr_token - 1;
   Log("e = %s ,nr_token = %d", e, nr_token);
-  Log("success = %d", *success);
 
   /* TODO: Insert codes to evaluate the expression. */
   return eval(p, q, success);
