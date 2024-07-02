@@ -523,7 +523,9 @@ static word_t eval(int p, int q, bool *success)
         {
           *success = true;
           return paddr_read(v2, sizeof(word_t));
-        }else{
+        }
+        else
+        {
           *success = false;
           return 1;
         }
@@ -592,7 +594,6 @@ word_t expr(char *e, bool *success)
     if (tokens[i].type == '*' && (i == 0 || tokens[i - 1].type == '(' || tokens[i - 1].type == '+' || tokens[i - 1].type == '-' || tokens[i - 1].type == '*' || tokens[i - 1].type == '/' || tokens[i - 1].type == TK_EQ || tokens[i - 1].type == TK_NOTEQ || tokens[i - 1].type == TK_LAND || tokens[i - 1].type == DEREF))
     {
       tokens[i].type = DEREF;
-      printf("acacac");
     }
   }
   int p = 0, q = nr_token - 1;

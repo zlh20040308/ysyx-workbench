@@ -86,7 +86,7 @@ static int cmd_q(char *args)
 
 static int cmd_w(char *args)
 {
-  if (args == NULL || strlen(args) == 0) 
+  if (args == NULL || strlen(args) == 0)
   {
     printf("Usage: w EXPR\n");
     return 1;
@@ -98,7 +98,7 @@ static int cmd_w(char *args)
 static int cmd_d(char *args)
 {
   char *endptr;
-  if (args == NULL || strlen(args) == 0) 
+  if (args == NULL || strlen(args) == 0)
   {
     printf("Usage: d <watchpoint ID>\n");
     return 1;
@@ -106,7 +106,7 @@ static int cmd_d(char *args)
   long watchpoint_id = strtol(args, &endptr, 10);
   if (*endptr != '\0')
   {
-    Log("Conversion error");
+    printf("Conversion error\n");
     return 0;
   }
   del_watchpoint(watchpoint_id);
@@ -115,7 +115,8 @@ static int cmd_d(char *args)
 
 static int cmd_p(char *args)
 {
-  if(args == NULL || strlen(args) == 0 ){
+  if (args == NULL || strlen(args) == 0)
+  {
     printf("Usage: p [OPTION]\n");
     return 0;
   }
@@ -149,7 +150,7 @@ static int cmd_si(char *args)
   if (*endptr == '\0')
     cpu_exec(num);
   else
-    Log("Conversion error, non-convertible part: %s", endptr);
+    printf("Conversion error, non-convertible part: %s\n", endptr);
   return 0;
 }
 
@@ -180,19 +181,19 @@ static int cmd_info(char *args)
 
 static int cmd_x(char *args)
 {
-  if (args == NULL || strlen(args) == 0) 
+  if (args == NULL || strlen(args) == 0)
   {
     printf("Usage: x N EXPR\n");
     return 1;
   }
-  
+
   char *N = strtok(args, " ");
   char *EXPR = N + strlen(N) + 1;
   char *endptr;
   uint64_t num = strtol(N, &endptr, 10);
   if (*endptr != '\0')
   {
-    Log("Conversion error");
+    printf("Conversion error\n");
     return 0;
   }
   bool success = false;
@@ -204,11 +205,13 @@ static int cmd_x(char *args)
     {
 
       word_t addr = val_expr + i * 4;
-      if (addr>=0x80000000 && addr <= 0x87ffffff)
+      if (addr >= 0x80000000 && addr <= 0x87ffffff)
       {
         printf("0x%08x 0x%08x\n", val_expr + i * 4, paddr_read(addr, sizeof(word_t)));
-      }else {
-        Log("0x%08x\n",addr);
+      }
+      else
+      {
+        Log("addr = 0x%08x", addr);
         printf("Sorry, but I can only show you the memory in[0x80000000, 0x87ffffff]\n");
         return 1;
       }
