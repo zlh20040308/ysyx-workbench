@@ -64,7 +64,11 @@ enum
     *imm = (SEXT(BITS(i, 31, 31), 1) << 20) | (BITS(i, 30, 21) << 1) | (BITS(i, 20, 20) << 11) | (BITS(i, 19, 12) << 12); \
   } while (0)
 
-// #define immB() do { *imm = (SEXT(BITS(i, 31, 25), 7) << 5) | BITS(i, 11, 7); } while(0)
+#define immB()                                                                                                        \
+  do                                                                                                                  \
+  {                                                                                                                   \
+    *imm = (SEXT(BITS(i, 31, 31), 1) << 12) | (BITS(i, 30, 25) << 5) | (BITS(i, 11, 8) << 1) | (BITS(i, 7, 7) << 11); \
+  } while (0)
 
 static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_t *imm, int type)
 {
@@ -92,6 +96,11 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_
   case TYPE_R:
     src1R();
     src2R();
+    break;
+  case TYPE_B:
+    src1R();
+    src2R();
+    immB();
     break;
   }
 }
@@ -122,10 +131,8 @@ static int decode_exec(Decode *s)
   INSTPAT("??????? ????? ????? 010 ????? 00000 11", lw, I, R(rd) = Mr(src1 + imm, 4););
   INSTPAT("0000000 ????? ????? 000 ????? 01100 11", add, R, R(rd) = src1 + src2;);
   INSTPAT("0100000 ????? ????? 000 ????? 01100 11", sub, R, R(rd) = src1 - src2;);
-  INSTPAT("??????? ????? ????? 011 ????? 00100 11", sltiu, I, R(rd) = src1 < imm ;);
-
-
-
+  INSTPAT("??????? ????? ????? 011 ????? 00100 11", sltiu, I, R(rd) = src1 < imm;);
+  INSTPAT("??????? ????? ????? 000 ????? 11000 11", beq, B, s->dnpc = src1 == src2 ? s->pc + imm : s->dnpc);
 
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak, N, NEMUTRAP(s->pc, R(10))); // R(10) is $a0
   INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv, N, INV(s->pc));
