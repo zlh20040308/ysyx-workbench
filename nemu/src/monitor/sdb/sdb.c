@@ -196,7 +196,7 @@ static int cmd_x(char *args)
     printf("Conversion error\n");
     return 0;
   }
-  bool success = false;
+  bool success = true;
   word_t val_expr = expr(EXPR, &success);
   Log("val_expr = 0x%09x, success = %d", val_expr, success);
   if (success)
