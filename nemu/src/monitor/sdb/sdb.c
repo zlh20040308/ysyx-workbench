@@ -205,14 +205,14 @@ static int cmd_x(char *args)
     {
 
       word_t addr = val_expr + i * 4;
-      if (addr >= 0x80000000 && addr <= 0x87ffffff)
+      if (addr >= CONFIG_MBASE && addr < CONFIG_MBASE + CONFIG_MSIZE)
       {
         printf("0x%08x 0x%08x\n", val_expr + i * 4, paddr_read(addr, sizeof(word_t)));
       }
       else
       {
         Log("addr = 0x%08x", addr);
-        printf("Sorry, but I can only show you the memory in[0x80000000, 0x87ffffff]\n");
+        printf("Sorry, but I can only show you the memory in[0x%08x, 0x%08x]\n",CONFIG_MBASE,CONFIG_MBASE + CONFIG_MSIZE);
         return 1;
       }
     }

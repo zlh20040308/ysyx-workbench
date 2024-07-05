@@ -519,7 +519,7 @@ static word_t eval(int p, int q, bool *success)
     case DEREF:
       if (eval_v2_success)
       {
-        if (v2 >= 0x80000000 && v2 <= 0x87ffffff)
+        if (v2 >= CONFIG_MBASE && v2 < CONFIG_MBASE + CONFIG_MSIZE )
         {
           *success = true;
           return paddr_read(v2, sizeof(word_t));
