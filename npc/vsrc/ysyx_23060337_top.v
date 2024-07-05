@@ -1,4 +1,4 @@
-module top(
+module ysyx_23060337_top(
     input clk,
     input rst,
     input [4:0] btn,
@@ -25,23 +25,6 @@ module top(
     output [7:0] seg7
 );
 
-wire [2:0] my_y; 
-wire input_valid;
 
-
-encode83 my_encode83(
-    .x(sw[7:0]),
-    .en_in(sw[8]),
-    .y(my_y),
-    .input_valid(input_valid)
-);
-
-assign ledr[4] = input_valid;
-assign ledr[2:0] = my_y ;
-
-bcd7seg my_bcd7seg(
-    .b({1'b0,my_y}),
-    .h(seg0[7:1])
-);
 
 endmodule
