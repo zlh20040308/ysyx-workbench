@@ -212,7 +212,7 @@ static int cmd_x(char *args)
       else
       {
         Log("addr = 0x%08x", addr);
-        printf("Sorry, but I can only show you the memory in[0x%08x, 0x%08x]\n",CONFIG_MBASE,CONFIG_MBASE + CONFIG_MSIZE - 1);
+        printf("Sorry, but I can only show you the memory in[0x%08x, 0x%08x]\n", CONFIG_MBASE, CONFIG_MBASE + CONFIG_MSIZE - 1);
         return 1;
       }
     }
