@@ -20,14 +20,17 @@
 //   nvboard_quit();
 // }
 
-uint32_t M[] = {
-  
-}
+
 
 
 #include <stdint.h>
 #include "verilated_vcd_c.h"
 #include "Vysyx_23060337_top.h"
+
+
+uint32_t M[] = {
+  0xfd010113,
+}
 
 VerilatedContext *contextp = NULL;
 VerilatedVcdC *tfp = NULL;
@@ -64,6 +67,8 @@ uint32_t pmem_read(uint32_t pc){
 int main()
 {
   sim_init();
+  top->pc = 0x80000000;
+  
 
   while (???)
   {
