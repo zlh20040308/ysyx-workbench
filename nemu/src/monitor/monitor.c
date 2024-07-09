@@ -53,16 +53,23 @@ static long load_img() {
   FILE *fp = fopen(img_file, "rb");
   Assert(fp, "Can not open '%s'", img_file);
 
+  // 将文件指针移动到文件末尾
   fseek(fp, 0, SEEK_END);
+
+  // 获取文件指针当前位置（即文件大小）并存储在 size 变量中
   long size = ftell(fp);
 
   Log("The image is %s, size = %ld", img_file, size);
 
+  // 将文件指针重置到文件开头
   fseek(fp, 0, SEEK_SET);
+
+  // 将 镜像文件 读入内存（pmem）
   int ret = fread(guest_to_host(RESET_VECTOR), size, 1, fp);
   assert(ret == 1);
 
   fclose(fp);
+  // 返回镜像大小
   return size;
 }
 
@@ -80,9 +87,9 @@ static int parse_args(int argc, char *argv[]) {
     switch (o) {
       case 'b': sdb_set_batch_mode(); break;
       case 'p': sscanf(optarg, "%d", &difftest_port); break;
-      case 'l': log_file = optarg; break;
+      case 'l': log_file = optarg; break;                              // 当命令行指定 -l 参数，将全局静态变量 log_file 设置成 日志文件 路径
       case 'd': diff_so_file = optarg; break;
-      case 1: img_file = optarg; return 0;
+      case 1: img_file = optarg; return 0;                             // 解析非选项参数参数，将全局静态变量 img_file 设置成 镜像文件 路径
       default:
         printf("Usage: %s [OPTION...] IMAGE [args]\n\n", argv[0]);
         printf("\t-b,--batch              run with batch mode\n");
