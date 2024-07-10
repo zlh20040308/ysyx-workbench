@@ -95,10 +95,10 @@ void sim_exit()
 
 extern "C" uint32_t pmem_read(uint32_t raddr)
 {
-  printf("%d",raddr);
+  printf("%d\n",raddr);
   if (raddr - MEM_BASE >=0 && raddr - MEM_BASE <= 36)
   {
-    printf("%d",raddr - MEM_BASE);
+    printf("%d\n",raddr - MEM_BASE);
     return *(uint32_t*)(pmem + (raddr - MEM_BASE));
   }
 }
