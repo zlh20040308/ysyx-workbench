@@ -20,17 +20,51 @@
 //   nvboard_quit();
 // }
 
-
-
-
+#include <stdio.h>
 #include <stdint.h>
 #include "verilated_vcd_c.h"
 #include "Vysyx_23060337_top.h"
 
+#define MEM_BASE 0x80000000
 
-uint32_t M[] = {
-  0xfd010113,
-}
+uint8_t pmem[] = {
+    0xfd,
+    0x01,
+    0x01,
+    0x13,
+    0xfd,
+    0x01,
+    0x01,
+    0x13,
+    0xfd,
+    0x01,
+    0x01,
+    0x13,
+    0xfd,
+    0x01,
+    0x01,
+    0x13,
+    0xfd,
+    0x01,
+    0x01,
+    0x13,
+    0xfd,
+    0x01,
+    0x01,
+    0x13,
+    0xfd,
+    0x01,
+    0x01,
+    0x13,
+    0xfd,
+    0x01,
+    0x01,
+    0x13,
+    0xfd,
+    0x01,
+    0x01,
+    0x13,
+};
 
 VerilatedContext *contextp = NULL;
 VerilatedVcdC *tfp = NULL;
@@ -59,23 +93,31 @@ void sim_exit()
   tfp->close();
 }
 
-
-uint32_t pmem_read(uint32_t pc){
-
+extern "C" void pmem_read(uint32_t raddr, uint32_t *rword)
+{
+  *rword = pmem[raddr - MEM_BASE];
 }
 
 int main()
 {
   sim_init();
-  top->pc = 0x80000000;
+
   
+  top->clk = 0;
+  top->eval();
+  top->clk = 1;
+  top->eval();
+  top->clk = 0;
+  top->eval();
+  top->clk = 1;
+  top->eval();
+  top->clk = 0;
+  top->eval();
+  top->clk = 1;
+  top->eval();
+  top->clk = 0;
+  top->eval();
 
-  while (???)
-  {
-
-    top->inst = pmem_read(top->pc);
-    top->eval();
-  }
 
   sim_exit();
 }
