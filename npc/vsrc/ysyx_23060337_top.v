@@ -26,7 +26,6 @@ assign opcode1 = opcode;
 ysyx_23060337_Reg #(32, 32'h80000000) PC (clk, rst, next_pc, cur_pc, 1'b1);
 
 ysyx_23060337_IFU IFU (
-    .clk(clk),
     .cur_pc(cur_pc),
     .inst(inst)
 );
