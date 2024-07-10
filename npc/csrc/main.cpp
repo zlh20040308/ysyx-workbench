@@ -86,11 +86,6 @@ int main()
   sim_init();
   top->rst = 1;
 
-  top->clk = 0;
-  step_and_dump_wave();
-
-  top->clk = 1;
-  step_and_dump_wave();
 
   top->clk = 0;
   step_and_dump_wave();
