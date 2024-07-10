@@ -13,16 +13,3 @@ module ysyx_23060337_Reg #(WIDTH = 1, RESET_VAL = 0) (
     else if (wen) dout <= din;
   end
 endmodule
-
-// 使用触发器模板的示例
-module ysyx_23060337_example(
-  input clk,
-  input rst,
-  input [3:0] in,
-  output [3:0] out
-);
-  // 位宽为1比特, 复位值为1'b1, 写使能一直有效
-  ysyx_23060337_Reg #(1, 1'b1) i0 (clk, rst, in[0], out[0], 1'b1);
-  // 位宽为3比特, 复位值为3'b0, 写使能为out[0]
-  ysyx_23060337_Reg #(3, 3'b0) i1 (clk, rst, in[3:1], out[3:1], out[0]);
-endmodule
