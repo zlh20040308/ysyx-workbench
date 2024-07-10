@@ -110,8 +110,8 @@ extern "C" uint32_t pmem_read(uint32_t raddr)
 int main()
 {
   sim_init();
-  top->clk = 1;
   top->rst = 1;
+  top->clk = 1;
   top->eval();
   top->rst = 0;
   top->eval();
