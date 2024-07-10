@@ -102,6 +102,7 @@ extern "C" uint32_t pmem_read(uint32_t raddr)
   if (raddr - MEM_BASE >=0 && raddr - MEM_BASE <= 36)
   {
     printf("%u\n",raddr - MEM_BASE);
+    printf("haha\n");
     return *(uint32_t*)(pmem + (raddr - MEM_BASE));
   }
 }
