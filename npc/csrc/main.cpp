@@ -101,7 +101,10 @@ extern "C" void pmem_read(uint32_t raddr, uint32_t *rword)
 int main()
 {
   sim_init();
-
+  top->rst = 1;
+  top->eval();
+  top->rst = 0;
+  top->eval();
   
   top->clk = 0;
   top->eval();
