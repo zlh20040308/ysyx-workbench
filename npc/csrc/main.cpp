@@ -111,13 +111,25 @@ int main()
 {
   sim_init();
   top->rst = 1;
-  top->clk = 1;
-  top->eval();
-  top->rst = 0;
-  top->eval();
 
   top->clk = 0;
   top->eval();
+  top->clk = 1;
+  top->eval();
+  top->clk = 0;
+  top->eval();
+  top->clk = 1;
+  top->eval();
+  top->clk = 0;
+  top->eval();
+  top->clk = 1;
+  top->eval();
+  top->clk = 0;
+  top->eval();
+
+  top->rst = 0;
+  top->eval();
+
   top->clk = 1;
   top->eval();
   top->clk = 0;
