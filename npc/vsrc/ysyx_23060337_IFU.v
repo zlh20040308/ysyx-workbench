@@ -1,14 +1,13 @@
 module ysyx_23060337_IFU(
     input clk,
     input [31:0] cur_pc,
-    output reg [31:0] inst
+    output [31:0] inst
 );
 
-import "DPI-C" function void pmem_read(input int raddr,output int rword);
-always @(posedge clk) begin
-    int rword; // 临时变量用于存储从 pmem_read 读取的数据
-    pmem_read(cur_pc, rword);
-    inst <= rword;
-end
+// DPI-C 函数声明
+import "DPI-C" function int pmem_read(input int raddr);
+
+// 使用组合逻辑读取指令
+assign inst = (clk) ? (pmem_read(cur_pc)) : 32'h80000000;
 
 endmodule

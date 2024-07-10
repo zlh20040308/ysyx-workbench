@@ -93,11 +93,11 @@ void sim_exit()
   tfp->close();
 }
 
-extern "C" void pmem_read(uint32_t raddr, uint32_t *rword)
+extern "C" uint32_t pmem_read(uint32_t raddr)
 {
   if (raddr - MEM_BASE >=0 && raddr - MEM_BASE <= 36)
   {
-    *rword = pmem[raddr - MEM_BASE];
+    return *(uint32_t*)(pmem + (raddr - MEM_BASE));
   }
   
   
