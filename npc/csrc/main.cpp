@@ -98,7 +98,7 @@ extern "C" uint32_t pmem_read(uint32_t raddr)
   
   if ((raddr - MEM_BASE) <= 36)
   { // 这里没有必要比较 `>=0`，因为是无符号整数
-    printf("%u\n", raddr - MEM_BASE);
+    printf("%u\n", *(uint32_t *)(pmem + (raddr - MEM_BASE)));
     printf("haha\n");
     return *(uint32_t *)(pmem + (raddr - MEM_BASE));
   }
