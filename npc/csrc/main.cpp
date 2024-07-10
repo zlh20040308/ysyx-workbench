@@ -35,6 +35,7 @@ static uint32_t img[] = {
     0x00530313, // addi t0, t0, 5
     0x00130313, // addi t0, t0, 1
     0x00930313, // addi t0, t0, 9
+    0x00100073,  // ebreak (used as npc_trap)
 };
 
 VerilatedContext *contextp = NULL;
@@ -80,8 +81,9 @@ extern "C" uint32_t pmem_read(uint32_t raddr)
 int main()
 {
   sim_init();
-  top->rst = 1;
 
+
+  top->rst = 1;
 
   top->clk = 0;
   step_and_dump_wave();
@@ -93,6 +95,13 @@ int main()
   step_and_dump_wave();
 
   top->rst = 0;
+  step_and_dump_wave();
+
+
+  top->clk = 1;
+  step_and_dump_wave();
+
+  top->clk = 0;
   step_and_dump_wave();
 
   top->clk = 1;
