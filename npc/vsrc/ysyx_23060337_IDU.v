@@ -29,7 +29,7 @@ assign funct7 = inst[31:25];
 assign opcode = inst[6:0];
 
 always @(*) begin
-    $display("inst %x",inst);
+    $display("IDU inst %x",inst);
 end
 
 
