@@ -27,43 +27,17 @@
 
 #define MEM_BASE 0x80000000
 
-uint8_t pmem[] = {
-    0x13,
-    0x81,
-    0x50,
-    0x00,
-    0xfd,
-    0x01,
-    0x01,
-    0x13,
-    0xfd,
-    0x01,
-    0x01,
-    0x13,
-    0xfd,
-    0x01,
-    0x01,
-    0x13,
-    0xfd,
-    0x01,
-    0x01,
-    0x13,
-    0xfd,
-    0x01,
-    0x01,
-    0x13,
-    0xfd,
-    0x01,
-    0x01,
-    0x13,
-    0xfd,
-    0x01,
-    0x01,
-    0x13,
-    0xfd,
-    0x01,
-    0x01,
-    0x13,
+uint8_t pmem[10000000] = {};
+
+// 4 + 5 + 1 + 9 = 19
+static uint32_t img[] = {
+    0x00400293, // li t0, 4      (addi t0, x0, 4)
+    0x00530313, // addi t0, t0, 5
+    0x00130313, // addi t0, t0, 1
+    0x00930313, // addi t0, t0, 9
+    0x05D003B7, // li a7, 93     (addi a7, x0, 93)
+    0x00000293, // li a0, 0      (addi a0, x0, 0)
+    0x00000073, // ecall
 };
 
 VerilatedContext *contextp = NULL;
@@ -79,6 +53,7 @@ void step_and_dump_wave()
 }
 void sim_init()
 {
+  memcpy(pmem, img, sizeof(img));
   contextp = new VerilatedContext;
   tfp = new VerilatedVcdC;
   top = new Vysyx_23060337_top;
