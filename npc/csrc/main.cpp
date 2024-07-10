@@ -35,9 +35,6 @@ static uint32_t img[] = {
     0x00530313, // addi t0, t0, 5
     0x00130313, // addi t0, t0, 1
     0x00930313, // addi t0, t0, 9
-    0x05D003B7, // li a7, 93     (addi a7, x0, 93)
-    0x00000293, // li a0, 0      (addi a0, x0, 0)
-    0x00000073, // ecall
 };
 
 VerilatedContext *contextp = NULL;
@@ -96,24 +93,6 @@ int main()
   step_and_dump_wave();
 
   top->rst = 0;
-  step_and_dump_wave();
-
-  top->clk = 1;
-  step_and_dump_wave();
-
-  top->clk = 0;
-  step_and_dump_wave();
-
-  top->clk = 1;
-  step_and_dump_wave();
-
-  top->clk = 0;
-  step_and_dump_wave();
-
-  top->clk = 1;
-  step_and_dump_wave();
-
-  top->clk = 0;
   step_and_dump_wave();
 
   top->clk = 1;
