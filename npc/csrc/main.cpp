@@ -95,16 +95,19 @@ void sim_exit()
 
 extern "C" uint32_t pmem_read(uint32_t raddr)
 {
-  printf("%u\n",raddr - MEM_BASE);
-  printf("%u\n",raddr - MEM_BASE >=0);
-  printf("%u\n",raddr - MEM_BASE <= 36);
+  printf("%u\n", raddr - MEM_BASE);
+  printf("%d\n", raddr - MEM_BASE >= 0);
+  printf("%d\n", raddr - MEM_BASE <= 36);
 
-  if (raddr - MEM_BASE >=0 && raddr - MEM_BASE <= 36)
-  {
-    printf("%u\n",raddr - MEM_BASE);
+  if ((raddr - MEM_BASE) <= 36)
+  { // 这里没有必要比较 `>=0`，因为是无符号整数
+    printf("%u\n", raddr - MEM_BASE);
     printf("haha\n");
-    return *(uint32_t*)(pmem + (raddr - MEM_BASE));
+    return *(uint32_t *)(pmem + (raddr - MEM_BASE));
   }
+
+  // 如果不满足条件，返回一个默认值或错误代码
+  return 0; // 根据你的需求，可以修改这个默认返回值
 }
 
 int main()
@@ -114,22 +117,21 @@ int main()
   top->eval();
   top->rst = 0;
   top->eval();
-  
-  top->clk = 0;
-  top->eval();
-  top->clk = 1;
-  top->eval();
-  top->clk = 0;
-  top->eval();
-  top->clk = 1;
-  top->eval();
-  top->clk = 0;
-  top->eval();
-  top->clk = 1;
-  top->eval();
-  top->clk = 0;
-  top->eval();
 
+  top->clk = 0;
+  top->eval();
+  top->clk = 1;
+  top->eval();
+  top->clk = 0;
+  top->eval();
+  top->clk = 1;
+  top->eval();
+  top->clk = 0;
+  top->eval();
+  top->clk = 1;
+  top->eval();
+  top->clk = 0;
+  top->eval();
 
   sim_exit();
 }
