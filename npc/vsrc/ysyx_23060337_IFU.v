@@ -7,6 +7,6 @@ module ysyx_23060337_IFU(
 import "DPI-C" function int pmem_read(input int raddr);
 
 // 使用组合逻辑读取指令
-assign inst = (pmem_read(cur_pc));
+assign inst = pmem_read(cur_pc);
 
 endmodule

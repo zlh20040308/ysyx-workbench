@@ -9,7 +9,6 @@ module ysyx_23060337_Reg #(WIDTH = 1, RESET_VAL = 0) (
   always @(posedge clk) begin
     if (rst) begin 
       dout <= RESET_VAL;
-      $display("asas");
     end
     else if (wen) dout <= din;
   end
