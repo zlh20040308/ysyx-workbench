@@ -95,7 +95,12 @@ void sim_exit()
 
 extern "C" void pmem_read(uint32_t raddr, uint32_t *rword)
 {
-  *rword = pmem[raddr - MEM_BASE];
+  if (raddr - MEM_BASE >=0 && raddr - MEM_BASE <= 36)
+  {
+    *rword = pmem[raddr - MEM_BASE];
+  }
+  
+  
 }
 
 int main()
