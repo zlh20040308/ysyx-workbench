@@ -152,6 +152,7 @@ endif
 $(DST_DIR)/%.o: %.c
 	@echo $(DST_DIR)
 	@echo $(dir $@)
+	@echo $(WORK_DIR)
 	@mkdir -p $(dir $@) && echo + CC $<
 	@$(CC) -std=gnu11 $(CFLAGS) -c -o $@ $(realpath $<)
 
