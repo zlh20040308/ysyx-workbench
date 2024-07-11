@@ -63,12 +63,12 @@ endif
 
 #### 定义变量 WORK_DIR，其值为当前工作目录
 WORK_DIR  = $(shell pwd)
-$(info $(WORK_DIR))
+$(info WORK_DIR is $(WORK_DIR))
 
 
 #### 定义变量 DST_DIR，其值为 WORK_DIR 变量加上 "/build/$(ARCH)"
 DST_DIR   = $(WORK_DIR)/build/$(ARCH)
-$(info $(DST_DIR))
+$(info DST_DIR is $(DST_DIR))
 
 # 使用 shell 命令创建目录 DST_DIR（包括必要的父目录）
 $(shell mkdir -p $(DST_DIR))
@@ -153,9 +153,9 @@ endif
 
 ### Rule (compile): a single `.c` -> `.o` (gcc)
 $(DST_DIR)/%.o: %.c
-	@echo $(DST_DIR)
-	@echo $(dir $@)
-	@echo $(WORK_DIR)
+	# @echo $(DST_DIR)
+	# @echo $(dir $@)
+	# @echo $(WORK_DIR)
 	@mkdir -p $(dir $@) && echo + CC $<
 	@$(CC) -std=gnu11 $(CFLAGS) -c -o $@ $(realpath $<)
 
