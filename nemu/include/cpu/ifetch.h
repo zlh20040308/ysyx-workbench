@@ -19,6 +19,7 @@
 
 static inline uint32_t inst_fetch(vaddr_t *pc, int len) {
   uint32_t inst = vaddr_ifetch(*pc, len);
+  Log("pc = 0x%08x",(*pc));
   (*pc) += len;
   return inst;
 }
