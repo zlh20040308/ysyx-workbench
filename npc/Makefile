@@ -1,72 +1,31 @@
-TOPNAME = ysyx_23060337_top
-NXDC_FILES = constr/top.nxdc
-INC_PATH ?=
-
-VERILATOR = verilator
-VERILATOR_CFLAGS += -MMD --build --trace -cc  \
-				-O3 --x-assign fast --x-initial fast --noassert
-
 BUILD_DIR = ./build
-OBJ_DIR = $(BUILD_DIR)/obj_dir
-BIN = $(BUILD_DIR)/$(TOPNAME)
-RUNBIN = $(BIN)_run
-SIMBIN = $(BIN)_sim
 
+PRJ = playground
 
-default: $(SIMBIN)
+test:
+	mill -i $(PRJ).test
 
-$(shell mkdir -p $(BUILD_DIR))
+verilog:
+	$(call git_commit, "generate verilog")
+	mkdir -p $(BUILD_DIR)
+	mill -i $(PRJ).runMain Elaborate --target-dir $(BUILD_DIR)
 
-# constraint file
-SRC_AUTO_BIND = $(abspath $(BUILD_DIR)/auto_bind.cpp)
-$(SRC_AUTO_BIND): $(NXDC_FILES)
-	python3 $(NVBOARD_HOME)/scripts/auto_pin_bind.py $^ $@
+help:
+	mill -i $(PRJ).runMain Elaborate --help
 
-# project source
-VSRCS = $(shell find $(abspath ./vsrc) -name "*.v")
-CSRCS = $(shell find $(abspath ./csrc) -name "*.c" -or -name "*.cc" -or -name "*.cpp")
-RUNCSRCS = $(CSRCS) $(SRC_AUTO_BIND)
-SIMCSRCS = $(CSRCS)
+reformat:
+	mill -i __.reformat
 
-# rules for NVBoard
-include $(NVBOARD_HOME)/scripts/nvboard.mk
-
-# rules for verilator
-INCFLAGS = $(addprefix -I, $(INC_PATH))
-CXXFLAGS += $(INCFLAGS) -DTOP_NAME="\"V$(TOPNAME)\""
-
-$(RUNBIN): $(VSRCS) $(RUNCSRCS) $(NVBOARD_ARCHIVE)
-	rm -rf $(OBJ_DIR)
-	rm -rf ./*.vcd
-	$(VERILATOR) $(VERILATOR_CFLAGS) \
-		--top-module $(TOPNAME) $^ \
-		$(addprefix -CFLAGS , $(CXXFLAGS)) $(addprefix -LDFLAGS , $(LDFLAGS)) \
-		--Mdir $(OBJ_DIR) --exe -o $(abspath $(BIN))
-
-$(SIMBIN): $(VSRCS) $(SIMCSRCS) $(NVBOARD_ARCHIVE)
-	rm -rf $(OBJ_DIR)
-	rm -rf ./*.vcd
-	$(VERILATOR) $(VERILATOR_CFLAGS) \
-		--top-module $(TOPNAME) $^ \
-		$(addprefix -CFLAGS , $(CXXFLAGS)) $(addprefix -LDFLAGS , $(LDFLAGS)) \
-		--Mdir $(OBJ_DIR) --exe -o $(abspath $(BIN))
+checkformat:
+	mill -i __.checkFormat
 
 clean:
-	rm -rf $(BUILD_DIR)
-	rm -rf ./*.vcd
+	-rm -rf $(BUILD_DIR)
 
-all: default
-	@echo "Write this Makefile by your self."
+.PHONY: test verilog help reformat checkformat clean
 
-sim: $(SIMBIN)
+sim:
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
-	@echo "Write this Makefile by your self."
-	@$(BIN)
-	@gtkwave waveform.vcd
+	@echo "Write this Makefile by yourself."
 
-run: $(RUNBIN)
-	@$(BIN)
-
-include ../Makefile
-
-.PHONY: default all clean sim $(BIN) run
+-include ../Makefile
