@@ -63,6 +63,8 @@ endif
 
 #### 定义变量 WORK_DIR，其值为当前工作目录
 WORK_DIR  = $(shell pwd)
+$(info $(WORK_DIR))
+
 
 #### 定义变量 DST_DIR，其值为 WORK_DIR 变量加上 "/build/$(ARCH)"
 DST_DIR   = $(WORK_DIR)/build/$(ARCH)
