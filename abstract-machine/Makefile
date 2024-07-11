@@ -68,6 +68,7 @@ $(info $(WORK_DIR))
 
 #### 定义变量 DST_DIR，其值为 WORK_DIR 变量加上 "/build/$(ARCH)"
 DST_DIR   = $(WORK_DIR)/build/$(ARCH)
+$(info $(DST_DIR))
 
 # 使用 shell 命令创建目录 DST_DIR（包括必要的父目录）
 $(shell mkdir -p $(DST_DIR))
