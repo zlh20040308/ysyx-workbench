@@ -80,8 +80,7 @@ int vsprintf(char *out, const char *fmt, va_list ap)
         const char *s2 = va_arg(ap, const char *);
         while (*s2)
         {
-          out[pos] = *s2;
-          pos++;
+          out[pos++] = *s2;
           s2++;
         }
         longarg = 0;
@@ -108,6 +107,7 @@ int vsprintf(char *out, const char *fmt, va_list ap)
       out[pos++] = *fmt;
     }
   }
+  out[pos++] = '\0';
   return pos;
 }
 
