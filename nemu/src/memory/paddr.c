@@ -33,7 +33,7 @@ static word_t pmem_read(paddr_t addr, int len)
 #ifdef CONFIG_MTRACE_COND
   if (MTRACE_COND)
   {
-    Log("memory read: "FMT_WORD" "FMT_WORD, addr, ret);
+    Log(FMT_WORD" "FMT_WORD, addr, ret);
   }
 #endif
   return ret;
@@ -45,7 +45,7 @@ static void pmem_write(paddr_t addr, int len, word_t data)
 #ifdef CONFIG_MTRACE_COND
   if (MTRACE_COND)
   {
-    Log("memory write: "FMT_WORD" "FMT_WORD, addr, data);
+    Log(FMT_WORD" "FMT_WORD, addr, data);
   }
 #endif
 }
