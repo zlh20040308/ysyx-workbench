@@ -90,7 +90,7 @@ static void exec_once(Decode *s, vaddr_t pc)
 
   disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
               MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
-  Log("%s", s->logbuf);
+  // Log("%s", s->logbuf);
 
 #else
   p[0] = '\0'; // the upstream llvm does not support loongarch32r
@@ -105,7 +105,9 @@ static void execute(uint64_t n)
   {
     exec_once(&s, cpu.pc);
     g_nr_guest_inst++;
+    Log("hhhhhhhhhhh");
     trace_and_difftest(&s, cpu.pc);
+
     if (nemu_state.state != NEMU_RUNNING)
       break;
     IFDEF(CONFIG_DEVICE, device_update());
