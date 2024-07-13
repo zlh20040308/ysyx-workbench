@@ -105,8 +105,8 @@ static int parse_args(int argc, char *argv[])
       diff_so_file = optarg;
       break;
     case 1:
-      Log("%s\n", optarg);
       img_file = optarg;
+      
       return 0; // 解析非选项参数参数，将全局静态变量 img_file 设置成 镜像文件 路径
     default:
       printf("Usage: %s [OPTION...] IMAGE [args]\n\n", argv[0]);
