@@ -131,9 +131,7 @@ static void exec_once(Decode *s, vaddr_t pc)
   cpu.pc = s->dnpc;
 #ifdef CONFIG_ITRACE
   char *p = s->logbuf;
-  char *log_p = s->logbuf;
   p += snprintf(p, sizeof(s->logbuf), FMT_WORD ":", s->pc);
-  Log("%s", log_p);
 
   int ilen = s->snpc - s->pc;
   int i;
@@ -141,7 +139,6 @@ static void exec_once(Decode *s, vaddr_t pc)
   for (i = ilen - 1; i >= 0; i--)
   {
     p += snprintf(p, 4, " %02x", inst[i]);
-    Log("%s", log_p);
   }
   int ilen_max = MUXDEF(CONFIG_ISA_x86, 8, 4);
   int space_len = ilen_max - ilen;
@@ -150,7 +147,6 @@ static void exec_once(Decode *s, vaddr_t pc)
   space_len = space_len * 3 + 1;
   memset(p, ' ', space_len);
   p += space_len;
-  Log("%s", log_p);
 
 #ifndef CONFIG_ISA_loongarch32r
   void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
