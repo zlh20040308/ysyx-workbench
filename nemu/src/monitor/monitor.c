@@ -90,7 +90,7 @@ static int parse_args(int argc, char *argv[]) {
       case 'p': sscanf(optarg, "%d", &difftest_port); break;
       case 'l': log_file = optarg; break;                              // 当命令行指定 -l 参数，将全局静态变量 log_file 设置成 日志文件 路径
       case 'd': diff_so_file = optarg; break;
-      case 1: img_file = optarg; return 0;                             // 解析非选项参数参数，将全局静态变量 img_file 设置成 镜像文件 路径
+      case 1: img_file = optarg; Log("%s",optarg);return 0;                             // 解析非选项参数参数，将全局静态变量 img_file 设置成 镜像文件 路径
       default:
         printf("Usage: %s [OPTION...] IMAGE [args]\n\n", argv[0]);
         printf("\t-b,--batch              run with batch mode\n");
