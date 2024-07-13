@@ -24,11 +24,77 @@
  * You can modify this value as you want.
  */
 #define MAX_INST_TO_PRINT 10
+#define BUFFER_SIZE 5
 
 CPU_state cpu = {};
 uint64_t g_nr_guest_inst = 0;
 static uint64_t g_timer = 0; // unit: us
 static bool g_print_step = false;
+
+typedef struct
+{
+  char buffer[BUFFER_SIZE][128];
+  int read_index;
+  int write_index;
+  int size;
+} IRB;
+
+static IRB iringbuf;
+
+// 初始化缓冲区
+void init_iringbuf()
+{
+  iringbuf.read_index = 0;
+  iringbuf.write_index = 0;
+  iringbuf.size = 0;
+}
+
+// 写入数据
+void write_iringbuf(const char *data)
+{
+  memcpy(iringbuf.buffer[iringbuf.write_index], data, 128);
+  iringbuf.write_index = (iringbuf.write_index + 1) % BUFFER_SIZE;
+
+  if (iringbuf.size < BUFFER_SIZE)
+  {
+    iringbuf.size++;
+  }
+  else
+  {
+    // 如果缓冲区已满，移动读指针
+    iringbuf.read_index = (iringbuf.read_index + 1) % BUFFER_SIZE;
+  }
+}
+
+// 读取数据
+bool read_iringbuf(char *data)
+{
+  if (iringbuf.size == 0)
+  {
+    // 缓冲区为空
+    return false;
+  }
+  memcpy(data, iringbuf.buffer[iringbuf.read_index], 128);
+  iringbuf.read_index = (iringbuf.read_index + 1) % BUFFER_SIZE;
+  iringbuf.size--;
+  return true;
+}
+
+// 遍历缓冲区数据
+void traverse_iringbuf()
+{
+  if (iringbuf.size == 0)
+  {
+    printf("iringbuf is empty\n");
+    return;
+  }
+
+  int index = iringbuf.read_index;
+  for (int i = 0; i < iringbuf.size; i++)
+  {
+    printf("%s\n", iringbuf.buffer[(index + i) % BUFFER_SIZE]);
+  }
+}
 
 void device_update();
 
@@ -40,6 +106,7 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc)
   if (ITRACE_COND)
   {
     log_write("%s\n", _this->logbuf);
+    write_iringbuf(_this->logbuf);
   }
 #endif
   if (g_print_step)
@@ -105,16 +172,10 @@ static void execute(uint64_t n)
   {
     exec_once(&s, cpu.pc);
     g_nr_guest_inst++;
-    Log("hhhhhhhhhhh");
     trace_and_difftest(&s, cpu.pc);
-    
-    Log("hhhhhhhhhhh");
-
     if (nemu_state.state != NEMU_RUNNING)
       break;
     IFDEF(CONFIG_DEVICE, device_update());
-    Log("hhhhhhhhhhh");
-
   }
 }
 
@@ -168,6 +229,11 @@ void cpu_exec(uint64_t n)
     Log("nemu: %s at pc = " FMT_WORD,
         (nemu_state.state == NEMU_ABORT ? ANSI_FMT("ABORT", ANSI_FG_RED) : (nemu_state.halt_ret == 0 ? ANSI_FMT("HIT GOOD TRAP", ANSI_FG_GREEN) : ANSI_FMT("HIT BAD TRAP", ANSI_FG_RED))),
         nemu_state.halt_pc);
+    if (nemu_state.halt_ret != 0)
+    {
+      traverse_iringbuf();
+    }
+    
     // fall through
   case NEMU_QUIT:
     statistic();
