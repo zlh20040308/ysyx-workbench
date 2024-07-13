@@ -107,10 +107,14 @@ static void execute(uint64_t n)
     g_nr_guest_inst++;
     Log("hhhhhhhhhhh");
     trace_and_difftest(&s, cpu.pc);
+    
+    Log("hhhhhhhhhhh");
 
     if (nemu_state.state != NEMU_RUNNING)
       break;
     IFDEF(CONFIG_DEVICE, device_update());
+    Log("hhhhhhhhhhh");
+
   }
 }
 
