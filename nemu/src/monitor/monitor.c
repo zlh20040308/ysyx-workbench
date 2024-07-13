@@ -44,6 +44,7 @@ void sdb_set_batch_mode();
 static char *log_file = NULL;
 static char *diff_so_file = NULL;
 static char *img_file = NULL;
+static char *elf_file = NULL;
 static int difftest_port = 1234;
 
 static long load_img()
@@ -84,11 +85,13 @@ static int parse_args(int argc, char *argv[])
       {"log", required_argument, NULL, 'l'},
       {"diff", required_argument, NULL, 'd'},
       {"port", required_argument, NULL, 'p'},
+      {"img", required_argument, NULL, 'i'},
+      {"elf", required_argument, NULL, 'e'},
       {"help", no_argument, NULL, 'h'},
       {0, 0, NULL, 0},
   };
   int o;
-  while ((o = getopt_long(argc, argv, "-bhl:d:p:", table, NULL)) != -1)
+  while ((o = getopt_long(argc, argv, "-bhl:d:p:i:e:", table, NULL)) != -1)
   {
     switch (o)
     {
@@ -104,16 +107,21 @@ static int parse_args(int argc, char *argv[])
     case 'd':
       diff_so_file = optarg;
       break;
-    case 1:
+    case 'i':
       img_file = optarg;
-      
-      return 0; // 解析非选项参数参数，将全局静态变量 img_file 设置成 镜像文件 路径
+      break; // 当命令行指定 -i 参数，将全局静态变量 img_file 设置成 镜像文件 路径
+    case 'e':
+      printf("asxasca %s \n", optarg);
+      elf_file = optarg;
+      break; // 当命令行指定 -e 参数，将全局静态变量 elf_file 设置成 镜像文件 路径
     default:
       printf("Usage: %s [OPTION...] IMAGE [args]\n\n", argv[0]);
       printf("\t-b,--batch              run with batch mode\n");
       printf("\t-l,--log=FILE           output log to FILE\n");
       printf("\t-d,--diff=REF_SO        run DiffTest with reference REF_SO\n");
       printf("\t-p,--port=PORT          run DiffTest with port PORT\n");
+      printf("\t-i,--img=IMG_FILE       run img file\n");
+      printf("\t-e,--elf=ELF_FILE       load elf file\n");
       printf("\n");
       exit(0);
     }
