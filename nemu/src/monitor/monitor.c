@@ -30,6 +30,20 @@ void init_sdb();
 void init_disasm(const char *triple);
 void init_iringbuf();
 
+typedef struct
+{
+  const char *st_name;       /* Symbol name (string tbl index) */
+  Elf32_Addr st_value; /* Symbol value */
+} FUNC_ITEM;
+
+typedef struct
+{
+  FUNC_ITEM *tb; /* Symbol name (string tbl index) */
+  size_t size;
+} FUNC_TAB;
+
+static FUNC_TAB f_tbl = {NULL, 0};
+
 static void welcome()
 {
   Log("Trace: %s", MUXDEF(CONFIG_TRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
@@ -154,8 +168,8 @@ static long parse_elf()
 
   const void *string_table = NULL;
   const Elf32_Sym *symbol_table = NULL;
-  size_t sym_tbl_entsize = 0;
-  size_t sym_tbl_size = 0;
+  Elf32_Word sym_tbl_entsize = 0;
+  Elf32_Word sym_tbl_size = 0;
   for (size_t i = 0, j = 0; i < elf_header->e_shnum; i++)
   {
     if (j == 2)
@@ -178,16 +192,29 @@ static long parse_elf()
     }
   }
 
-  printf("sisisisi %ld\n", sym_tbl_size / sym_tbl_entsize);
-
   for (size_t i = 1; i < sym_tbl_size / sym_tbl_entsize; i++)
   {
-    
     if (ELF32_ST_TYPE(symbol_table[i].st_info) == STT_FUNC)
     {
-      printf("%ld: %s %u\n", i, (char *)(string_table + symbol_table[i].st_name), symbol_table[i].st_info);
+      ++f_tbl.size;
     }
-    // printf("%ld: %s %u\n", i, (char *)(string_table + symbol_table[i].st_name), symbol_table[i].st_info);
+  }
+
+  f_tbl.tb = malloc(sizeof(FUNC_ITEM) * f_tbl.size);
+
+  for (size_t i = 0, pos = 0; i < sym_tbl_size / sym_tbl_entsize; i++)
+  {
+    if (ELF32_ST_TYPE(symbol_table[i].st_info) == STT_FUNC)
+    {
+      f_tbl.tb[pos].st_name = string_table + symbol_table[i].st_name;
+      f_tbl.tb[pos].st_value = symbol_table[i].st_value;
+      ++pos;
+    }
+  }
+
+  for (size_t i = 0; i < f_tbl.size; i++)
+  {
+    printf("%s %x\n", f_tbl.tb[i].st_name, f_tbl.tb[i].st_value);
   }
 
   close(fd);
