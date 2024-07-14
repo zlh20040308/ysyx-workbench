@@ -160,6 +160,8 @@ static long parse_elf()
   // const Elf32_Phdr *program_header = elf + elf_header->e_phoff;
   const Elf32_Shdr *section_table = elf + elf_header->e_shoff;
   printf("Name %x\n",  section_table[1].sh_name);
+  printf("Name %x\n",  section_table[2].sh_name);
+
 
   Log("Name %x", section_table[1].sh_offset);
   Log("Name %x", section_table[2].sh_offset);
