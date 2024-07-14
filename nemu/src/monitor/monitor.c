@@ -153,6 +153,8 @@ static long parse_elf()
   const Elf32_Ehdr *elf_header = elf;
   Log("Machine:\t%d", elf_header->e_machine);
   Log("Type:\t%d", elf_header->e_type);
+  Log("Start of program headers:\t%d", elf_header->e_phoff);
+  Log("Start of section headers\t%d", elf_header->e_shoff);
 
   close(fd);
   // 返回镜像大小
