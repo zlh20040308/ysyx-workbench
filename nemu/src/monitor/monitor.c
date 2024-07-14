@@ -184,8 +184,9 @@ static long parse_elf()
   {
     if (symbol_table[i].st_info == STT_FUNC)
     {
-      printf("%ld: %s %u\n", i, (char *)(string_table + symbol_table[i].st_name), symbol_table[i].st_other);
+      printf("%ld: %s %u\n", i, (char *)(string_table + symbol_table[i].st_name), symbol_table[i].st_info);
     }
+    printf("%ld: %s %u\n", i, (char *)(string_table + symbol_table[i].st_name), symbol_table[i].st_info);
   }
 
   close(fd);
