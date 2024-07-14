@@ -152,9 +152,12 @@ static long parse_elf()
   const Elf32_Ehdr *elf_header = elf;
   const Elf32_Shdr *section_table = elf + elf_header->e_shoff;
 
-
   const void *string_table = NULL;
   const void *symbol_table = NULL;
+  size_t str_tbl_entsize = 0;
+  size_t sym_tbl_entsize = 0;
+  size_t str_tbl_size = 0;
+  size_t sym_tbl_size = 0;
   for (size_t i = 0, j = 0; i < elf_header->e_shnum; i++)
   {
     if (j == 2)
@@ -164,17 +167,28 @@ static long parse_elf()
 
     if (section_table[i].sh_type == SHT_STRTAB)
     {
+      str_tbl_size = section_table[i].sh_size;
+      str_tbl_entsize = section_table[i].sh_entsize;
       string_table = elf + section_table[i].sh_offset;
+      printf("%lu\t%lu\n",str_tbl_size,str_tbl_entsize);
       ++j;
     }
 
     if (section_table[i].sh_type == SHT_SYMTAB)
     {
+      sym_tbl_size = section_table[i].sh_size;
+      sym_tbl_entsize = section_table[i].sh_entsize;
       symbol_table = elf + section_table[i].sh_offset;
+      printf("%lu\t%lu\n",sym_tbl_size,sym_tbl_entsize);
       ++j;
     }
   }
   symbol_table++;
+
+  // for (size_t i = 0; i < sym_tbl_size / sym_tbl_entsize; i++)
+  // {
+    
+  // }
 
   printf("Name: %s\n", (char *)(string_table + 0));
   printf("Name: %s\n", (char *)(string_table + 1));
@@ -182,7 +196,7 @@ static long parse_elf()
   printf("Name: %s\n", (char *)(string_table + 3));
   printf("Name: %s\n", (char *)(string_table + 4));
   printf("Name: %s\n", (char *)(string_table + 5));
-  
+
   // for (size_t i = 0; i < elf_header->e_shnum; i++)
   // {
   //   printf("Name: %s\n", string_table + section_table[i].sh_name);
