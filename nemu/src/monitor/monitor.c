@@ -159,13 +159,17 @@ static long parse_elf()
 
   // const Elf32_Phdr *program_header = elf + elf_header->e_phoff;
   const Elf32_Shdr *section_table = elf + elf_header->e_shoff;
-  const char *string_table = elf + elf_header->e_shstrndx;
-  printf("Name %s\n",  string_table + section_table[1].sh_name);
+  const char *string_table = NULL;
+  for (size_t i = 0; i < elf_header->e_shnum; i++)
+  {
+    if (section_table[i].sh_type == SHT_STRTAB)
+    {
+      string_table = elf + section_table[i].sh_offset;
+      break;
+    }
+  }
 
-
-  // Log("Name %x", section_table[1].sh_offset);
-  // Log("Name %x", section_table[2].sh_offset);
-  // Log("Name %x", section_table[3].sh_offset);
+  printf("Name : %s\n",string_table + section_table[1].sh_name);
 
   close(fd);
   // 返回镜像大小
