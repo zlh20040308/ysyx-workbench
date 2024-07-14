@@ -151,13 +151,7 @@ static long parse_elf()
   const void *elf = mmap(0, stats.st_size, PROT_READ, MAP_SHARED, fd, 0);
 
   const Elf32_Ehdr *elf_header = elf;
-  Log("Machine:\t%d", elf_header->e_machine);
-  Log("Type:\t%d", elf_header->e_type);
-
-  // Log("Start of program headers:\t%d", elf_header->e_phoff);
-  Log("Start of section headers:\t%d", elf_header->e_shoff);
-
-  // const Elf32_Phdr *program_header = elf + elf_header->e_phoff;
+  
   const Elf32_Shdr *section_table = elf + elf_header->e_shoff;
   const char *string_table = NULL;
   for (size_t i = 0; i < elf_header->e_shnum; i++)
@@ -168,10 +162,10 @@ static long parse_elf()
       break;
     }
   }
-
-  printf("Name : %s\n",string_table + section_table[1].sh_name);
-  printf("Name : %s\n",string_table + section_table[2].sh_name);
-  printf("Name : %s\n",string_table + section_table[3].sh_name);
+  for (size_t i = 0; i < elf_header->e_shnum; i++)
+  {
+    printf("Name: %s\n",string_table + section_table[i].sh_name);
+  }
 
 
   close(fd);
