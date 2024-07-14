@@ -182,7 +182,8 @@ static long parse_elf()
 
   for (size_t i = 1; i < sym_tbl_size / sym_tbl_entsize; i++)
   {
-    if (symbol_table[i].st_info == STT_FUNC)
+    
+    if (ELF32_ST_TYPE(symbol_table[i].st_info) == STT_FUNC)
     {
       printf("%ld: %s %u\n", i, (char *)(string_table + symbol_table[i].st_name), symbol_table[i].st_info);
     }
