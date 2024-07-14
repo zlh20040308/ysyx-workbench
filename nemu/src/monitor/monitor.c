@@ -158,8 +158,8 @@ static long parse_elf()
   Log("Start of section headers:\t%d", elf_header->e_shoff);
 
   // const Elf32_Phdr *program_header = elf + elf_header->e_phoff;
-  const Elf32_Shdr *section_header = elf + elf_header->e_shoff;
-  Log("Name %d",section_header[1].sh_name);
+  const Elf32_Shdr *section_table = elf + elf_header->e_shoff;
+  Log("Name %x",section_table[1].sh_offset);
 
 
   
