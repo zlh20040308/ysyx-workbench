@@ -182,7 +182,7 @@ static long parse_elf()
 
   for (size_t i = 1; i < sym_tbl_size / sym_tbl_entsize; i++)
   {
-    printf("%s\n", (char *)(string_table + symbol_table[i].st_name));
+    printf("%ld: %s\n", i, (char *)(string_table + symbol_table[i].st_name));
   }
 
   close(fd);
