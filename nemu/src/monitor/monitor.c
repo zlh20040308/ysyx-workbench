@@ -14,6 +14,13 @@
  ***************************************************************************************/
 
 #include <isa.h>
+#include <elf.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <sys/mman.h>
+#include <sys/types.h>
+#include <fcntl.h>
+#include <unistd.h>
 #include <memory/paddr.h>
 
 void init_rand();
@@ -129,6 +136,30 @@ static int parse_args(int argc, char *argv[])
   return 0;
 }
 
+static long parse_elf()
+{
+
+  if (elf_file == NULL)
+  {
+    Log("No elf is given.");
+    return 0;
+  }
+
+  struct stat stats;
+  stat(elf_file, &stats);
+  long size = stats.st_size;
+  int fd = open(elf_file, O_RDONLY);
+
+  const void *elf = mmap(0, stats.st_size, PROT_READ, MAP_SHARED, fd, 0);
+
+  const Elf32_Ehdr *elf_header = elf;
+  Log("%d", elf_header->e_type);
+
+  close(fd);
+  // 返回镜像大小
+  return size;
+}
+
 void init_monitor(int argc, char *argv[])
 {
   /* Perform some global initialization. */
@@ -153,6 +184,9 @@ void init_monitor(int argc, char *argv[])
 
   /* Load the image to memory. This will overwrite the built-in image. */
   long img_size = load_img();
+
+  /* Parse elf file. */
+  parse_elf();
 
   /* Initialize differential testing. */
   init_difftest(diff_so_file, img_size, difftest_port);
