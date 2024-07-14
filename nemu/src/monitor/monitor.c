@@ -159,7 +159,7 @@ static long parse_elf()
 
   // const Elf32_Phdr *program_header = elf + elf_header->e_phoff;
   const Elf32_Shdr *section_header = elf + elf_header->e_shoff;
-  Log("Name %s",(char*)(elf + section_header[1].sh_name));
+  Log("Name %s",(char*)section_header + section_header[1].sh_name);
 
 
   
