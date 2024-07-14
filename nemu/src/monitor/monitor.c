@@ -171,6 +171,8 @@ static long parse_elf()
 
   printf("Name : %s\n",string_table + section_table[1].sh_name);
   printf("Name : %s\n",string_table + section_table[2].sh_name);
+  printf("Name : %s\n",string_table + section_table[3].sh_name);
+
 
   close(fd);
   // 返回镜像大小
