@@ -169,6 +169,7 @@ static long parse_elf()
     }
   }
 
+  printf("Name : %s\n",string_table + section_table[0].sh_name);
   printf("Name : %s\n",string_table + section_table[1].sh_name);
 
   close(fd);
