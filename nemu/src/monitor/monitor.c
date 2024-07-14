@@ -151,12 +151,14 @@ static long parse_elf()
   const void *elf = mmap(0, stats.st_size, PROT_READ, MAP_SHARED, fd, 0);
 
   const Elf32_Ehdr *elf_header = elf;
-  Log("huhuhuhuhuhuhuhuhu %d", elf_header->e_type);
+  Log("Machine:\t%d", elf_header->e_machine);
+  Log("Type:\t%d", elf_header->e_type);
 
   close(fd);
   // 返回镜像大小
   return size;
 }
+
 
 void init_monitor(int argc, char *argv[])
 {
