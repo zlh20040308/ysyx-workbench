@@ -159,16 +159,13 @@ static long parse_elf()
 
   // const Elf32_Phdr *program_header = elf + elf_header->e_phoff;
   const Elf32_Shdr *section_table = elf + elf_header->e_shoff;
-  printf("Name %s\n",  (char *)(elf + elf_header->e_shoff + section_table[1].sh_name));
-  printf("Name %s\n",  (char *)(elf + section_table[1].sh_name));
-  printf("Name %s\n",  (char *)(elf + elf_header->e_shoff + section_table[1].sh_name));
-
-  printf("Name %x\n",  section_table[2].sh_name);
+  const char *string_table = elf + elf_header->e_shstrndx;
+  printf("Name %s\n",  string_table + section_table[1].sh_name);
 
 
-  Log("Name %x", section_table[1].sh_offset);
-  Log("Name %x", section_table[2].sh_offset);
-  Log("Name %x", section_table[3].sh_offset);
+  // Log("Name %x", section_table[1].sh_offset);
+  // Log("Name %x", section_table[2].sh_offset);
+  // Log("Name %x", section_table[3].sh_offset);
 
   close(fd);
   // 返回镜像大小
