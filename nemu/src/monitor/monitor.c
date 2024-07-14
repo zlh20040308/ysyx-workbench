@@ -149,25 +149,44 @@ static long parse_elf()
   int fd = open(elf_file, O_RDONLY);
 
   const void *elf = mmap(0, stats.st_size, PROT_READ, MAP_SHARED, fd, 0);
-
   const Elf32_Ehdr *elf_header = elf;
-  
   const Elf32_Shdr *section_table = elf + elf_header->e_shoff;
-  const char *string_table = NULL;
-  for (size_t i = 0; i < elf_header->e_shnum; i++)
+
+
+  const void *string_table = NULL;
+  const void *symbol_table = NULL;
+  for (size_t i = 0, j = 0; i < elf_header->e_shnum; i++)
   {
+    if (j == 2)
+    {
+      break;
+    }
+
     if (section_table[i].sh_type == SHT_STRTAB)
     {
       string_table = elf + section_table[i].sh_offset;
-      printf("hhhhhhhhhhhhhhhhh %x\n",section_table[i].sh_offset);
-      break;
+      ++j;
+    }
+
+    if (section_table[i].sh_type == SHT_SYMTAB)
+    {
+      symbol_table = elf + section_table[i].sh_offset;
+      ++j;
     }
   }
-  for (size_t i = 0; i < elf_header->e_shnum; i++)
-  {
-    printf("Name: %s\n",string_table + section_table[i].sh_name);
-  }
+  symbol_table++;
 
+  printf("Name: %s\n", (char *)(string_table + 0));
+  printf("Name: %s\n", (char *)(string_table + 1));
+  printf("Name: %s\n", (char *)(string_table + 2));
+  printf("Name: %s\n", (char *)(string_table + 3));
+  printf("Name: %s\n", (char *)(string_table + 4));
+  printf("Name: %s\n", (char *)(string_table + 5));
+  
+  // for (size_t i = 0; i < elf_header->e_shnum; i++)
+  // {
+  //   printf("Name: %s\n", string_table + section_table[i].sh_name);
+  // }
 
   close(fd);
   // 返回镜像大小
