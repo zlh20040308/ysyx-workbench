@@ -174,7 +174,6 @@ static long parse_elf()
       sym_tbl_size = section_table[i].sh_size;
       sym_tbl_entsize = section_table[i].sh_entsize;
       symbol_table = elf + section_table[i].sh_offset;
-      printf("symbol %lu\t%lu\n", sym_tbl_size, sym_tbl_entsize);
       ++j;
     }
   }
