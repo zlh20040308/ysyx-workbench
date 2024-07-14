@@ -153,14 +153,21 @@ static long parse_elf()
   const Elf32_Ehdr *elf_header = elf;
   Log("Machine:\t%d", elf_header->e_machine);
   Log("Type:\t%d", elf_header->e_type);
-  Log("Start of program headers:\t%d", elf_header->e_phoff);
-  Log("Start of section headers\t%d", elf_header->e_shoff);
+
+  // Log("Start of program headers:\t%d", elf_header->e_phoff);
+  Log("Start of section headers:\t%d", elf_header->e_shoff);
+
+  // const Elf32_Phdr *program_header = elf + elf_header->e_phoff;
+  const Elf32_Shdr *section_header = elf + elf_header->e_shoff;
+  Log("%s",(char*)(elf + section_header[1].sh_name));
+
+
+  
 
   close(fd);
   // 返回镜像大小
   return size;
 }
-
 
 void init_monitor(int argc, char *argv[])
 {
