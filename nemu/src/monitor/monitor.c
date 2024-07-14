@@ -187,7 +187,7 @@ static long parse_elf()
     {
       printf("%ld: %s %u\n", i, (char *)(string_table + symbol_table[i].st_name), symbol_table[i].st_info);
     }
-    printf("%ld: %s %u\n", i, (char *)(string_table + symbol_table[i].st_name), symbol_table[i].st_info);
+    // printf("%ld: %s %u\n", i, (char *)(string_table + symbol_table[i].st_name), symbol_table[i].st_info);
   }
 
   close(fd);
