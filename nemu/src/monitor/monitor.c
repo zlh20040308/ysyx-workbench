@@ -159,6 +159,7 @@ static long parse_elf()
     if (section_table[i].sh_type == SHT_STRTAB)
     {
       string_table = elf + section_table[i].sh_offset;
+      printf("hhhhhhhhhhhhhhhhh %x\n",section_table[i].sh_offset);
       break;
     }
   }
