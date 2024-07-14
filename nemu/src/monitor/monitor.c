@@ -16,10 +16,9 @@
 #include <isa.h>
 #include <elf.h>
 #include <fcntl.h>
+#include <unistd.h>
 #include <sys/stat.h>
 #include <sys/mman.h>
-// #include <sys/types.h>
-#include <unistd.h>
 #include <memory/paddr.h>
 
 void init_rand();
