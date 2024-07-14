@@ -179,22 +179,10 @@ static long parse_elf()
     }
   }
 
-  for (size_t i = 0; i < sym_tbl_size / sym_tbl_entsize; i++)
+  for (size_t i = 1; i < sym_tbl_size / sym_tbl_entsize; i++)
   {
     printf("%s\n", (char *)(string_table + symbol_table[i].st_name));
   }
-
-  printf("Name: %s\n", (char *)(string_table + 0));
-  printf("Name: %s\n", (char *)(string_table + 1));
-  printf("Name: %s\n", (char *)(string_table + 2));
-  printf("Name: %s\n", (char *)(string_table + 3));
-  printf("Name: %s\n", (char *)(string_table + 4));
-  printf("Name: %s\n", (char *)(string_table + 5));
-
-  // for (size_t i = 0; i < elf_header->e_shnum; i++)
-  // {
-  //   printf("Name: %s\n", string_table + section_table[i].sh_name);
-  // }
 
   close(fd);
   // 返回镜像大小
