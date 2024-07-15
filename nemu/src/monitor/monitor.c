@@ -255,7 +255,7 @@ const char *find_funct_symbol(uint32_t addr)
     if (ELF32_ST_TYPE(symbol_table[i].st_info) == STT_FUNC && addr >= symbol_table[i].st_value && addr < symbol_table[i].st_value + symbol_table[i].st_size)
     {
       // funct_name = string_table + symbol_table[i].st_name;
-      printf("funct_name:%s\n", (char *)(string_table + symbol_table[i].st_name));
+      // printf("funct_name:%s\n", (char *)(string_table + symbol_table[i].st_name));
       return (char *)(string_table + symbol_table[i].st_name);
     }
   }
