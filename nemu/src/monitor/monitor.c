@@ -248,19 +248,18 @@ static long parse_elf()
   return size;
 }
 
-void find_funct_symbol(uint32_t addr, const char *funct_name)
+const char *find_funct_symbol(uint32_t addr)
 {
   for (size_t i = 0; i < sym_tbl_nums; i++)
   {
     if (ELF32_ST_TYPE(symbol_table[i].st_info) == STT_FUNC && addr >= symbol_table[i].st_value && addr < symbol_table[i].st_value + symbol_table[i].st_size)
     {
-      funct_name = string_table + symbol_table[i].st_name;
-      printf("funct_name:%s\n", funct_name);
-      return;
+      // funct_name = string_table + symbol_table[i].st_name;
+      printf("funct_name:%s\n", (char *)(string_table + symbol_table[i].st_name));
+      return (char *)(string_table + symbol_table[i].st_name);
     }
   }
-  funct_name = "???";
-  return;
+  return "???";
 }
 
 void init_monitor(int argc, char *argv[])

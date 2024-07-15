@@ -29,7 +29,7 @@ extern Elf32_Word sym_tbl_nums;
 
 static size_t call_funct_times = 0;
 
-extern void find_funct_symbol(uint32_t addr, const char *funct_name);
+extern const char * find_funct_symbol(uint32_t addr);
 
 enum
 {
@@ -233,7 +233,7 @@ static int decode_exec(Decode *s)
       {
         printf(" ");
       }
-      find_funct_symbol(s->pc, funct_name);
+      funct_name = find_funct_symbol(s->pc);
       printf("ret [%s]\n",funct_name);
       
       --call_funct_times;
@@ -246,7 +246,7 @@ static int decode_exec(Decode *s)
       {
         printf(" ");
       }
-      find_funct_symbol(s->dnpc, funct_name);
+      funct_name = find_funct_symbol(s->dnpc);
       printf("call [%s@"FMT_WORD"]\n",funct_name,s->dnpc);
     }
   }
