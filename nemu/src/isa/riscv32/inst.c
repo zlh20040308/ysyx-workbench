@@ -23,13 +23,14 @@
 #define Mr vaddr_read
 #define Mw vaddr_write
 
+#ifdef CONFIG_FTRACE_COND
 extern const void *string_table;
 extern const Elf32_Sym *symbol_table;
 extern Elf32_Word sym_tbl_nums;
-
 static size_t call_funct_times = 0;
+#endif
 
-extern const char * find_funct_symbol(uint32_t addr);
+extern const char *find_funct_symbol(uint32_t addr);
 
 enum
 {
@@ -229,26 +230,26 @@ static int decode_exec(Decode *s)
     /* ret */
     if (is_ret)
     {
-      printf(FMT_WORD": ",s->pc);
+      printf(FMT_WORD ": ", s->pc);
       for (size_t i = 0; i < call_funct_times; i++)
       {
         printf(" ");
       }
       funct_name = find_funct_symbol(s->pc);
-      printf("ret [%s]\n",funct_name);
-      
+      printf("ret [%s]\n", funct_name);
+
       --call_funct_times;
     } /* call */
     else if (is_call)
     {
       ++call_funct_times;
-      printf(FMT_WORD": ",s->pc);
+      printf(FMT_WORD ": ", s->pc);
       for (size_t i = 0; i < call_funct_times; i++)
       {
         printf(" ");
       }
       funct_name = find_funct_symbol(s->dnpc);
-      printf("call [%s@"FMT_WORD"]\n",funct_name,s->dnpc);
+      printf("call [%s@" FMT_WORD "]\n", funct_name, s->dnpc);
     }
   }
 #endif

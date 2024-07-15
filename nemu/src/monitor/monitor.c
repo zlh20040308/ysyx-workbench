@@ -187,7 +187,7 @@ static int parse_args(int argc, char *argv[])
   }
   return 0;
 }
-
+#ifdef CONFIG_FTRACE_COND
 static long parse_elf()
 {
 
@@ -232,21 +232,12 @@ static long parse_elf()
   }
 
   sym_tbl_nums = sym_tbl_size / sym_tbl_entsize;
-  // for (size_t i = 0, pos = 0; i < sym_tbl_nums; i++)
-  // {
-  //   if (ELF32_ST_TYPE(symbol_table[i].st_info) == STT_FUNC)
-  //   {
-  //     f_tbl.tb[pos].st_name = string_table + symbol_table[i].st_name;
-  //     f_tbl.tb[pos].st_value = symbol_table[i].st_value;
-  //     f_tbl.tb[pos].st_size = symbol_table[i].st_size;
-  //     ++pos;
-  //   }
-  // }
-
   close(fd);
   // 返回镜像大小
   return size;
 }
+#endif
+
 
 const char *find_funct_symbol(uint32_t addr)
 {
@@ -287,7 +278,12 @@ void init_monitor(int argc, char *argv[])
   /* Load the image to memory. This will overwrite the built-in image. */
   long img_size = load_img();
 
-  parse_elf();
+#ifdef CONFIG_FTRACE_COND
+  if (FTRACE_COND)
+  {
+    parse_elf();
+  }
+#endif
 
   // /* generat function table. */
   // gen_func_tbl(elf_file);
