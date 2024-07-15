@@ -20,6 +20,7 @@
 #include <sys/stat.h>
 #include <sys/mman.h>
 #include <memory/paddr.h>
+#include <memory/vaddr.h>
 
 void init_rand();
 void init_log(const char *log_file);
@@ -30,19 +31,54 @@ void init_sdb();
 void init_disasm(const char *triple);
 void init_iringbuf();
 
-typedef struct
-{
-  const char *st_name;       /* Symbol name (string tbl index) */
-  Elf32_Addr st_value; /* Symbol value */
-} FUNC_ITEM;
+// typedef struct
+// {
+//   const char *st_name; /* Symbol name (string tbl index) */
+//   Elf32_Addr st_value; /* Symbol value */
+//   Elf32_Word st_size;  /* Symbol size */
+// } FUNC_ITEM;
 
-typedef struct
-{
-  FUNC_ITEM *tb; /* Symbol name (string tbl index) */
-  size_t size;
-} FUNC_TAB;
+// typedef struct
+// {
+//   FUNC_ITEM *tb; /* Symbol name (string tbl index) */
+//   size_t size;
+// } FUNC_TBL;
 
-static FUNC_TAB f_tbl = {NULL, 0};
+// FUNC_TBL f_tbl = {};
+
+// void init_func_tbl()
+// {
+//   f_tbl.tb = NULL;
+//   f_tbl.size = 0;
+// }
+
+// static void gen_func_tbl(const void *elf)
+// {
+
+//   return;
+// }
+
+// int check_func_tbl(vaddr_t *pc)
+// {
+//   for (size_t i = 0; i < f_tbl.size; i++)
+//   {
+//     if (*pc == f_tbl.tb[i].st_value)
+//     {
+//       return START_FUNC;
+//     }
+
+//     if (*pc == f_tbl.tb[i].st_value + f_tbl.tb[i].st_size - 1)
+//     {
+//       return END_FUNC;
+//     }
+//   }
+//   return IN_FUNC;
+// }
+
+// void del_func_tbl()
+// {
+//   free(f_tbl.tb);
+// }
 
 static void welcome()
 {
@@ -65,6 +101,10 @@ static char *diff_so_file = NULL;
 static char *img_file = NULL;
 static char *elf_file = NULL;
 static int difftest_port = 1234;
+
+const void *string_table = NULL;
+const Elf32_Sym *symbol_table = NULL;
+Elf32_Word sym_tbl_nums;
 
 static long load_img()
 {
@@ -161,15 +201,14 @@ static long parse_elf()
   stat(elf_file, &stats);
   long size = stats.st_size;
   int fd = open(elf_file, O_RDONLY);
-
   const void *elf = mmap(0, stats.st_size, PROT_READ, MAP_SHARED, fd, 0);
+
   const Elf32_Ehdr *elf_header = elf;
   const Elf32_Shdr *section_table = elf + elf_header->e_shoff;
 
-  const void *string_table = NULL;
-  const Elf32_Sym *symbol_table = NULL;
   Elf32_Word sym_tbl_entsize = 0;
   Elf32_Word sym_tbl_size = 0;
+
   for (size_t i = 0, j = 0; i < elf_header->e_shnum; i++)
   {
     if (j == 2)
@@ -192,34 +231,35 @@ static long parse_elf()
     }
   }
 
-  for (size_t i = 1; i < sym_tbl_size / sym_tbl_entsize; i++)
-  {
-    if (ELF32_ST_TYPE(symbol_table[i].st_info) == STT_FUNC)
-    {
-      ++f_tbl.size;
-    }
-  }
-
-  f_tbl.tb = malloc(sizeof(FUNC_ITEM) * f_tbl.size);
-
-  for (size_t i = 0, pos = 0; i < sym_tbl_size / sym_tbl_entsize; i++)
-  {
-    if (ELF32_ST_TYPE(symbol_table[i].st_info) == STT_FUNC)
-    {
-      f_tbl.tb[pos].st_name = string_table + symbol_table[i].st_name;
-      f_tbl.tb[pos].st_value = symbol_table[i].st_value;
-      ++pos;
-    }
-  }
-
-  for (size_t i = 0; i < f_tbl.size; i++)
-  {
-    printf("%s %x\n", f_tbl.tb[i].st_name, f_tbl.tb[i].st_value);
-  }
+  sym_tbl_nums = sym_tbl_size / sym_tbl_entsize;
+  // for (size_t i = 0, pos = 0; i < sym_tbl_nums; i++)
+  // {
+  //   if (ELF32_ST_TYPE(symbol_table[i].st_info) == STT_FUNC)
+  //   {
+  //     f_tbl.tb[pos].st_name = string_table + symbol_table[i].st_name;
+  //     f_tbl.tb[pos].st_value = symbol_table[i].st_value;
+  //     f_tbl.tb[pos].st_size = symbol_table[i].st_size;
+  //     ++pos;
+  //   }
+  // }
 
   close(fd);
   // 返回镜像大小
   return size;
+}
+
+void find_funct_symbol(uint32_t addr, const char *funct_name)
+{
+  for (size_t i = 0; i < sym_tbl_nums; i++)
+  {
+    if (ELF32_ST_TYPE(symbol_table[i].st_info) == STT_FUNC && addr >= symbol_table[i].st_value && addr < symbol_table[i].st_value + symbol_table[i].st_size)
+    {
+      funct_name = string_table + symbol_table[i].st_name;
+      return;
+    }
+  }
+  funct_name = "???";
+  return;
 }
 
 void init_monitor(int argc, char *argv[])
@@ -247,8 +287,10 @@ void init_monitor(int argc, char *argv[])
   /* Load the image to memory. This will overwrite the built-in image. */
   long img_size = load_img();
 
-  /* Parse elf file. */
   parse_elf();
+
+  // /* generat function table. */
+  // gen_func_tbl(elf_file);
 
   /* Initialize differential testing. */
   init_difftest(diff_so_file, img_size, difftest_port);

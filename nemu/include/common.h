@@ -24,6 +24,10 @@
 #include <generated/autoconf.h>
 #include <macro.h>
 
+#define START_FUNC 0
+#define IN_FUNC 1
+#define END_FUNC 2
+
 #ifdef CONFIG_TARGET_AM
 #include <klib.h>
 #else
