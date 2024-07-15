@@ -234,7 +234,8 @@ static int decode_exec(Decode *s)
         printf(" ");
       }
       find_funct_symbol(s->pc, funct_name);
-      printf("ret [%s]",funct_name);
+      printf("ret [%s]\n",funct_name);
+      
       --call_funct_times;
     } /* call */
     else if (is_call)
@@ -246,7 +247,7 @@ static int decode_exec(Decode *s)
         printf(" ");
       }
       find_funct_symbol(s->dnpc, funct_name);
-      printf("call [%s@"FMT_WORD"]",funct_name,s->dnpc);
+      printf("call [%s@"FMT_WORD"]\n",funct_name,s->dnpc);
     }
   }
 #endif
