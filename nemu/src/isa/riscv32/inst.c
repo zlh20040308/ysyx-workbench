@@ -220,6 +220,7 @@ static int decode_exec(Decode *s)
   if (FTRACE_COND)
   {
     const char *funct_name = "???";
+    // bool is_jr = BITS(INSTPAT_INST(s), 6, 0) == 0x67 && BITS(INSTPAT_INST(s), 14, 12) == 0x0;
     bool is_jal = BITS(INSTPAT_INST(s), 6, 0) == 0x67 && BITS(INSTPAT_INST(s), 14, 12) == 0x0;
     bool is_jalr = BITS(INSTPAT_INST(s), 6, 0) == 0x6f;
     bool is_ret = INSTPAT_INST(s) == 0x00008067;
