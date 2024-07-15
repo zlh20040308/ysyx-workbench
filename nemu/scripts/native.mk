@@ -30,7 +30,7 @@ override ARGS += $(ARGS_DIFF)
 # Command to execute NEMU
 IMG ?=
 ELF ?=
-NEMU_EXEC := $(BINARY) $(ARGS) -i $(IMG) -e $(ELF)
+NEMU_EXEC := $(BINARY) $(ARGS) -i $(IMG)
 
 ifdef ITRACE
 NEMU_EXEC += -e $(ELF)
