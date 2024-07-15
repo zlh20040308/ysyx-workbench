@@ -32,7 +32,7 @@ IMG ?=
 ELF ?=
 NEMU_EXEC := $(BINARY) $(ARGS) -i $(IMG)
 
-ifdef ITRACE
+ifdef FTRACE
 NEMU_EXEC += -e $(ELF)
 endif
 
