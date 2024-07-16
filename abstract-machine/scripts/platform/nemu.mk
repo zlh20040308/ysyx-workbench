@@ -23,7 +23,7 @@ image: $(IMAGE).elf
 	@$(OBJCOPY) -S --set-section-flags .bss=alloc,contents -O binary $(IMAGE).elf $(IMAGE).bin
 
 run: image
-	$(MAKE) -C $(NEMU_HOME) ISA=$(ISA) run ARGS="-b $(NEMUFLAGS)" IMG=$(IMAGE).bin 
+	$(MAKE) -C $(NEMU_HOME) ISA=$(ISA) run ARGS="-b $(NEMUFLAGS)" IMG=$(IMAGE).bin ELF=$(IMAGE).elf
 
 run-elf: image
 	$(MAKE) -C $(NEMU_HOME) ISA=$(ISA) run ARGS="-b $(NEMUFLAGS)" IMG=$(IMAGE).bin ELF=$(IMAGE).elf
