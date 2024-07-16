@@ -245,7 +245,7 @@ static int decode_exec(Decode *s)
       printf("hahaha\n");
       funct_name = find_funct_symbol(s->dnpc);
       printf("%s\n",funct_name);
-      if (!strcmp(funct_name,"???"))
+      if (strcmp(funct_name,"???"))
       {
         ++call_funct_times;
         printf(FMT_WORD ": ", s->pc);
