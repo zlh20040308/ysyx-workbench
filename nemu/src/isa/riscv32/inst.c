@@ -31,6 +31,7 @@ extern const void *string_table;
 extern const Elf32_Sym *symbol_table;
 extern Elf32_Word sym_tbl_nums;
 static size_t call_funct_times = 0;
+static size_t jr_call_times = 0;
 #endif
 
 extern const char *find_funct_symbol(uint32_t addr, char *pos);
@@ -234,7 +235,7 @@ static int decode_exec(Decode *s)
     if (is_ret)
     {
       printf(FMT_WORD ": ", s->pc);
-      for (size_t i = 0; i < call_funct_times; i++)
+      for (size_t i = 0; i < call_funct_times - jr_call_times; i++)
       {
         printf(" ");
       }
@@ -243,6 +244,7 @@ static int decode_exec(Decode *s)
       printf("ret [%s]\n", funct_name);
 
       --call_funct_times;
+      jr_call_times = 0;
     }
     else if (is_jr)
     {
@@ -250,6 +252,7 @@ static int decode_exec(Decode *s)
       // printf("%s\n", funct_name);
       if (strcmp(funct_name, "???") && pos == FUNCT_HEAD)
       {
+        ++jr_call_times;
         ++call_funct_times;
         printf(FMT_WORD ": ", s->pc);
         for (size_t i = 0; i < call_funct_times; i++)
