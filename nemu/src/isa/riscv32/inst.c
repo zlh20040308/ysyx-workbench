@@ -242,6 +242,7 @@ static int decode_exec(Decode *s)
     }
     else if (is_jr)
     {
+      printf("hahaha\n");
       funct_name = find_funct_symbol(s->dnpc);
       if (!strcmp(funct_name,"???"))
       {
