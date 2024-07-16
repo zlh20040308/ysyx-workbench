@@ -22,6 +22,9 @@
 #define R(i) gpr(i)
 #define Mr vaddr_read
 #define Mw vaddr_write
+#define FUNCT_HEAD 0
+#define FUNCT_BODY 1
+#define OUT_OF_FUNCT 2
 
 #ifdef CONFIG_FTRACE_COND
 extern const void *string_table;
@@ -30,18 +33,17 @@ extern Elf32_Word sym_tbl_nums;
 static size_t call_funct_times = 0;
 #endif
 
-extern const char *find_funct_symbol(uint32_t addr);
+extern const char *find_funct_symbol(uint32_t addr, char *pos);
 
-enum
-{
-  TYPE_I,
-  TYPE_U,
-  TYPE_S,
-  TYPE_J,
-  TYPE_B,
-  TYPE_R,
-  TYPE_N, // none
-};
+    enum {
+      TYPE_I,
+      TYPE_U,
+      TYPE_S,
+      TYPE_J,
+      TYPE_B,
+      TYPE_R,
+      TYPE_N, // none
+    };
 
 #define src1R()     \
   do                \
@@ -226,6 +228,7 @@ static int decode_exec(Decode *s)
     bool is_jalr = BITS(INSTPAT_INST(s), 6, 0) == 0x6f;
     bool is_ret = INSTPAT_INST(s) == 0x00008067;
     bool is_call = (is_jalr || is_jal) && BITS(INSTPAT_INST(s), 11, 7) == 0x1;
+    char pos = 0;
 
     /* ret */
     if (is_ret)
@@ -235,17 +238,17 @@ static int decode_exec(Decode *s)
       {
         printf(" ");
       }
-      funct_name = find_funct_symbol(s->pc);
+
+      funct_name = find_funct_symbol(s->pc, &pos);
       printf("ret [%s]\n", funct_name);
 
       --call_funct_times;
     }
     else if (is_jr)
     {
-      printf("hahaha\n");
-      funct_name = find_funct_symbol(s->dnpc);
-      printf("%s\n",funct_name);
-      if (strcmp(funct_name,"???"))
+      funct_name = find_funct_symbol(s->dnpc, &pos);
+      // printf("%s\n", funct_name);
+      if (strcmp(funct_name, "???") && pos == FUNCT_HEAD)
       {
         ++call_funct_times;
         printf(FMT_WORD ": ", s->pc);
@@ -265,7 +268,7 @@ static int decode_exec(Decode *s)
       {
         printf(" ");
       }
-      funct_name = find_funct_symbol(s->dnpc);
+      funct_name = find_funct_symbol(s->dnpc, &pos);
       printf("call [%s@" FMT_WORD "]\n", funct_name, s->dnpc);
     }
   }

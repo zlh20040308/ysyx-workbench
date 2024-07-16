@@ -31,6 +31,10 @@ void init_sdb();
 void init_disasm(const char *triple);
 void init_iringbuf();
 
+#define FUNCT_HEAD 0
+#define FUNCT_BODY 1
+#define OUT_OF_FUNCT 2
+
 // typedef struct
 // {
 //   const char *st_name; /* Symbol name (string tbl index) */
@@ -160,17 +164,17 @@ static int parse_args(int argc, char *argv[])
       break;
     case 'p':
       printf("p \n");
-      
+
       sscanf(optarg, "%d", &difftest_port);
       break;
     case 'l':
       printf("l \n");
-      
+
       log_file = optarg;
       break; // 当命令行指定 -l 参数，将全局静态变量 log_file 设置成 日志文件 路径
     case 'd':
       printf("d \n");
-      
+
       diff_so_file = optarg;
       break;
     case 'i':
@@ -246,14 +250,24 @@ static long parse_elf()
 }
 #endif
 
-const char *find_funct_symbol(uint32_t addr)
+const char *find_funct_symbol(uint32_t addr, char *pos)
 {
+  *pos = OUT_OF_FUNCT;
   for (size_t i = 0; i < sym_tbl_nums; i++)
   {
     if (ELF32_ST_TYPE(symbol_table[i].st_info) == STT_FUNC && addr >= symbol_table[i].st_value && addr < symbol_table[i].st_value + symbol_table[i].st_size)
     {
       // funct_name = string_table + symbol_table[i].st_name;
       // printf("funct_name:%s\n", (char *)(string_table + symbol_table[i].st_name));
+      if (addr == symbol_table[i].st_value)
+      {
+        *pos = FUNCT_HEAD;
+      }
+      else
+      {
+        *pos = FUNCT_BODY;
+      }
+
       return (char *)(string_table + symbol_table[i].st_name);
     }
   }
