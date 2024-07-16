@@ -221,7 +221,7 @@ static int decode_exec(Decode *s)
   if (FTRACE_COND)
   {
     const char *funct_name = "???";
-    // bool is_jr = BITS(INSTPAT_INST(s), 6, 0) == 0x67 && BITS(INSTPAT_INST(s), 14, 12) == 0x0;
+    bool is_jr = BITS(INSTPAT_INST(s), 14, 0) == 0x67 && BITS(INSTPAT_INST(s), 31, 20) == 0x0;
     bool is_jal = BITS(INSTPAT_INST(s), 6, 0) == 0x67 && BITS(INSTPAT_INST(s), 14, 12) == 0x0;
     bool is_jalr = BITS(INSTPAT_INST(s), 6, 0) == 0x6f;
     bool is_ret = INSTPAT_INST(s) == 0x00008067;
@@ -239,7 +239,22 @@ static int decode_exec(Decode *s)
       printf("ret [%s]\n", funct_name);
 
       --call_funct_times;
-    } /* call */
+    }
+    else if (is_jr)
+    {
+      funct_name = find_funct_symbol(s->dnpc);
+      if (!strcmp(funct_name,"???"))
+      {
+        ++call_funct_times;
+        printf(FMT_WORD ": ", s->pc);
+        for (size_t i = 0; i < call_funct_times; i++)
+        {
+          printf(" ");
+        }
+        printf("call [%s@" FMT_WORD "]\n", funct_name, s->dnpc);
+      }
+    }
+    /* call */
     else if (is_call)
     {
       ++call_funct_times;
