@@ -265,6 +265,11 @@ static int decode_exec(Decode *s)
     /* call */
     else if (is_call)
     {
+      if (jr_call_times)
+      {
+        jr_call_times++;
+      }
+      
       ++call_funct_times;
       printf(FMT_WORD ": ", s->pc);
       for (size_t i = 0; i < call_funct_times; i++)
