@@ -235,7 +235,8 @@ static int decode_exec(Decode *s)
     if (is_ret)
     {
       printf(FMT_WORD ": ", s->pc);
-      for (size_t i = 0; i < call_funct_times - jr_call_times; i++)
+      call_funct_times -=jr_call_times;
+      for (size_t i = 0; i < call_funct_times; i++)
       {
         printf(" ");
       }
