@@ -30,10 +30,10 @@ override ARGS += $(ARGS_DIFF)
 # Command to execute NEMU
 IMG ?=
 ELF ?=
-NEMU_EXEC := $(BINARY) $(ARGS) -i $(IMG)
+NEMU_EXEC := $(BINARY) $(ARGS) -i$(IMG)
 
 ifdef FTRACE
-NEMU_EXEC += -e $(ELF)
+NEMU_EXEC += -e$(ELF)
 endif
 
 run-env: $(BINARY) $(DIFF_REF_SO)
