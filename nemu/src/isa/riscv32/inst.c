@@ -235,8 +235,7 @@ static int decode_exec(Decode *s)
     if (is_ret)
     {
       printf(FMT_WORD ": ", s->pc);
-      call_funct_times -=jr_call_times;
-      for (size_t i = 0; i < call_funct_times; i++)
+      for (size_t i = 0; i < call_funct_times - jr_call_times; i++)
       {
         printf(" ");
       }
@@ -262,7 +261,7 @@ static int decode_exec(Decode *s)
         printf(" ");
       }
       funct_name = find_funct_symbol(s->dnpc, &pos);
-      printf("call [%s@" FMT_WORD "]\n", funct_name, s->dnpc);
+      printf("jr_call [%s@" FMT_WORD "]\n", funct_name, s->dnpc);
     }
     else if (is_jr)
     {
