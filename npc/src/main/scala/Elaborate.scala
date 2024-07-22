@@ -10,7 +10,7 @@ object Elaborate extends App {
   )
   // circt.stage.ChiselStage.emitSystemVerilogFile(new ButtonController, args, firtoolOptions)
   // circt.stage.ChiselStage.emitSystemVerilogFile(new top, args, firtoolOptions)
-  circt.stage.ChiselStage.emitSystemVerilogFile(new SimpleDecoder, args, firtoolOptions)
+  circt.stage.ChiselStage.emitSystemVerilogFile(new AluArea, args, firtoolOptions)
 
   
   // circt.stage.ChiselStage.emitSystemVerilogFile(new PS2KeyBoard, args, firtoolOptions)
