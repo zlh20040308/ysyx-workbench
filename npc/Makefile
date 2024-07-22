@@ -34,6 +34,8 @@ reformat:
 checkformat:
 	mill -i __.checkFormat
 
+.PHONY: test verilog help reformat checkformat clean
+
 
 default: $(SIMBIN)
 
@@ -83,10 +85,13 @@ sim: $(SIMBIN)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 	@echo "Write this Makefile by yourself."
 	@$(BIN)
+	@gtkwave waveform.vcd
 
 run: $(RUNBIN)
 	@$(BIN)
 
-.PHONY: test verilog help reformat checkformat clean default all sim run $(BIN) 
+
+.PHONY: default all clean sim $(BIN) run
+
 
 -include ../Makefile
