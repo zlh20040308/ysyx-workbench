@@ -159,30 +159,21 @@ static int parse_args(int argc, char *argv[])
     switch (o)
     {
     case 'b':
-      printf("b \n");
       sdb_set_batch_mode();
       break;
     case 'p':
-      printf("p \n");
-
       sscanf(optarg, "%d", &difftest_port);
       break;
     case 'l':
-      printf("l \n");
-
       log_file = optarg;
       break; // 当命令行指定 -l 参数，将全局静态变量 log_file 设置成 日志文件 路径
     case 'd':
-      printf("d \n");
-
       diff_so_file = optarg;
       break;
     case 'i':
-      printf("i \n");
       img_file = optarg;
       break; // 当命令行指定 -i 参数，将全局静态变量 img_file 设置成 镜像文件 路径
     case 'e':
-      printf("e  \n");
       elf_file = optarg;
       break; // 当命令行指定 -e 参数，将全局静态变量 elf_file 设置成 镜像文件 路径
     default:

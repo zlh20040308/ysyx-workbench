@@ -85,14 +85,14 @@ void traverse_iringbuf()
 {
   if (iringbuf.size == 0)
   {
-    printf("iringbuf is empty\n");
+    Log("iringbuf is empty\n");
     return;
   }
 
   int index = iringbuf.read_index;
   for (int i = 0; i < iringbuf.size; i++)
   {
-    printf("%s\n", iringbuf.buffer[(index + i) % BUFFER_SIZE]);
+    Log("%s\n", iringbuf.buffer[(index + i) % BUFFER_SIZE]);
   }
 }
 
