@@ -221,8 +221,8 @@ static int decode_exec(Decode *s)
   R(0) = 0; // reset $zero to 0
 
 #ifdef CONFIG_FTRACE_COND
-  if (FTRACE_COND)
-  {
+  // if (FTRACE_COND)
+  // {
     const char *funct_name = "???";
     bool is_jr = BITS(INSTPAT_INST(s), 14, 0) == 0x67 && BITS(INSTPAT_INST(s), 31, 20) == 0x0;
     bool is_jal = BITS(INSTPAT_INST(s), 6, 0) == 0x67 && BITS(INSTPAT_INST(s), 14, 12) == 0x0;
@@ -280,7 +280,7 @@ static int decode_exec(Decode *s)
       }
     }
     
-  }
+  // }
 #endif
 
   return 0;

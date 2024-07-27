@@ -10,12 +10,14 @@ object Alu {
   val ALU_XOR   = 5.U(3.W)
   val ALU_SLT   = 6.U(3.W)
   val ALU_EQ    = 7.U(3.W)
+
+  def getWidth: Int = 3
 }
 
 class AluIO(width: Int) extends Bundle {
   val a        = Input(UInt(width.W))
   val b        = Input(UInt(width.W))
-  val alu_op   = Input(UInt(3.W))
+  val alu_op   = Input(UInt(Alu.getWidth.W))
   val a_larger = Output(Bool())
   val zero     = Output(Bool())
   val overflow = Output(Bool())
@@ -30,7 +32,7 @@ trait Alu extends Module {
   val io: AluIO
 }
 
-class AluArea(val width: Int = 4) extends Alu {
+class AluArea(val width: Int = 32) extends Alu {
   val io = IO(new AluIO(width))
 
   val Adder = Module(new AdderArea(width))

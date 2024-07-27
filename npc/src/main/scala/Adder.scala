@@ -15,7 +15,7 @@ trait Adder extends Module {
   val io: AdderIO
 }
 
-class AdderArea(val width: Int = 4) extends Adder {
+class AdderArea(val width: Int = 32) extends Adder {
   val io       = IO(new AdderIO(width))
   val t_no_Cin = Wire(UInt(width.W))
   t_no_Cin := Fill(width, io.ci) ^ io.b
