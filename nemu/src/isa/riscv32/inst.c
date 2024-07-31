@@ -19,6 +19,7 @@
 #include <cpu/ifetch.h>
 #include <elf.h>
 #include <stddef.h>
+#include <stdint.h>
 
 #define R(i) gpr(i)
 #define Mr vaddr_read
@@ -28,10 +29,13 @@
 #define OUT_OF_FUNCT 2
 
 #ifdef CONFIG_FTRACE_COND
+#define RET_SPECE_BUF_SIZE 1024
 extern const void *string_table;
 extern const Elf32_Sym *symbol_table;
 extern Elf32_Word sym_tbl_nums;
 static size_t call_funct_times = 0;
+static uint32_t ret_space_buf[RET_SPECE_BUF_SIZE] = {0};
+static uint32_t ret_space_buf_ptr = 0;
 #endif
 
 extern const char *find_funct_symbol(uint32_t addr, char *pos);
@@ -257,8 +261,6 @@ static int decode_exec(Decode *s) {
   R(0) = 0; // reset $zero to 0
 
 #ifdef CONFIG_FTRACE_COND
-  // if (FTRACE_COND)
-  // {
   const char *funct_name = "???";
   bool is_jal = BITS(INSTPAT_INST(s), 6, 0) == 0x67 &&
                 BITS(INSTPAT_INST(s), 14, 12) == 0x0;
@@ -271,60 +273,63 @@ static int decode_exec(Decode *s) {
   if (is_ret) {
     printf(FMT_WORD ": ", s->pc);
     for (size_t i = 0; i < call_funct_times; i++) {
-      printf(" ");
+      printf("  ");
     }
     funct_name = find_funct_symbol(s->pc, &pos);
     printf("ret [%s]\n", funct_name);
-    --call_funct_times;
+
+    call_funct_times -= ret_space_buf[ret_space_buf_ptr - 1];
+    ret_space_buf[--ret_space_buf_ptr] = 0;
   }
   /* is_jal */
   else if (is_jal) {
     funct_name = find_funct_symbol(s->dnpc, &pos);
-    if (rd_type == 0) {
+    if (rd_type == 0) { // no ra
       if (pos == FUNCT_HEAD) {
+        ret_space_buf[ret_space_buf_ptr - 1]++;
         ++call_funct_times;
         printf(FMT_WORD ": ", s->pc);
         for (size_t i = 0; i < call_funct_times; i++) {
-          printf(" ");
+          printf("  ");
         }
         printf("call [%s@" FMT_WORD "]\n", funct_name, s->dnpc);
       }
-    } else if (rd_type == 1) {
+    } else if (rd_type == 1) { // normal
       if (pos == FUNCT_HEAD) {
+        ret_space_buf[ret_space_buf_ptr++]++;
         ++call_funct_times;
         printf(FMT_WORD ": ", s->pc);
         for (size_t i = 0; i < call_funct_times; i++) {
-          printf(" ");
+          printf("  ");
         }
         printf("call [%s@" FMT_WORD "]\n", funct_name, s->dnpc);
       }
     }
   } else if (is_jalr) {
     funct_name = find_funct_symbol(s->dnpc, &pos);
-    if (rd_type == 0) {
+    if (rd_type == 0) { // no ra
       if (pos == FUNCT_HEAD) {
+        ret_space_buf[ret_space_buf_ptr - 1]++;
         ++call_funct_times;
         printf(FMT_WORD ": ", s->pc);
         for (size_t i = 0; i < call_funct_times; i++) {
-          printf(" ");
+          printf("  ");
         }
         printf("call [%s@" FMT_WORD "]\n", funct_name, s->dnpc);
       }
-    } else if (rd_type == 1) {
+    } else if (rd_type == 1) { // normal
       if (pos == FUNCT_HEAD) {
+        ret_space_buf[ret_space_buf_ptr++]++;
         ++call_funct_times;
         printf(FMT_WORD ": ", s->pc);
         for (size_t i = 0; i < call_funct_times; i++) {
-          printf(" ");
+          printf("  ");
         }
         printf("call [%s@" FMT_WORD "]\n", funct_name, s->dnpc);
       }
     }
   }
-
-// }
 #endif
-
   return 0;
 }
 
