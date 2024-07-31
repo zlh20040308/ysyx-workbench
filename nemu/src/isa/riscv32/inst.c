@@ -269,13 +269,13 @@ static int decode_exec(Decode *s) {
 
   /* ret */
   if (is_ret) {
-    printf(FMT_WORD ": ", s->pc);
-    for (size_t i = 0; i < call_funct_times; i++) {
-      printf(" ");
-    }
-    funct_name = find_funct_symbol(s->pc, &pos);
-    printf("ret [%s]\n", funct_name);
-    --call_funct_times;
+    // printf(FMT_WORD ": ", s->pc);
+    // for (size_t i = 0; i < call_funct_times; i++) {
+    //   printf(" ");
+    // }
+    // funct_name = find_funct_symbol(s->pc, &pos);
+    // printf("ret [%s]\n", funct_name);
+    // --call_funct_times;
   }
   /* is_jal */
   else if (is_jal) {
