@@ -282,7 +282,7 @@ static int decode_exec(Decode *s) {
     ret_space_buf[--ret_space_buf_ptr] = 0;
   }
   /* is_jal */
-  else if (is_jal) {
+  else if (is_jal||is_jalr) {
     funct_name = find_funct_symbol(s->dnpc, &pos);
     if (rd_type == 0) { // no ra
       if (pos == FUNCT_HEAD) {
@@ -305,30 +305,31 @@ static int decode_exec(Decode *s) {
         printf("call [%s@" FMT_WORD "]\n", funct_name, s->dnpc);
       }
     }
-  } else if (is_jalr) {
-    funct_name = find_funct_symbol(s->dnpc, &pos);
-    if (rd_type == 0) { // no ra
-      if (pos == FUNCT_HEAD) {
-        ret_space_buf[ret_space_buf_ptr - 1]++;
-        ++call_funct_times;
-        printf(FMT_WORD ": ", s->pc);
-        for (size_t i = 0; i < call_funct_times; i++) {
-          printf("  ");
-        }
-        printf("call [%s@" FMT_WORD "]\n", funct_name, s->dnpc);
-      }
-    } else if (rd_type == 1) { // normal
-      if (pos == FUNCT_HEAD) {
-        ret_space_buf[ret_space_buf_ptr++]++;
-        ++call_funct_times;
-        printf(FMT_WORD ": ", s->pc);
-        for (size_t i = 0; i < call_funct_times; i++) {
-          printf("  ");
-        }
-        printf("call [%s@" FMT_WORD "]\n", funct_name, s->dnpc);
-      }
-    }
-  }
+  } 
+  // else if (is_jalr) {
+  //   funct_name = find_funct_symbol(s->dnpc, &pos);
+  //   if (rd_type == 0) { // no ra
+  //     if (pos == FUNCT_HEAD) {
+  //       ret_space_buf[ret_space_buf_ptr - 1]++;
+  //       ++call_funct_times;
+  //       printf(FMT_WORD ": ", s->pc);
+  //       for (size_t i = 0; i < call_funct_times; i++) {
+  //         printf("  ");
+  //       }
+  //       printf("call [%s@" FMT_WORD "]\n", funct_name, s->dnpc);
+  //     }
+  //   } else if (rd_type == 1) { // normal
+  //     if (pos == FUNCT_HEAD) {
+  //       ret_space_buf[ret_space_buf_ptr++]++;
+  //       ++call_funct_times;
+  //       printf(FMT_WORD ": ", s->pc);
+  //       for (size_t i = 0; i < call_funct_times; i++) {
+  //         printf("  ");
+  //       }
+  //       printf("call [%s@" FMT_WORD "]\n", funct_name, s->dnpc);
+  //     }
+  //   }
+  // }
 #endif
   return 0;
 }
