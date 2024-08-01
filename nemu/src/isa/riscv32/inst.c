@@ -262,14 +262,12 @@ static int decode_exec(Decode *s) {
 
 #ifdef CONFIG_FTRACE_COND
   const char *funct_name = "???";
+  size_t rd_type = BITS(INSTPAT_INST(s), 11, 7);
   bool is_jal = BITS(INSTPAT_INST(s), 6, 0) == 0x67 &&
                 BITS(INSTPAT_INST(s), 14, 12) == 0x0;
   bool is_jalr = BITS(INSTPAT_INST(s), 6, 0) == 0x6f;
-  size_t rd_type = BITS(INSTPAT_INST(s), 11, 7);
   bool is_ret = INSTPAT_INST(s) == 0x00008067;
   char pos = 0;
-
-  /* ret */
   if (is_ret) {
     printf(FMT_WORD ": ", s->pc);
     for (size_t i = 0; i < call_funct_times; i++) {
@@ -277,12 +275,10 @@ static int decode_exec(Decode *s) {
     }
     funct_name = find_funct_symbol(s->pc, &pos);
     printf("ret [%s]\n", funct_name);
-
     call_funct_times -= ret_space_buf[ret_space_buf_ptr - 1];
     ret_space_buf[--ret_space_buf_ptr] = 0;
   }
-  /* is_jal */
-  else if (is_jal||is_jalr) {
+  else if (is_jal || is_jalr) {
     funct_name = find_funct_symbol(s->dnpc, &pos);
     if (rd_type == 0) { // no ra
       if (pos == FUNCT_HEAD) {
@@ -305,31 +301,7 @@ static int decode_exec(Decode *s) {
         printf("call [%s@" FMT_WORD "]\n", funct_name, s->dnpc);
       }
     }
-  } 
-  // else if (is_jalr) {
-  //   funct_name = find_funct_symbol(s->dnpc, &pos);
-  //   if (rd_type == 0) { // no ra
-  //     if (pos == FUNCT_HEAD) {
-  //       ret_space_buf[ret_space_buf_ptr - 1]++;
-  //       ++call_funct_times;
-  //       printf(FMT_WORD ": ", s->pc);
-  //       for (size_t i = 0; i < call_funct_times; i++) {
-  //         printf("  ");
-  //       }
-  //       printf("call [%s@" FMT_WORD "]\n", funct_name, s->dnpc);
-  //     }
-  //   } else if (rd_type == 1) { // normal
-  //     if (pos == FUNCT_HEAD) {
-  //       ret_space_buf[ret_space_buf_ptr++]++;
-  //       ++call_funct_times;
-  //       printf(FMT_WORD ": ", s->pc);
-  //       for (size_t i = 0; i < call_funct_times; i++) {
-  //         printf("  ");
-  //       }
-  //       printf("call [%s@" FMT_WORD "]\n", funct_name, s->dnpc);
-  //     }
-  //   }
-  // }
+  }
 #endif
   return 0;
 }

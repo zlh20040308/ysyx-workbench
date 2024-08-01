@@ -222,6 +222,8 @@ static long parse_elf()
     if (section_table[i].sh_type == SHT_STRTAB)
     {
       string_table = elf + section_table[i].sh_offset;
+      Log("e_shstrndx = %d",(int)elf_header->e_shstrndx);
+      Log("index = %d",(int)i);
       ++j;
     }
 
@@ -291,10 +293,10 @@ void init_monitor(int argc, char *argv[])
   long img_size = load_img();
 
 #ifdef CONFIG_FTRACE_COND
-  if (FTRACE_COND)
-  {
+  // if (FTRACE_COND)
+  // {
     parse_elf();
-  }
+  // }
 #endif
 
   // /* generat function table. */
