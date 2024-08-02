@@ -223,6 +223,8 @@ static long parse_elf()
     {
       string_table = elf + section_table[i].sh_offset;
       Log("sh_addr = %d",(int)section_table[i].sh_addr);
+      Log("SHT_NOBITS = %d",SHT_NOBITS);
+      Log("sh_type = %d",(int)section_table[i].sh_type);
       Log("e_shstrndx = %d",(int)elf_header->e_shstrndx);
       Log("index = %d",(int)i);
       ++j;
