@@ -230,6 +230,7 @@ static long parse_elf()
 
     if (section_table[i].sh_type == SHT_SYMTAB)
     {
+      Log("sh_addr = %d",(int)section_table[i].sh_addr);
       sym_tbl_size = section_table[i].sh_size;
       sym_tbl_entsize = section_table[i].sh_entsize;
       symbol_table = elf + section_table[i].sh_offset;
