@@ -222,6 +222,7 @@ static long parse_elf()
     if (section_table[i].sh_type == SHT_STRTAB)
     {
       string_table = elf + section_table[i].sh_offset;
+      Log("sh_addr = %d",(int)section_table[i].sh_addr);
       Log("e_shstrndx = %d",(int)elf_header->e_shstrndx);
       Log("index = %d",(int)i);
       ++j;
