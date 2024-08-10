@@ -65,7 +65,7 @@ object Control {
 import Control._
 
 // 定义指令模式
-case class InstructionPattern(
+case class InstPattern(
   val funct7: BitPat = BitPat.dontCare(7),
   val funct3: BitPat = BitPat.dontCare(3),
   val opcode: BitPat)
@@ -76,11 +76,11 @@ case class InstructionPattern(
 import Alu._
 
 // 控制信号字段
-object AluOpField extends DecodeField[InstructionPattern, UInt] {
+object AluOpField extends DecodeField[InstPattern, UInt] {
   def name:       String = "aluOp"
   def chiselType: UInt   = UInt(3.W)
 
-  def genTable(op: InstructionPattern): BitPat = {
+  def genTable(op: InstPattern): BitPat = {
     (op.opcode.rawString, op.funct3.rawString, op.funct7.rawString) match {
       case ("0110011", "000", "0000000") => BitPat(ALU_ADD) // ADD
       case _                             => BitPat("b0000") // 默认值
@@ -88,11 +88,11 @@ object AluOpField extends DecodeField[InstructionPattern, UInt] {
   }
 }
 
-object ImmSelField extends DecodeField[InstructionPattern, UInt] {
+object ImmSelField extends DecodeField[InstPattern, UInt] {
   def name:       String = "immSel"
   def chiselType: UInt   = UInt(3.W)
 
-  def genTable(op: InstructionPattern): BitPat = {
+  def genTable(op: InstPattern): BitPat = {
     (op.funct7.rawString, op.funct3.rawString, op.opcode.rawString) match {
       /* -------- IMM_U -------- */
       case (_, _, "0110111") => BitPat(IMM_U) // LUI
@@ -136,10 +136,10 @@ object ImmSelField extends DecodeField[InstructionPattern, UInt] {
   }
 }
 
-object RegWriteField extends DecodeField[InstructionPattern, Bool] {
+object RegWriteField extends DecodeField[InstPattern, Bool] {
   def name:       String = "regWrite"
   def chiselType: Bool   = Bool()
-  def genTable(op: InstructionPattern): BitPat = {
+  def genTable(op: InstPattern): BitPat = {
     (op.funct7.rawString, op.funct3.rawString, op.opcode.rawString) match {
       /* -------- IMM_U -------- */
       case (_, _, "0110111") => BitPat("b1") // LUI
@@ -150,30 +150,35 @@ object RegWriteField extends DecodeField[InstructionPattern, Bool] {
   }
 }
 
-object MemReadField extends DecodeField[InstructionPattern, Bool] {
+object MemReadField extends DecodeField[InstPattern, Bool] {
   def name:       String = "memRead"
   def chiselType: Bool   = Bool()
-  def genTable(op: InstructionPattern): BitPat = {
+  def genTable(op: InstPattern): BitPat = {
     if (op.opcode.rawString == "0000011") BitPat("b1") // 示例条件
     else BitPat("b0")
   }
 }
 
-object MemWriteField extends DecodeField[InstructionPattern, Bool] {
+object MemWriteField extends DecodeField[InstPattern, Bool] {
   def name:       String = "memWrite"
   def chiselType: Bool   = Bool()
-  def genTable(op: InstructionPattern): BitPat = {
+  def genTable(op: InstPattern): BitPat = {
     if (op.opcode.rawString == "0100011") BitPat("b1") // 示例条件
     else BitPat("b0")
   }
 }
 
 class CUIO extends Bundle {
-  val instruction = Input(UInt(32.W))
-  val aluOp       = UInt(4.W) // 根据 AluOpField 定义的宽度
-  val regWrite    = Bool()
-  val memRead     = Bool()
-  val memWrite    = Bool()
+  val inst = Input(UInt(32.W))
+
+  val PCSel    = Output(Bool())
+  val ImmSel    = Output(UInt(3.W))
+  val RegWEn    = Output(UInt(1.W))
+
+  val aluOp       = Output(UInt(4.W)) // 根据 AluOpField 定义的宽度
+  val regWrite    = Output(Bool())
+  val memRead     = Output(Bool())
+  val memWrite    = Output(Bool())
 
 }
 
@@ -184,12 +189,12 @@ class CU extends Module {
   // 移动到伴生对象中
   object CU {
     val patterns = Seq(
-      InstructionPattern(
+      InstPattern(
         funct7 = BitPat("b0000000"),
         funct3 = BitPat("b000"),
         opcode = BitPat("b0110011")
       ), // ADD 示例
-      InstructionPattern(
+      InstPattern(
         funct7 = BitPat("b0100000"),
         funct3 = BitPat("b000"),
         opcode = BitPat("b0110011")
@@ -209,7 +214,7 @@ class CU extends Module {
   import CU._
 
   // 解码结果
-  val decodedSignals = decodeTable.decode(io.instruction)
+  val decodedSignals = decodeTable.decode(io.inst)
 
   // 连接输出信号
   io.aluOp    := decodedSignals(AluOpField).asUInt
