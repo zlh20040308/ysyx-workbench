@@ -261,7 +261,7 @@ static int decode_exec(Decode *s) {
   R(0) = 0; // reset $zero to 0
 
 #ifdef CONFIG_FTRACE_COND
-  const char *funct_name = "???";
+  const char *funct_name = "??";
   size_t rd_type = BITS(INSTPAT_INST(s), 11, 7);
   bool is_jal = BITS(INSTPAT_INST(s), 6, 0) == 0x67 &&
                 BITS(INSTPAT_INST(s), 14, 12) == 0x0;
