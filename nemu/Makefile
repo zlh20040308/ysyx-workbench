@@ -63,9 +63,9 @@ ifdef MTRACE
 CFLAGS_TRACE += $(CFLAGS_MTRACE)
 endif
 
-ifdef FTRACE
+# ifdef FTRACE
 CFLAGS_TRACE += $(CFLAGS_FTRACE)
-endif
+# endif
 
 # make ITRACE=1 MTRACE=1
 
