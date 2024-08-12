@@ -55,9 +55,9 @@ CFLAGS_FTRACE += -DFTRACE_COND=$(if $(CONFIG_FTRACE_COND),$(call remove_quote,$(
 CFLAGS_TRACE :=
 
 # 根据命令行传递的参数更新 CFLAGS_TRACE
-ifdef ITRACE
+# ifdef ITRACE
 CFLAGS_TRACE += $(CFLAGS_ITRACE)
-endif
+# endif
 
 ifdef MTRACE
 CFLAGS_TRACE += $(CFLAGS_MTRACE)
