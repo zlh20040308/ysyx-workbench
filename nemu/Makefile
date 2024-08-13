@@ -33,11 +33,17 @@ NAME    = $(GUEST_ISA)-nemu-$(ENGINE)
 $(info NAME = $(NAME))
 # Include all filelist.mk to merge file lists
 FILELIST_MK = $(shell find -L ./src -name "filelist.mk")
+$(info FILELIST_MK = $(FILELIST_MK))
+
 include $(FILELIST_MK)
 
 # Filter out directories and files in blacklist to obtain the final set of source files
 DIRS-BLACKLIST-y += $(DIRS-BLACKLIST)
+$(info DIRS-BLACKLIST-y = $(DIRS-BLACKLIST-y))
+
 SRCS-BLACKLIST-y += $(SRCS-BLACKLIST) $(shell find -L $(DIRS-BLACKLIST-y) -name "*.c")
+$(info SRCS-BLACKLIST-y = $(SRCS-BLACKLIST-y))
+
 SRCS-y += $(shell find -L $(DIRS-y) -name "*.c")
 SRCS = $(filter-out $(SRCS-BLACKLIST-y),$(SRCS-y))
 
