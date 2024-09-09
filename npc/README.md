@@ -29,4 +29,3 @@ To generate Verilog:
 ```bash
 make verilog
 ```
-
