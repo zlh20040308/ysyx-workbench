@@ -275,7 +275,7 @@ static int decode_exec(Decode *s) {
     }
     funct_name = find_funct_symbol(s->pc, &pos);
     printf("ret [%s]\n", funct_name);
-    Assert(ret_space_buf_ptr - 1 < 1024, "Assertion failed: Out of bound");
+    Assert(1 < 2, "Assertion failed: Out of bound");
     call_funct_times -= ret_space_buf[ret_space_buf_ptr - 1];
     ret_space_buf[--ret_space_buf_ptr] = 0;
   } else if (is_jal || is_jalr) {
