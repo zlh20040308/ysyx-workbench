@@ -32,9 +32,9 @@ IMG ?=
 ELF ?=
 NEMU_EXEC := $(BINARY) $(ARGS) -i$(IMG)
 
-ifdef FTRACE
+# ifdef FTRACE
 NEMU_EXEC += -e$(ELF)
-endif
+# endif
 
 run-env: $(BINARY) $(DIFF_REF_SO)
 
