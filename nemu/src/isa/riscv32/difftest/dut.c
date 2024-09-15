@@ -14,6 +14,7 @@
  ***************************************************************************************/
 
 #include "../local-include/reg.h"
+#include "debug.h"
 #include <cpu/difftest.h>
 #include <isa.h>
 #include <stdbool.h>
@@ -25,6 +26,7 @@ bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
       return false;
     }
   }
+  Log("Difftest Pass!");
   return true;
 }
 
