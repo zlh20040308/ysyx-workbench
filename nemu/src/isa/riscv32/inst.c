@@ -133,12 +133,8 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2,
 
 static int decode_exec(Decode *s) {
   int rd = 0;
-  // uint32_t i = s->isa.inst.val;
+  Log("haha\n");
   word_t src1 = 0, src2 = 0, imm = 0;
-  // word_t funct7 = 0, funct3 = 0, opcode = 0;
-  // opcode();
-  // funct3();
-  // funct7();
   // 此时dnpc已经指向下一条指令了
   s->dnpc = s->snpc;
 
