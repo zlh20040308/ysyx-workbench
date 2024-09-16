@@ -138,9 +138,9 @@ static int decode_exec(Decode *s) {
   word_t src1 = 0, src2 = 0, imm = 0;
   // 此时dnpc已经指向下一条指令了
   s->dnpc = s->snpc;
-  if (src2 == 0) {
-    Log("src2 == 0");
-  }
+//   if (src2 == 0) {
+//     Log("src2 == 0");
+//   }
 
 #define INSTPAT_INST(s) ((s)->isa.inst.val)
 #define INSTPAT_MATCH(s, name, type, ... /* execute body */)                   \
