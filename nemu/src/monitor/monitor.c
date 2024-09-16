@@ -35,55 +35,6 @@ void init_iringbuf();
 #define FUNCT_BODY 1
 #define OUT_OF_FUNCT 2
 
-// typedef struct
-// {
-//   const char *st_name; /* Symbol name (string tbl index) */
-//   Elf32_Addr st_value; /* Symbol value */
-//   Elf32_Word st_size;  /* Symbol size */
-// } FUNC_ITEM;
-
-// typedef struct
-// {
-//   FUNC_ITEM *tb; /* Symbol name (string tbl index) */
-//   size_t size;
-// } FUNC_TBL;
-
-// FUNC_TBL f_tbl = {};
-
-// void init_func_tbl()
-// {
-//   f_tbl.tb = NULL;
-//   f_tbl.size = 0;
-// }
-
-// static void gen_func_tbl(const void *elf)
-// {
-
-//   return;
-// }
-
-// int check_func_tbl(vaddr_t *pc)
-// {
-//   for (size_t i = 0; i < f_tbl.size; i++)
-//   {
-//     if (*pc == f_tbl.tb[i].st_value)
-//     {
-//       return START_FUNC;
-//     }
-
-//     if (*pc == f_tbl.tb[i].st_value + f_tbl.tb[i].st_size - 1)
-//     {
-//       return END_FUNC;
-//     }
-//   }
-//   return IN_FUNC;
-// }
-
-// void del_func_tbl()
-// {
-//   free(f_tbl.tb);
-// }
-
 static void welcome() {
   Log("Trace: %s", MUXDEF(CONFIG_TRACE, ANSI_FMT("ON", ANSI_FG_GREEN),
                           ANSI_FMT("OFF", ANSI_FG_RED)));
