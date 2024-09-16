@@ -295,14 +295,11 @@ void init_monitor(int argc, char *argv[]) {
 
   /* Initialize the simple debugger. */
   init_sdb();
-Log("hahaha1\n");
 
   /* Initialize the instructions ring buffer. */
 #ifdef CONFIG_ITRACE
-Log("hahaha\n");
   init_iringbuf();
 #endif
-Log("hahaha2\n");
 
 #ifndef CONFIG_ISA_loongarch32r
   IFDEF(CONFIG_ITRACE,
