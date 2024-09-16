@@ -12,6 +12,7 @@ void __am_timer_uptime(AM_TIMER_UPTIME_T *uptime) {
     high1 = inl(RTC_ADDR);         // 先读高位
     low = inl(RTC_ADDR + 0x0000004);  // 再读低位
     high2 = inl(RTC_ADDR);         // 再次读高位
+    printf("Nonono\n");
   } while (high1 != high2);  // 检查高位是否发生变化
 
   uptime->us = ((uint64_t)high1 << 32) | (uint64_t)low;
