@@ -297,7 +297,7 @@ void init_monitor(int argc, char *argv[]) {
   init_sdb();
 
   /* Initialize the instructions ring buffer. */
-#ifdef CONFIG_ITRACE
+#ifdef CONFIG_ITRACE_COND
   init_iringbuf();
 #endif
 
