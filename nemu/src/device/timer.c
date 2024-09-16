@@ -39,11 +39,11 @@ static void timer_intr() {
 #endif
 
 void init_timer() {
-#ifdef CONFIG_TARGET_AM
+// #ifdef CONFIG_TARGET_AM
   for (int i = 0; i < 10; ++i) {
     Log("hhhhhhhhhhhhhhhhhhhhhhhhh");
   }
-#endif  
+// #endif  
   rtc_port_base = (uint32_t *)new_space(8);
 #ifdef CONFIG_HAS_PORT_IO
   add_pio_map("rtc", CONFIG_RTC_PORT, rtc_port_base, 8, rtc_io_handler);
