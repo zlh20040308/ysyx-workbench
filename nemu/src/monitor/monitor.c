@@ -298,6 +298,7 @@ void init_monitor(int argc, char *argv[]) {
 
   /* Initialize the instructions ring buffer. */
 #ifdef CONFIG_ITRACE
+Log("hahaha\n");
   init_iringbuf();
 #endif
 #ifndef CONFIG_ISA_loongarch32r
