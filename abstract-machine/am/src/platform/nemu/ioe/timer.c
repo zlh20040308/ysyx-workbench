@@ -7,11 +7,15 @@
 void __am_timer_init() {}
 
 void __am_timer_uptime(AM_TIMER_UPTIME_T *uptime) {
-  uint32_t rtc_reg1 = inl(RTC_ADDR);
-  uint32_t rtc_reg2 = inl(RTC_ADDR + 0x0000004);
+  uint32_t high1, high2, low;
+  do {
+    high1 = inl(RTC_ADDR);         // 先读高位
+    low = inl(RTC_ADDR + 0x0000004);  // 再读低位
+    high2 = inl(RTC_ADDR);         // 再次读高位
+  } while (high1 != high2);  // 检查高位是否发生变化
 
-  uptime->us = ((uint64_t)rtc_reg1 << 32) | (uint64_t)rtc_reg2;
-  printf("haha %d\n", uptime->us);
+  uptime->us = ((uint64_t)high1 << 32) | (uint64_t)low;
+  printf("haha %llu\n", (unsigned long long)uptime->us);
 }
 
 void __am_timer_rtc(AM_TIMER_RTC_T *rtc) {
