@@ -190,7 +190,7 @@ static long parse_elf() {
   // 返回镜像大小
   return size;
 }
-#endif
+
 
 const char *find_funct_symbol(uint32_t addr, char *pos) {
   *pos = OUT_OF_FUNCT;
@@ -212,6 +212,7 @@ const char *find_funct_symbol(uint32_t addr, char *pos) {
   }
   return "???";
 }
+#endif
 
 void init_monitor(int argc, char *argv[]) {
   /* Perform some global initialization. */
