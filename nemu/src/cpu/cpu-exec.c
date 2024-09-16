@@ -225,7 +225,9 @@ void cpu_exec(uint64_t n)
     Log("nemu: %s at pc = " FMT_WORD,
         (nemu_state.state == NEMU_ABORT ? ANSI_FMT("ABORT", ANSI_FG_RED) : (nemu_state.halt_ret == 0 ? ANSI_FMT("HIT GOOD TRAP", ANSI_FG_GREEN) : ANSI_FMT("HIT BAD TRAP", ANSI_FG_RED))),
         nemu_state.halt_pc);
+#ifdef CONFIG_ITRACE_COND 
     traverse_iringbuf();
+#endif
     // fall through
   case NEMU_QUIT:
     statistic();
