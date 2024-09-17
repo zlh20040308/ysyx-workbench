@@ -219,7 +219,6 @@ void cpu_exec(uint64_t n)
   case NEMU_RUNNING:
     nemu_state.state = NEMU_STOP;
     break;
-
   case NEMU_END:
   case NEMU_ABORT:
     Log("nemu: %s at pc = " FMT_WORD,
