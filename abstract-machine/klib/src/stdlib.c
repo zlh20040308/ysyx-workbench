@@ -34,6 +34,8 @@ void *malloc(size_t size) {
   // On native, malloc() will be called during initializaion of C runtime.
   // Therefore do not call panic() here, else it will yield a dead recursion:
   //   panic() -> putchar() -> (glibc) -> malloc() -> panic()
+
+#if !(defined(__ISA_NATIVE__) && defined(__NATIVE_USE_KLIB__))
   if (!size) {
     return NULL;
   }
@@ -41,17 +43,14 @@ void *malloc(size_t size) {
   if (p_addr == NULL) {
     p_addr = heap.start;
   }
-
-#if !(defined(__ISA_NATIVE__) && defined(__NATIVE_USE_KLIB__))
   if (p_addr + size < heap.end) {
     void *temp = p_addr;
-    p_addr = (void*)ROUNDUP(p_addr + size, 4);
+    p_addr = (void *)ROUNDUP(p_addr + size, 4);
     return temp;
   } else {
     return NULL;
   }
 #endif
-  return NULL;
 }
 
 void free(void *ptr) {}
