@@ -66,8 +66,7 @@ word_t map_read(paddr_t addr, int len, IOMap *map) {
   invoke_callback(map->callback, offset, len, false); // prepare data to read
   word_t ret = host_read(map->space + offset, len);
 #ifdef CONFIG_DTRACE_COND
-  // printf("[Timestamp: %s]\n", timestamp);
-  Log("Device: %s (Address Space: "FMT_PADDR" - "FMT_PADDR")\n", map->name,
+  Log("Device: %s (Address Space: "FMT_PADDR" - "FMT_PADDR")", map->name,
          map->low, map->high);
   Log("Action: READ");
   Log("Accessed Address: " FMT_PADDR, addr);
@@ -79,9 +78,14 @@ word_t map_read(paddr_t addr, int len, IOMap *map) {
 void map_write(paddr_t addr, int len, word_t data, IOMap *map) {
   assert(len >= 1 && len <= 8);
   check_bound(map, addr);
-#ifdef CONFIG_DTRACE_COND
-#endif
   paddr_t offset = addr - map->low;
   host_write(map->space + offset, len, data);
   invoke_callback(map->callback, offset, len, true);
+#ifdef CONFIG_DTRACE_COND
+  Log("Device: %s (Address Space: "FMT_PADDR" - "FMT_PADDR")", map->name,
+         map->low, map->high);
+  Log("Action: WRITE");
+  Log("Accessed Address: " FMT_PADDR, addr);
+  Log("Write Data: "FMT_WORD"\n", data);
+#endif
 }
