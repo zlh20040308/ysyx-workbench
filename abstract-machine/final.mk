@@ -1,3 +1,5 @@
+NAME = dummy
+SRCS = tests/dummy.c
 # Makefile for AbstractMachine Kernels and Libraries
 
 ### *Get a more readable version of this Makefile* by `make html` (requires python-markdown)
@@ -142,7 +144,54 @@ LDFLAGS  += -z noexecstack
 ### Paste in arch-specific configurations (e.g., from `scripts/x86_64-qemu.mk`)
 
 #### -include 是一个用于有条件包含其他 Makefile 文件的指令，提供了灵活的构建配置机制。
--include $(AM_HOME)/scripts/$(ARCH).mk
+CROSS_COMPILE := riscv64-linux-gnu-
+COMMON_CFLAGS := -fno-pic -march=rv64g -mcmodel=medany -mstrict-align
+CFLAGS        += $(COMMON_CFLAGS) -static
+ASFLAGS       += $(COMMON_CFLAGS) -O0
+LDFLAGS       += -melf64lriscv
+
+# overwrite ARCH_H defined in $(AM_HOME)/Makefile
+ARCH_H := arch/riscv.h
+
+AM_SRCS := platform/nemu/trm.c \
+           platform/nemu/ioe/ioe.c \
+           platform/nemu/ioe/timer.c \
+           platform/nemu/ioe/input.c \
+           platform/nemu/ioe/gpu.c \
+           platform/nemu/ioe/audio.c \
+           platform/nemu/ioe/disk.c \
+           platform/nemu/mpe.c
+
+CFLAGS    += -fdata-sections -ffunction-sections
+LDFLAGS   += -T $(AM_HOME)/scripts/linker.ld \
+             --defsym=_pmem_start=0x80000000 --defsym=_entry_offset=0x0
+LDFLAGS   += --gc-sections -e _start
+NEMUFLAGS += -l $(shell dirname $(IMAGE).elf)/nemu-log.txt
+
+CFLAGS += -DMAINARGS=\"$(mainargs)\"
+CFLAGS += -I$(AM_HOME)/am/src/platform/nemu/include
+.PHONY: $(AM_HOME)/am/src/platform/nemu/trm.c
+
+image: $(IMAGE).elf
+	@$(OBJDUMP) -d $(IMAGE).elf > $(IMAGE).txt
+	@echo + OBJCOPY "->" $(IMAGE_REL).bin
+	@$(OBJCOPY) -S --set-section-flags .bss=alloc,contents -O binary $(IMAGE).elf $(IMAGE).bin
+
+run: image
+	$(MAKE) -C $(NEMU_HOME) ISA=$(ISA) run ARGS="$(NEMUFLAGS)" IMG=$(IMAGE).bin
+
+gdb: image
+	$(MAKE) -C $(NEMU_HOME) ISA=$(ISA) gdb ARGS="$(NEMUFLAGS)" IMG=$(IMAGE).bin
+
+CFLAGS  += -DISA_H=\"riscv/riscv.h\"
+COMMON_CFLAGS += -march=rv32im_zicsr -mabi=ilp32   # overwrite
+LDFLAGS       += -melf32lriscv                     # overwrite
+
+AM_SRCS += riscv/nemu/start.S \
+           riscv/nemu/cte.c \
+           riscv/nemu/trap.S \
+           riscv/nemu/vme.c
+
 
 ### Fall back to native gcc/binutils if there is no cross compiler
 ifeq ($(wildcard $(shell which $(CC))),)
@@ -154,6 +203,9 @@ endif
 
 ### Rule (compile): a single `.c` -> `.o` (gcc)
 $(DST_DIR)/%.o: %.c
+	# @echo $(DST_DIR)
+	# @echo $(dir $@)
+	# @echo $(WORK_DIR)
 	@mkdir -p $(dir $@) && echo + CC $<
 	@$(CC) -std=gnu11 $(CFLAGS) -c -o $@ $(realpath $<)
 
@@ -196,7 +248,7 @@ image: image-dep
 archive: $(ARCHIVE)
 image-dep: $(OBJS) $(LIBS)
 	@echo \# Creating image [$(ARCH)]
-.PHONY: image image-dep archive run $(LIBS) sdb
+.PHONY: image image-dep archive run $(LIBS)
 
 ### Clean a single project (remove `build/`)
 clean:
@@ -209,3 +261,4 @@ clean-all: $(CLEAN_ALL) clean
 $(CLEAN_ALL):
 	-@$(MAKE) -s -C $@ clean
 .PHONY: clean-all $(CLEAN_ALL)
+
