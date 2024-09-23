@@ -6,9 +6,11 @@
 void __am_gpu_init() {
   int i;
   uint32_t screen_size = inl(VGACTL_ADDR);
-  int w = (int)(screen_size >> 16); // TODO: get the correct width
+  int w = (int)(screen_size >> 16);    // TODO: get the correct width
   int h = (int)(0x00FF & screen_size); // TODO: get the correct height
-  uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
+  // volatile uint32_t *fb = (volatile uint32_t *)(uintptr_t)FB_ADDR;
+  volatile uint32_t *fb = (volatile uint32_t *)FB_ADDR;
+
   for (i = 0; i < w * h; i++)
     fb[i] = i;
   outl(SYNC_ADDR, 1);
@@ -29,10 +31,12 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
     outl(SYNC_ADDR, 1);
   }
   uint32_t width = inl(VGACTL_ADDR) >> 16;
+  volatile uint32_t *fb = (volatile uint32_t *)(uintptr_t)FB_ADDR;
+  uint32_t *from = (uint32_t *)(uintptr_t)(ctl->pixels);
+
   for (int i = 0; i < ctl->h; i++) {
     for (int j = 0; j < ctl->w; j++) {
-      outl(FB_ADDR + ((ctl->x + j + (ctl->y + i) * width) * 0x0000004),
-           ((uint32_t *)(ctl->pixels))[i * ctl->w + j]);
+      fb[width * (i + ctl->y) + ctl->x + j] = from[i * ctl->w + j];
     }
   }
 }
