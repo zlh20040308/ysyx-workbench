@@ -8,8 +8,8 @@ void __am_gpu_init() {
   uint32_t screen_size = inl(VGACTL_ADDR);
   int w = (int)(screen_size >> 16);    // TODO: get the correct width
   int h = (int)(0x00FF & screen_size); // TODO: get the correct height
-  // volatile uint32_t *fb = (volatile uint32_t *)(uintptr_t)FB_ADDR;
-  volatile uint32_t *fb = (volatile uint32_t *)FB_ADDR;
+  // volatile uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
+  volatile uint32_t *fb = (uint32_t *)FB_ADDR;
 
   for (i = 0; i < w * h; i++)
     fb[i] = i;
