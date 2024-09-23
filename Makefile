@@ -1,6 +1,11 @@
 STUID = ysyx_23060337
 STUNAME = 张凌豪
 
+ARCH :=
+
+gen_compile_commands:
+	bear -- $(MAKE) -C $(YSYX_HOME)/nemu ARCH=$(ARCH)
+
 # DO NOT modify the following code!!!
 
 TRACER = tracer-ysyx
