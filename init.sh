@@ -72,6 +72,8 @@ case $1 in
     else
       rm -rf npc
       init OSCPU/chisel-playground master npc true NPC_HOME
+      init sequencer/rvdecoderdb master npc/rvdecoderdb false
+      init riscv/riscv-opcodes master npc/riscv-opcodes false
     fi
     ;;
   npc)

@@ -36,9 +36,6 @@ verilog:
 	mill -i Feng_3000.runMain Feng_3000.Elaborate --target-dir $(BUILD_DIR)
 	# mill -i  Feng_3000.Elaborate --target-dir $(BUILD_DIR)
 	
-init:
-	git submodule update --init --recursive
-
 
 help:
 	mill -i Feng_3000.runMain Feng_3000.Elaborate --help
