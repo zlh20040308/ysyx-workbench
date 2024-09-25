@@ -48,6 +48,12 @@ case $1 in
   fceux-am)
     init NJU-ProjectN/fceux-am ics2021 fceux-am false
     ;;
+  rvdecoderdb)
+    init sequencer/rvdecoderdb master npc/rvdecoderdb false
+    ;;
+  riscv-opcodes)
+    init riscv/riscv-opcodes master npc/riscv-opcodes false
+    ;;
   am-kernels)
     init NJU-ProjectN/am-kernels ics2021 am-kernels false
     ;;
