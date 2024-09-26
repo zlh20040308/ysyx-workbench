@@ -11,6 +11,30 @@ OBJ_DIR = $(BUILD_DIR)/obj_dir
 BIN = $(BUILD_DIR)/$(TOPNAME)
 RUNBIN = $(BIN)_run
 SIMBIN = $(BIN)_sim
+PRJ = playground
+VSRCS_DIR = $(BUILD_DIR)/vsrc
+
+$(shell mkdir -p $(VSRCS_DIR))
+
+test:
+	mill -i $(PRJ).test
+
+verilog:
+	$(call git_commit, "generate verilog")
+	rm -rf $(VSRCS_DIR)
+	mkdir -p $(VSRCS_DIR)
+	mill -i $(PRJ).runMain Elaborate --target-dir $(VSRCS_DIR)
+
+help:
+	mill -i $(PRJ).runMain Elaborate --help
+
+reformat:
+	mill -i __.reformat
+
+checkformat:
+	mill -i __.checkFormat
+
+.PHONY: test verilog help reformat checkformat clean
 
 
 default: $(SIMBIN)
@@ -23,8 +47,8 @@ $(SRC_AUTO_BIND): $(NXDC_FILES)
 	python3 $(NVBOARD_HOME)/scripts/auto_pin_bind.py $^ $@
 
 # project source
-VSRCS = $(shell find $(abspath ./vsrc) -name "*.v")
-CSRCS = $(shell find $(abspath ./csrc) -name "*.c" -or -name "*.cc" -or -name "*.cpp")
+VSRCS = $(shell find $(abspath ./$(BUILD_DIR)/vsrc) -name "*.sv")
+CSRCS = $(shell find $(abspath ./src/main/cc) -name "*.c" -or -name "*.cc" -or -name "*.cpp")
 RUNCSRCS = $(CSRCS) $(SRC_AUTO_BIND)
 SIMCSRCS = $(CSRCS)
 
@@ -56,17 +80,18 @@ clean:
 	rm -rf ./*.vcd
 
 all: default
-	@echo "Write this Makefile by your self."
 
 sim: $(SIMBIN)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
-	@echo "Write this Makefile by your self."
+	@echo "Write this Makefile by yourself."
 	@$(BIN)
 	@gtkwave waveform.vcd
 
 run: $(RUNBIN)
 	@$(BIN)
 
-include ../Makefile
 
 .PHONY: default all clean sim $(BIN) run
+
+
+-include ../Makefile

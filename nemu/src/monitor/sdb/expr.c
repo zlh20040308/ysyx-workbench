@@ -36,6 +36,7 @@ enum
   TK_G,
   TK_LT,
   TK_L,
+  // TK_NEG,
 
   /* TODO: Add more token types */
 
@@ -69,9 +70,10 @@ static struct rule
      * Pay attention to the precedence level of different rules.
      */
 
-    {" +", TK_NOTYPE},             // spaces
-    {"\\+", '+'},                  // plus
-    {"==", TK_EQ},                 // equal
+    {" +", TK_NOTYPE}, // spaces
+    {"\\+", '+'},      // plus
+    {"==", TK_EQ},     // equal
+    // {"-[ ]*[0-9]+", TK_NEG},       // negative numbers with optional spaces (负数)
     {"\\-", '-'},                  // minus
     {"\\*", '*'},                  // multiply or dereference
     {"\\/", '/'},                  // divide
@@ -85,7 +87,7 @@ static struct rule
     {"<", TK_L},                   // less
     {"!=", TK_NOTEQ},              // not equal
     {"&&", TK_LAND},               // logical and
-    {"\\$[a-zA-Z][0-9]", TK_REG},  // register
+    {"\\$[$a-zA-Z0-9][a-zA-Z0-9]", TK_REG},  // register
 };
 
 #define NR_REGEX ARRLEN(rules)
@@ -285,21 +287,14 @@ static bool check_parentheses(int p, int q)
         {
           return false;
         }
-        
+
         if (buf[top - 1] == '(')
         {
           top--;
         }
         else if (buf[top - 1] == '1')
         {
-          if (i == q)
-          {
-            return true;
-          }
-          else
-          {
-            return false;
-          }
+          return i == q;
         }
       }
     }
@@ -446,54 +441,141 @@ static word_t eval(int p, int q, bool *success)
       }
     }
 
-    if (cur_select_op_priority == 0 || select_op_idx == 0)
+    if (cur_select_op_priority == -1 || select_op_idx == -1)
     {
       *success = false;
       return 1;
     }
     Log("select_op_idx  = %d cur_select_op_priority = %d", select_op_idx, cur_select_op_priority);
-    word_t v2 = eval(select_op_idx + 1, q, success);
-    if (!(*success))
-    {
-      return 1;
-    }
-    Log("v2 = 0x%09x", v2);
+
+    bool eval_v1_success = true, eval_v2_success = true;
+
     word_t v1 = 0;
     if (select_op != DEREF)
     {
-      v1 = eval(p, select_op_idx - 1, success);
-      if (!(*success))
-      {
-        return 1;
-      }
+      v1 = eval(p, select_op_idx - 1, &eval_v1_success);
       Log("v1 = 0x%09x", v1);
     }
+    word_t v2 = eval(select_op_idx + 1, q, &eval_v2_success);
 
-    Log("select_op_index = %d", select_op);
+    Log("v2 = 0x%09x", v2);
+
+    Log("select_op is %s", token_to_str(select_op));
     switch (select_op)
     {
     case '+':
-      return v1 + v2;
-    case '-':
-      return v1 - v2;
-    case '*':
-      return v1 * v2;
-    case '/':
-      if (v2 == 0)
+      if (eval_v1_success && eval_v2_success)
+      {
+        *success = true;
+        return v1 + v2;
+      }
+      else
       {
         *success = false;
-        printf("Can't divide 0!\n");
         return 1;
       }
-      return v1 / v2;
+
+    case '-':
+      if (eval_v1_success && eval_v2_success)
+      {
+        *success = true;
+        return v1 - v2;
+      }
+      else
+      {
+        *success = false;
+        return 1;
+      }
+    case '*':
+      if (eval_v1_success && eval_v2_success)
+      {
+        *success = true;
+        return v1 * v2;
+      }
+      else
+      {
+        *success = false;
+        return 1;
+      }
+    case '/':
+      if (eval_v1_success && eval_v2_success)
+      {
+        if (v2 == 0)
+        {
+          *success = false;
+          return 1;
+        }
+        else
+        {
+          *success = true;
+          return v1 / v2;
+        }
+      }
+      else
+      {
+        *success = false;
+        return 1;
+      }
     case DEREF:
-      return paddr_read(v2, sizeof(word_t));
+      if (eval_v2_success)
+      {
+        if (v2 >= CONFIG_MBASE && v2 < CONFIG_MBASE + CONFIG_MSIZE )
+        {
+          *success = true;
+          return paddr_read(v2, sizeof(word_t));
+        }
+        else
+        {
+          *success = false;
+          return 1;
+        }
+      }
+      else
+      {
+        *success = false;
+        return 1;
+      }
     case TK_EQ:
-      return v1 == v2;
+      if (eval_v1_success && eval_v2_success)
+      {
+        *success = true;
+        return v1 == v2;
+      }
+      else
+      {
+        *success = false;
+        return 1;
+      }
+
     case TK_NOTEQ:
-      return v1 != v2;
+      if (eval_v1_success && eval_v2_success)
+      {
+        *success = true;
+        return v1 != v2;
+      }
+      else
+      {
+        *success = false;
+        return 1;
+      }
     case TK_LAND:
-      return v1 && v2;
+      if (eval_v1_success && eval_v2_success)
+      {
+        *success = true;
+        return v1 && v2;
+      }
+      if (!eval_v1_success)
+      {
+        *success = false;
+        return 1;
+      }
+      if (!eval_v2_success)
+      {
+        *success = true;
+        return v1 == true;
+      }
+      *success = false;
+      return 1;
     }
   }
   return 0;
@@ -516,7 +598,6 @@ word_t expr(char *e, bool *success)
   }
   int p = 0, q = nr_token - 1;
   Log("e = %s ,nr_token = %d", e, nr_token);
-  Log("success = %d", *success);
 
   /* TODO: Insert codes to evaluate the expression. */
   return eval(p, q, success);

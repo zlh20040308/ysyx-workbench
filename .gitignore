@@ -10,6 +10,8 @@
 !README.md
 !.gitignore
 !init.sh
-/fceux-am
 /nvboard
 /am-kernels
+/fceux-am
+/npc/rvdecoderdb
+/npc/riscv-opcodes
