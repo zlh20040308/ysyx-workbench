@@ -24,54 +24,54 @@ word_t expr(char *e, bool *success);
 #define BUF_SIZE 65536
 
 // 读取文件内容并处理每一行
-void process_file(const char *filename)
-{
-  FILE *file = fopen(filename, "r");
-  if (!file)
-  {
-    perror("Failed to open file");
-    exit(EXIT_FAILURE);
-  }
+// void process_file(const char *filename)
+// {
+//   FILE *file = fopen(filename, "r");
+//   if (!file)
+//   {
+//     perror("Failed to open file");
+//     exit(EXIT_FAILURE);
+//   }
 
-  char line[BUF_SIZE];
-  int items = 0;
-  int passed = 0;
-  while (fgets(line, sizeof(line), file))
-  {
-    items++;
-    unsigned expected_result;
-    char expression[BUF_SIZE];
+//   char line[BUF_SIZE];
+//   int items = 0;
+//   int passed = 0;
+//   while (fgets(line, sizeof(line), file))
+//   {
+//     items++;
+//     unsigned expected_result;
+//     char expression[BUF_SIZE];
 
-    // 解析行格式 "结果 表达式"
-    if (sscanf(line, "%u %[^\n]", &expected_result, expression) != 2)
-    {
-      fprintf(stderr, "Failed to parse line: %s", line);
-      continue;
-    }
+//     // 解析行格式 "结果 表达式"
+//     if (sscanf(line, "%u %[^\n]", &expected_result, expression) != 2)
+//     {
+//       fprintf(stderr, "Failed to parse line: %s", line);
+//       continue;
+//     }
 
-    bool success = false;
-    word_t actual_result = expr(expression, &success);
+//     bool success = false;
+//     word_t actual_result = expr(expression, &success);
 
-    if (success)
-    {
+//     if (success)
+//     {
       
-      if (expected_result != actual_result)
-      {
-        printf("Expected: %u, Actual: %u, Expression: %s\n", expected_result, actual_result, expression);
-        printf("Mismatch detected!\n");
-      }else{
-        passed++;
-      }
-    }
-    else
-    {
-      printf("Expression eval failed: %s\n", expression);
-    }
-  }
-  printf("total = %d,passed = %d\n", items, passed);
+//       if (expected_result != actual_result)
+//       {
+//         printf("Expected: %u, Actual: %u, Expression: %s\n", expected_result, actual_result, expression);
+//         printf("Mismatch detected!\n");
+//       }else{
+//         passed++;
+//       }
+//     }
+//     else
+//     {
+//       printf("Expression eval failed: %s\n", expression);
+//     }
+//   }
+//   printf("total = %d,passed = %d\n", items, passed);
 
-  fclose(file);
-}
+//   fclose(file);
+// }
 
 int main(int argc, char *argv[])
 {
