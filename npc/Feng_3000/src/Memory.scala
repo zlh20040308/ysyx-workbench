@@ -14,7 +14,7 @@ class ImemPort extends Bundle {
 class DmemPort extends Bundle {
   val addr  = Input(UInt(WORD_LEN.W))
   val wdata = Input(UInt(WORD_LEN.W))
-  val wen   = Input(UInt(WORD_LEN.W))
+  val wen   = Input(Bool())
   val wmask = Input(UInt(4.W))
   val rdata = Output(UInt(WORD_LEN.W))
 }
@@ -28,8 +28,8 @@ class ram_2r1w extends BlackBox with HasBlackBoxResource {
 
     val dmem_addr  = Input(UInt(WORD_LEN.W))
     val dmem_wdata = Input(UInt(WORD_LEN.W))
-    val dmem_wen   = Input(UInt(WORD_LEN.W))
-    val dmem_wmask = Input(UInt(WORD_LEN.W))
+    val dmem_wen   = Input(Bool())
+    val dmem_wmask = Input(UInt(4.W))
     val dmem_rdata = Output(UInt(WORD_LEN.W))
 
   })
@@ -52,6 +52,5 @@ class Memory extends Module {
   mem.io.dmem_wdata := io.dmem.wdata
   mem.io.dmem_wen   := io.dmem.wen
   mem.io.dmem_wmask := io.dmem.wmask
-  mem.io.dmem_rdata := io.dmem.rdata
   io.dmem.rdata     := mem.io.dmem_rdata
 }

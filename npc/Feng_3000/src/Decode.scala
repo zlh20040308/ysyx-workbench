@@ -24,7 +24,7 @@ object PCSel extends DecodeField[Insn, PCSelEnum.Type] {
   override def chiselType = PCSelEnum()
 
   override def genTable(i: Insn): BitPat = {
-    val dontCareStr     = "h" + ("?" * PCSelEnum.getWidth)
+    val dontCareStr     = "b" + ("?" * PCSelEnum.getWidth)
     val dontCarePattern = BitPat(dontCareStr)
 
     val otherInstructions = Set("beq", "bne", "blt", "bge", "bltu", "bgeu", "ecall", "ebreak")
@@ -45,7 +45,7 @@ object ASel extends DecodeField[Insn, ASelEnum.Type] {
 
   override def genTable(i: Insn): BitPat = {
     val otherInstructions = Set("slli", "srli", "srai", "csrrw", "csrrs", "csrrc")
-    val dontCareStr       = "h" + ("?" * ASelEnum.getWidth)
+    val dontCareStr       = "b" + ("?" * ASelEnum.getWidth)
     val dontCarePattern   = BitPat(dontCareStr)
 
     if (i.inst.name == "auipc" || Utils.isB(i.inst) || Utils.isJ(i.inst)) {
@@ -64,7 +64,7 @@ object BSel extends DecodeField[Insn, BSelEnum.Type] {
   override def chiselType = BSelEnum()
 
   override def genTable(i: Insn): BitPat = {
-    val dontCareStr       = "h" + ("?" * BSelEnum.getWidth)
+    val dontCareStr       = "b" + ("?" * BSelEnum.getWidth)
     val dontCarePattern   = BitPat(dontCareStr)
     val otherInstructions = Set("slli", "srli", "srai")
 
@@ -88,7 +88,7 @@ object ImmSel extends DecodeField[Insn, ImmSelEnum.Type] {
 
   override def genTable(i: Insn): BitPat = {
     val immzInstructions = Set("csrrwi", "csrrsi", "csrrci")
-    val dontCareStr      = "h" + ("?" * ImmSelEnum.getWidth)
+    val dontCareStr      = "b" + ("?" * ImmSelEnum.getWidth)
     val dontCarePattern  = BitPat(dontCareStr)
 
     val sliInstructions = Set("slli", "srli", "srai")
@@ -117,7 +117,7 @@ object ALUSel extends DecodeField[Insn, AluEnum.Type] {
 
   override def genTable(i: Insn): BitPat = {
     val addOpInstructions = Set("auipc", "jalr", "lb", "lh", "lw", "lbu", "lhu", "add", "addi")
-    val dontCareStr       = "h" + ("?" * AluEnum.getWidth)
+    val dontCareStr       = "b" + ("?" * AluEnum.getWidth)
     val dontCarePattern   = BitPat(dontCareStr)
     if (Utils.isS(i.inst) || Utils.isB(i.inst) || Utils.isJ(i.inst) || addOpInstructions.contains(i.inst.name)) {
       BitPat(AluEnum.ALU_ADD.litValue.U((AluEnum.getWidth).W))
@@ -195,7 +195,7 @@ object WbSel extends DecodeField[Insn, WbSelEnum.Type] {
     val aluInstructions  = Set("addi", "slti", "sltiu", "xori", "ori", "andi")
     val sliInstructions  = Set("slli", "srli", "srai")
     val csrInstructions  = Set("csrrw", "csrrs", "csrrc", "csrrwi", "csrrsi", "csrrci")
-    val dontCareStr      = "h" + ("?" * WbSelEnum.getWidth)
+    val dontCareStr      = "b" + ("?" * WbSelEnum.getWidth)
     val dontCarePattern  = BitPat(dontCareStr)
 
     if (
@@ -274,41 +274,37 @@ class Decode(val xlen: Int) extends Module {
   val io   = IO(new DecodeIO(xlen))
   val inst = io.inst
 
-  val rviExceptInstructions =
-    Set("fence")
-
   val rv32iExceptInstructions =
-    Set("slli_rv32", "srli_rv32", "srai_rv32")
+    Set("sbreak", "scall", "pause", "fence.tso", "fence", "slli_rv32", "srli_rv32", "srai_rv32")
 
   val instTable         = rvdecoderdb.fromFile.instructions(os.pwd / "riscv-opcodes")
-  val rviTargetSets     = Set("rv_i")
-  val rv32iTargetSets   = Set("rv32_i")
+  val rv32iTargetSets   = Set("rv_i","rv32_i")
   val rvzicsrTargetSets = Set("rv_zicsr")
 
   // add implemented instructions here
-  val rviInstList = instTable
-    .filter(_.pseudoFrom.isEmpty)
-    .filter(instr => rviTargetSets.contains(instr.instructionSet.name))
-    .filter(instr => !rviExceptInstructions.contains(instr.name))
-    .map(Insn(_))
-    .toSeq
   val rv32iInstList = instTable
-    .filter(instr => rviTargetSets.contains(instr.instructionSet.name))
+    .filter(instr => rv32iTargetSets.contains(instr.instructionSet.name))
     .filter(instr => !rv32iExceptInstructions.contains(instr.name))
     .map(Insn(_))
     .toSeq
+
   val rvzicsrInstList = instTable
     .filter(_.pseudoFrom.isEmpty)
     .filter(instr => rvzicsrTargetSets.contains(instr.instructionSet.name))
     .map(Insn(_))
     .toSeq
-  val instList = rviInstList ++ rv32iInstList ++ rvzicsrInstList
-  println(s"The length of mySeq is: ${instList.length}")
-  val decodeTable =
-    new DecodeTable(
-      instList,
-      Seq(PCSel, ASel, BSel, ImmSel, ALUSel, BrType, StType, LdType, CSRCmd, WbSel, MemRW, WbEn, Ebreak)
-    )
+
+  val instList = rv32iInstList ++ rvzicsrInstList
+
+  println(s"The length of rv32iInstList is: ${rv32iInstList.length}")
+
+  println(s"The length of rvzicsrInstList is: ${rvzicsrInstList.length}")
+
+  println(s"The length of instList is: ${instList.length}")
+  val decodeTable = new DecodeTable(
+    instList,
+    Seq(PCSel, ASel, BSel, ImmSel, ALUSel, BrType, StType, LdType, CSRCmd, WbSel, MemRW, WbEn, Ebreak)
+  )
 
   val decodedBundle = decodeTable.decode(inst)
 

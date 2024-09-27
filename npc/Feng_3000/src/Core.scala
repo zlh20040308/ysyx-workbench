@@ -6,8 +6,11 @@ import Consts._
 
 class Core extends Module {
   val io = IO(new Bundle {
-    val imem = Flipped(new ImemPort())
-    val dmem = Flipped(new DmemPort())
+    val imem   = Flipped(new ImemPort())
+    val dmem   = Flipped(new DmemPort())
+    val ebreak = Output(Bool())
+
+    val debug  = new DebugPort()
   })
 
   val pc = RegInit(START_ADDR)
@@ -40,6 +43,8 @@ class Core extends Module {
       pc := JPCGenInstance.io.pc_alu
     }
   }
+
+  /* ---------- IMEM ---------- */
   io.imem.addr := pc
 
   /* ---------- RegFile ---------- */
@@ -67,6 +72,10 @@ class Core extends Module {
   }
 
   /* ---------- ALU ---------- */
+  AluInstance.io.alu_op := CUInstance.io.ALUSel
+  AluInstance.io.A      := 0.U
+  AluInstance.io.B      := 0.U
+
   switch(CUInstance.io.ASel) {
     is(ASelEnum.A_PC) {
       AluInstance.io.A := pc
@@ -84,8 +93,9 @@ class Core extends Module {
       AluInstance.io.A := RegFileInstance.io.rs2
     }
   }
+
   /* ---------- DMEM ---------- */
-  io.dmem.rdata := AluInstance.io.out
+  io.dmem.addr  := AluInstance.io.out
   io.dmem.wdata := RegFileInstance.io.rs2
   io.dmem.wmask := WmaskGenInstance.io.wmask
   io.dmem.wen   := CUInstance.io.MemRW
@@ -123,5 +133,12 @@ class Core extends Module {
   /* ---------- LdData ---------- */
   LdDataInstance.io.rdata  := io.dmem.rdata
   LdDataInstance.io.LdType := CUInstance.io.LdType
+
+  /* ---------- Ebreak ---------- */
+  io.ebreak := CUInstance.io.Ebreak
+
+  /* ---------- DebugPort ---------- */
+  io.debug.pc    := pc
+  io.debug.PCSel := CUInstance.io.PCSel
 
 }

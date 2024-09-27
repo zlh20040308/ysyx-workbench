@@ -15,6 +15,7 @@ class Alu(val width: Int) extends Module{
   val io = IO(new AluIO(width))
 
   val shamt = io.B(4, 0).asUInt
+  io.out := 0.U
 
   switch(io.alu_op) {
     is(AluEnum.ALU_ADD) {
