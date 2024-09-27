@@ -12,8 +12,6 @@ class Core extends Module {
 
   val pc = RegInit(START_ADDR)
 
-  val MemoryInstance = Module(new Memory)
-
   val AluInstance = Module(new Alu(WORD_LEN))
 
   val JPCGenInstance = Module(new JPCGen(WORD_LEN))
