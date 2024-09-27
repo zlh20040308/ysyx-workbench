@@ -10,7 +10,7 @@ class ImmGenIO(xlen: Int) extends Bundle {
   val out    = Output(UInt(xlen.W))
 }
 
-class ImmGenWire(val xlen: Int) {
+class ImmGen(val xlen: Int) extends Module{
   val io   = IO(new ImmGenIO(xlen))
   val Iimm = io.inst(31, 20).asSInt
   val Simm = Cat(io.inst(31, 25), io.inst(11, 7)).asSInt

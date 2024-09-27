@@ -11,7 +11,7 @@ class AluIO(width: Int) extends Bundle {
   val out    = Output(UInt(width.W))
 }
 
-class Alu(val width: Int) {
+class Alu(val width: Int) extends Module{
   val io = IO(new AluIO(width))
 
   val shamt = io.B(4, 0).asUInt
