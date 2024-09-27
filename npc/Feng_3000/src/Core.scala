@@ -4,61 +4,128 @@ import chisel3._
 import chisel3.util._
 import Consts._
 
-object Instructions {
-  val LW = BitPat("b?????????????????010?????0000011")
-}
-
-import Instructions._
-
 class Core extends Module {
   val io = IO(new Bundle {
     val imem = Flipped(new ImemPort())
     val dmem = Flipped(new DmemPort())
-    val exit = Output(Bool())
-    // val gp   = Output(UInt(WORD_LEN.W))
   })
 
-  val regfile = Mem(32, UInt(WORD_LEN.W))
+  val pc = RegInit(START_ADDR)
 
-  val pc_reg = RegInit(START_ADDR)
-  pc_reg := pc_reg + 4.U(WORD_LEN.W)
+  val AluInstance = Module(new Alu(WORD_LEN))
 
-  io.imem.addr := pc_reg
-  val inst = io.imem.inst
+  val JPCGenInstance = Module(new JPCGen(WORD_LEN))
 
-  val imm_i      = inst(31, 20)
-  val imm_i_sext = Cat(Fill(20, imm_i(11)), imm_i)
+  val CompareInstance = Module(new Compare(WORD_LEN))
 
-  val rs1_addr = inst(19, 15)
-  val rs2_addr = inst(24, 20)
-  val wb_addr  = inst(11, 7)
+  val CUInstance = Module(new CU(WORD_LEN))
 
-  val rs1_data = Mux(rs1_addr =/= 0.U(WORD_LEN.U), regfile(rs1_addr), 0.U(WORD_LEN.W))
-  val rs2_data = Mux(rs2_addr =/= 0.U(WORD_LEN.U), regfile(rs2_addr), 0.U(WORD_LEN.W))
+  val RegFileInstance = Module(new RegFile(WORD_LEN))
 
-  // EX
+  val CSRInstance = Module(new CSR(WORD_LEN))
 
-  val alu_out = MuxCase(
-    0.U(WORD_LEN.W),
-    Seq(
-      (inst === LW) -> (rs1_data + imm_i_sext)
-    )
-  )
+  val ImmGenInstance = Module(new ImmGen(WORD_LEN))
 
-  // MEM
-  io.dmem.addr := alu_out
+  val WmaskGenInstance = Module(new WmaskGen)
 
-  when(inst === LW) {
-    io.dmem.addr := alu_out
+  val LdDataInstance = Module(new LdData(WORD_LEN))
+
+  /* ---------- PC ---------- */
+  val pc_plus4 = pc + 4.U
+  switch(CUInstance.io.PCSel) {
+    is(PCSelEnum.PC_4) {
+      pc := pc_plus4
+    }
+    is(PCSelEnum.PC_ALU) {
+      pc := JPCGenInstance.io.pc_alu
+    }
+  }
+  io.imem.addr := pc
+
+  /* ---------- RegFile ---------- */
+
+  RegFileInstance.io.raddr1 := io.imem.inst(19, 15)
+  RegFileInstance.io.raddr2 := io.imem.inst(24, 20)
+  RegFileInstance.io.waddr  := io.imem.inst(11, 7)
+  RegFileInstance.io.wdata  := 0.U
+
+  RegFileInstance.io.wen := CUInstance.io.WbEn
+
+  switch(CUInstance.io.WbSel) {
+    is(WbSelEnum.WB_ALU) {
+      RegFileInstance.io.wdata := AluInstance.io.out
+    }
+    is(WbSelEnum.WB_MEM) {
+      RegFileInstance.io.wdata := LdDataInstance.io.wb_data
+    }
+    is(WbSelEnum.WB_PC4) {
+      RegFileInstance.io.wdata := pc_plus4
+    }
+    is(WbSelEnum.WB_CSR) {
+      RegFileInstance.io.wdata := CSRInstance.io.rdata
+    }
   }
 
-  // WB
-  val wb_data = io.dmem.rdata
-  when(inst === LW) {
-    regfile(wb_addr) := wb_data
+  /* ---------- ALU ---------- */
+  AluInstance.io.alu_op := CUInstance.io.ALUSel
+  AluInstance.io.A      := 0.U
+  AluInstance.io.B      := 0.U
+
+  switch(CUInstance.io.ASel) {
+    is(ASelEnum.A_PC) {
+      AluInstance.io.A := pc
+    }
+    is(ASelEnum.A_RS1) {
+      AluInstance.io.A := RegFileInstance.io.rs1
+    }
   }
 
-  // 当 inst 为 "34333231" (读取程序最后一行) 时，设定 exit 信号为 true.B
-  io.exit := (inst === 0x14131211.U(WORD_LEN.W))
+  switch(CUInstance.io.BSel) {
+    is(BSelEnum.B_IMM) {
+      AluInstance.io.B := ImmGenInstance.io.out
+    }
+    is(BSelEnum.B_RS2) {
+      AluInstance.io.A := RegFileInstance.io.rs2
+    }
+  }
+  /* ---------- DMEM ---------- */
+  io.dmem.addr  := AluInstance.io.out
+  io.dmem.wdata := RegFileInstance.io.rs2
+  io.dmem.wmask := WmaskGenInstance.io.wmask
+  io.dmem.wen   := CUInstance.io.MemRW
+
+  /* ---------- WmaskGen ---------- */
+
+  WmaskGenInstance.io.StType := CUInstance.io.StType
+
+  /* ---------- ImmGen ---------- */
+  ImmGenInstance.io.inst   := io.imem.inst
+  ImmGenInstance.io.ImmSel := CUInstance.io.ImmSel
+
+  /* ---------- CSR ---------- */
+  CSRInstance.io.CSRCmd := CUInstance.io.CSRCmd
+  CSRInstance.io.addr   := io.imem.inst(31, 20)
+
+  when(CUInstance.io.ImmSel === ImmSelEnum.IMM_Z) {
+    CSRInstance.io.wdata := ImmGenInstance.io.out
+  }.otherwise {
+    CSRInstance.io.wdata := AluInstance.io.out
+  }
+
+  /* ---------- JPCGen ---------- */
+  JPCGenInstance.io.alu_data := AluInstance.io.out
+
+  /* ---------- Compare ---------- */
+  CompareInstance.io.BrType := CUInstance.io.BrType
+  CompareInstance.io.rs1    := RegFileInstance.io.rs1
+  CompareInstance.io.rs2    := RegFileInstance.io.rs2
+
+  /* ---------- CU ---------- */
+  CUInstance.io.compare := CompareInstance.io.result
+  CUInstance.io.inst    := io.imem.inst
+
+  /* ---------- LdData ---------- */
+  LdDataInstance.io.rdata  := io.dmem.rdata
+  LdDataInstance.io.LdType := CUInstance.io.LdType
 
 }

@@ -1,6 +1,7 @@
 package Feng_3000
 
 import chisel3._
+import Consts._
 import circt.stage.ChiselStage
 
 object Elaborate extends App {
@@ -45,6 +46,11 @@ object Elaborate extends App {
     "--disable-all-randomization"
   )
 
+  // ChiselStage.emitSystemVerilogFile(
+  //   new SimTop,
+  //   firrtlOpts,
+  //   firtoolOpts
+  // )
     ChiselStage.emitSystemVerilogFile(
     new Top,
     firrtlOpts,

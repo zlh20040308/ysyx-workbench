@@ -5,10 +5,10 @@ import chisel3.util._
 
 object Consts {
   val WORD_LEN   = 32
-  val START_ADDR = 0.U(WORD_LEN.W)
+  val START_ADDR = "h80000000".U(WORD_LEN.W)
 
   object AluEnum extends ChiselEnum {
-    val ALU_XXX, ALU_ADD, ALU_SUB, ALU_COPY_B, ALU_SLL, ALU_SLT, ALU_SLTU, ALU_XOR, ALU_SRL, ALU_SRA, ALU_OR, ALU_AND =
+    val ALU_XXX, ALU_ADD, ALU_SUB, ALU_COPY_A,ALU_COPY_B, ALU_SLL, ALU_SLT, ALU_SLTU, ALU_XOR, ALU_SRL, ALU_SRA, ALU_OR, ALU_AND =
       Value
   }
 
@@ -28,7 +28,7 @@ object Consts {
   }
 
   object ImmSelEnum extends ChiselEnum {
-    val IMM_X, IMM_I, IMM_S, IMM_U, IMM_J, IMM_B = Value
+    val IMM_X, IMM_I, IMM_S, IMM_U, IMM_J, IMM_B,IMM_Z = Value
 
   }
 

@@ -13,11 +13,13 @@ class CUIO(val xlen: Int) extends Bundle {
   val ImmSel  = Output(ImmSelEnum())
   val ALUSel  = Output(AluEnum())
   val BrType  = Output(BrTypeEnum())
+  val CSRCmd  = Output(CSRCmdEnum())
   val StType  = Output(StTypeEnum())
   val LdType  = Output(LdTypeEnum())
-  val WBSel   = Output(WbSelEnum())
+  val WbSel   = Output(WbSelEnum())
   val MemRW   = Output(Bool())
-  val RegWEn  = Output(Bool())
+  val WbEn    = Output(Bool())
+  val Ebreak  = Output(Bool())
 }
 
 class CU(val xlen: Int) extends Module {
@@ -32,9 +34,11 @@ class CU(val xlen: Int) extends Module {
   io.BrType      := decode.io.BrType
   io.StType      := decode.io.StType
   io.LdType      := decode.io.LdType
-  io.WBSel       := decode.io.WBSel
+  io.WbSel       := decode.io.WbSel
   io.MemRW       := decode.io.MemRW
-  io.RegWEn      := decode.io.RegWEn
+  io.WbEn        := decode.io.WbEn
+  io.Ebreak      := decode.io.Ebreak
+  io.CSRCmd      := decode.io.CSRCmd
 
   switch(decode.io.BrType) {
     is(BrTypeEnum.BR_EQ) {

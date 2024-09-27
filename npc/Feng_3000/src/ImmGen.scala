@@ -10,13 +10,14 @@ class ImmGenIO(xlen: Int) extends Bundle {
   val out    = Output(UInt(xlen.W))
 }
 
-class ImmGenWire(val xlen: Int) {
+class ImmGen(val xlen: Int) extends Module{
   val io   = IO(new ImmGenIO(xlen))
-  val Iimm = io.inst(31, 20).asSInt
-  val Simm = Cat(io.inst(31, 25), io.inst(11, 7)).asSInt
-  val Bimm = Cat(io.inst(31), io.inst(7), io.inst(30, 25), io.inst(11, 8), 0.U(1.W)).asSInt
-  val Uimm = Cat(io.inst(31, 12), 0.U(12.W)).asSInt
-  val Jimm = Cat(io.inst(31), io.inst(19, 12), io.inst(20), io.inst(30, 25), io.inst(24, 21), 0.U(1.W)).asSInt
+  val Iimm = Cat(Fill(21,io.inst(31)),io.inst(30, 20))
+  val Simm = Cat(Fill(21,io.inst(31)),io.inst(30, 25), io.inst(11, 7))
+  val Bimm = Cat(Fill(20,io.inst(31)), io.inst(7), io.inst(30, 25), io.inst(11, 8), 0.U(1.W))
+  val Uimm = Cat(io.inst(31, 12), 0.U(12.W))
+  val Jimm = Cat(io.inst(31), io.inst(19, 12), io.inst(20), io.inst(30, 25), io.inst(24, 21), 0.U(1.W))
+  val Zimm = Cat(Fill(27,0.U(1.W)),io.inst(19, 15))
 
   io.out := 0.U(xlen.W)
 
@@ -38,6 +39,9 @@ class ImmGenWire(val xlen: Int) {
     }
     is(ImmSelEnum.IMM_X) {
       io.out := 0.U(xlen.W)
+    }
+    is(ImmSelEnum.IMM_Z) {
+      io.out := Zimm
     }
   }
 }

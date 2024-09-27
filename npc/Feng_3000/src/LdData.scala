@@ -17,19 +17,19 @@ class LdData(val xlen: Int) extends Module {
 
   switch(io.LdType) {
     is(LdTypeEnum.LD_LB) {
-      io.wb_data := Cat(Fill(xlen - 8, io.rdata(7)), io.rdata(7, 0))
+      io.wb_data := Cat(Fill(24, io.rdata(7)), io.rdata(7, 0))
     }
     is(LdTypeEnum.LD_LH) {
-      io.wb_data := Cat(Fill(xlen - 16, io.rdata(15)), io.rdata(15, 0))
+      io.wb_data := Cat(Fill(16, io.rdata(15)), io.rdata(15, 0))
     }
     is(LdTypeEnum.LD_LW) {
-      io.wb_data := Cat(Fill(xlen - 32, io.rdata(31)), io.rdata(31, 0))
+      io.wb_data := io.rdata(31, 0)
     }
     is(LdTypeEnum.LD_LBU) {
-      io.wb_data := Cat(Fill(xlen - 8, 0.U), io.rdata(7, 0))
+      io.wb_data := Cat(Fill(24, 0.U), io.rdata(7, 0))
     }
     is(LdTypeEnum.LD_LHU) {
-      io.wb_data := Cat(Fill(xlen - 16, 0.U), io.rdata(15, 0))
+      io.wb_data := Cat(Fill(16, 0.U), io.rdata(15, 0))
     }
   }
 }
