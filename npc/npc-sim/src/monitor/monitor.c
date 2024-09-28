@@ -30,6 +30,8 @@ void init_device();
 void init_sdb();
 void init_disasm(const char *triple);
 void init_iringbuf();
+void init_dut();
+
 
 #define FUNCT_HEAD 0
 #define FUNCT_BODY 1
@@ -219,6 +221,9 @@ void init_monitor(int argc, char *argv[]) {
 
   /* Parse arguments. */
   parse_args(argc, argv);
+
+  /* Initialize DUT. */
+  init_dut();
 
   /* Set random seed. */
   init_rand();

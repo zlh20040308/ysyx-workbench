@@ -12,6 +12,8 @@ class RegFileIO(xlen: Int) extends Bundle {
   val wen    = Input(Bool())
   val waddr  = Input(UInt(5.W))
   val wdata  = Input(UInt(xlen.W))
+
+  val gpr = Output(Vec(16, UInt(xlen.W))) // for debug
 }
 
 class RegFile(xlen: Int) extends Module {
@@ -19,6 +21,11 @@ class RegFile(xlen: Int) extends Module {
   val regs = Mem(16, UInt(xlen.W))
   io.rs1 := Mux(io.raddr1.orR, regs(io.raddr1), 0.U)
   io.rs2 := Mux(io.raddr2.orR, regs(io.raddr2), 0.U)
+
+  for (i <- 0 until 16) {
+    io.gpr(i) := regs(i)
+  }
+
   when(io.wen & io.waddr.orR) {
     regs(io.waddr) := io.wdata
   }

@@ -16,7 +16,7 @@ class ImmGen(val xlen: Int) extends Module{
   val Simm = Cat(Fill(21,io.inst(31)),io.inst(30, 25), io.inst(11, 7))
   val Bimm = Cat(Fill(20,io.inst(31)), io.inst(7), io.inst(30, 25), io.inst(11, 8), 0.U(1.W))
   val Uimm = Cat(io.inst(31, 12), 0.U(12.W))
-  val Jimm = Cat(io.inst(31), io.inst(19, 12), io.inst(20), io.inst(30, 25), io.inst(24, 21), 0.U(1.W))
+  val Jimm = Cat(Fill(12,io.inst(31)), io.inst(19, 12), io.inst(20), io.inst(30, 25), io.inst(24, 21), 0.U(1.W))
   val Zimm = Cat(Fill(27,0.U(1.W)),io.inst(19, 15))
 
   io.out := 0.U(xlen.W)

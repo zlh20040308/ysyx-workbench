@@ -76,11 +76,11 @@ void process_file(const char *filename)
 int main(int argc, char *argv[])
 {
   /* Initialize the monitor. */
-#ifdef CONFIG_TARGET_AM
-  am_init_monitor();
-#else
+// #ifdef CONFIG_TARGET_AM
+//   am_init_monitor();
+// #else
   init_monitor(argc, argv);
-#endif
+// #endif
 
   /* Start engine. */
   engine_start();

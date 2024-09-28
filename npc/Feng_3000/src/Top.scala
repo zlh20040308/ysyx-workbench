@@ -7,6 +7,7 @@ import Consts._
 class DebugPort extends Bundle {
   val pc = Output(UInt(WORD_LEN.W))
   val PCSel = Output(PCSelEnum())
+  val gpr = Output(Vec(16, UInt(WORD_LEN.W)))
 }
 
 class Top extends Module {

@@ -36,4 +36,4 @@ $(BIN): $(VSRCS) $(CSRCS)
 		--Mdir $(OBJ_DIR) --exe -o $(abspath $(BIN))
 
 run: $(BIN)
-	$(BIN) /home/feng/code/ysyx-workbench/am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.bin
+	$(BIN) /home/feng/code/ysyx-workbench/am-kernels/tests/cpu-tests/build/add-riscv32e-npc.bin

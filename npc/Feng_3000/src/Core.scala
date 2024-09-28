@@ -10,7 +10,7 @@ class Core extends Module {
     val dmem   = Flipped(new DmemPort())
     val ebreak = Output(Bool())
 
-    val debug  = new DebugPort()
+    val debug = new DebugPort()
   })
 
   val pc = RegInit(START_ADDR)
@@ -140,5 +140,5 @@ class Core extends Module {
   /* ---------- DebugPort ---------- */
   io.debug.pc    := pc
   io.debug.PCSel := CUInstance.io.PCSel
-
+  io.debug.gpr   := RegFileInstance.io.gpr
 }
