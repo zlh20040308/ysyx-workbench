@@ -1,0 +1,39 @@
+TOPNAME = Top
+INC_PATH ?=
+
+
+VERILATOR = verilator
+VERILATOR_CFLAGS += -MMD --build -cc  \
+				 -O3 --x-assign fast --x-initial fast
+				# -O3 --x-assign fast --x-initial fast --noassert
+
+BUILD_DIR = ./build
+OBJ_DIR = $(BUILD_DIR)/obj_dir
+BIN = $(BUILD_DIR)/$(TOPNAME)
+
+default: $(BIN)
+
+$(shell mkdir -p $(BUILD_DIR))
+
+VSRCS = $(shell find $(abspath ../build) -name "*.sv")
+CSRCS = $(shell find $(abspath ./) -name "*.c" -or -name "*.cc" -or -name "*.cpp")
+NPC_OBJS := $(shell find $(abspath $(OBJ_DIR)) -name "*.o")
+-include $(NPC_OBJS:.o=.d)
+
+
+
+INCFLAGS = $(addprefix -I, $(INC_PATH))
+CXXFLAGS += $(INCFLAGS) -DTOP_NAME="\"V$(TOPNAME)\""
+CXXFLAGS += -MMD -O3 
+
+
+
+$(BIN): $(VSRCS) $(CSRCS)
+	@rm -rf $(OBJ_DIR)
+	$(VERILATOR) $(VERILATOR_CFLAGS) \
+		--top-module $(TOPNAME) $^ \
+		$(addprefix -CFLAGS , $(CXXFLAGS)) $(addprefix -LDFLAGS , $(LDFLAGS)) \
+		--Mdir $(OBJ_DIR) --exe -o $(abspath $(BIN))
+
+run: $(BIN)
+	$(BIN) /home/feng/code/ysyx-workbench/am-kernels/tests/cpu-tests/build/wanshu-riscv32e-npc.bin

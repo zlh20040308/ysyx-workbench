@@ -14,6 +14,9 @@ class WmaskGen extends Module {
   io.wmask := 0.U(4.W)
 
   switch(io.StType) {
+    is(StTypeEnum.ST_XXX) {
+      io.wmask := "b0000".U
+    }
     is(StTypeEnum.ST_SB) {
       io.wmask := "b0001".U
     }
