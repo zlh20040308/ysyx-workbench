@@ -144,13 +144,9 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2,
     immB();
     break;
   case TYPE_Z:
-    Log("Before src1R, rs1 = %x", rs1);
     src1R();
-    Log("After src1R");
     immZ();
     CSR_VAL();
-    Log("Is CSR!!!!");
-    Log("csr_addr = %x",*csr_addr);
     break;
   }
 }
@@ -257,7 +253,7 @@ static int decode_exec(Decode *s) {
           R(rd) = s->pc + imm);
 
   INSTPAT("??????? ????? ????? 001 ????? 11100 11", csrrw, Z,
-          word_t t = csr_val; Log("csr_addr = %x", csr_addr);CSR(csr_addr) = src1; R(rd) = t;);
+          word_t t = csr_val; CSR(csr_addr) = src1; R(rd) = t;);
   INSTPAT("??????? ????? ????? 110 ????? 11101 11", csrrs, Z,
           word_t t = csr_val; CSR(csr_addr) = t | src1; R(rd) = t);
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak, N,

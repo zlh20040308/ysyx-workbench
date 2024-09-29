@@ -23,15 +23,12 @@
 extern CPU_state cpu;
 
 static inline int check_reg_idx(int idx) {
-  Log("%x\n", (word_t)idx);
-  Log("pc = %x\n",(word_t)(cpu.pc));
   
   IFDEF(CONFIG_RT_CHECK, assert(idx >= 0 && idx < MUXDEF(CONFIG_RVE, 16, 32)));
   return idx;
 }
 
 static inline int check_csr_idx(int idx) {
-  Log("check_csr_idx\n");
 
   IFDEF(CONFIG_RT_CHECK, assert(idx >= 0 && idx < 4096));
   return idx;
