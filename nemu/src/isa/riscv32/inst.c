@@ -144,10 +144,11 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2,
     immB();
     break;
   case TYPE_Z:
-    Log("Is CSR!!!!");
     src1R();
     immZ();
     CSR_VAL();
+    Log("Is CSR!!!!");
+    Log("csr_addr = %x",*csr_addr);
     break;
   }
 }
