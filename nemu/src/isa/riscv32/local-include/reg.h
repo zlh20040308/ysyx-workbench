@@ -18,8 +18,14 @@
 
 #include <common.h>
 
+// for debug
+#include <isa.h>
+extern CPU_state cpu;
+
 static inline int check_reg_idx(int idx) {
-  Log("%x\n",(word_t)idx);
+  Log("%x\n", (word_t)idx);
+  Log("pc = %x\n",(word_t)(cpu.pc));
+  
   IFDEF(CONFIG_RT_CHECK, assert(idx >= 0 && idx < MUXDEF(CONFIG_RVE, 16, 32)));
   return idx;
 }
