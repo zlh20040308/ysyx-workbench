@@ -24,7 +24,8 @@ bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
   for (size_t i = 0; i < MUXDEF(CONFIG_RVE, 16, 32); i++) {
     if (ref_r->gpr[i] != gpr(i)) {
       Log("Difftest Fail!");
-      Log("ref gpr[i] = "FMT_WORD", dut gpr[i] = "FMT_WORD"",ref_r->gpr[i] , gpr(i));
+      Log("ref gpr[%d] = " FMT_WORD ", dut gpr[%d] = " FMT_WORD "", (int)i,
+          ref_r->gpr[i], (int)i, gpr(i));
       return false;
     }
   }
