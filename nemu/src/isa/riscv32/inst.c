@@ -15,6 +15,7 @@
 
 #include "common.h"
 #include "debug.h"
+#include "isa-def.h"
 #include "local-include/reg.h"
 #include <cpu/cpu.h>
 #include <cpu/decode.h>
@@ -64,7 +65,7 @@ enum {
   } while (0)
 #define CSR_VAL()                                                              \
   do {                                                                         \
-    *csr_val = CSR(*csr_addr);                                                \
+    *csr_val = CSR(*csr_addr);                                                 \
   } while (0)
 
 #define immI()                                                                 \
@@ -92,7 +93,7 @@ enum {
   } while (0)
 #define immZ()                                                                 \
   do {                                                                         \
-    *imm = BITS(i, 19, 15);                                                     \
+    *imm = BITS(i, 19, 15);                                                    \
   } while (0)
 
 #define opcode()                                                               \
@@ -253,13 +254,15 @@ static int decode_exec(Decode *s) {
           R(rd) = s->pc + imm);
 
   INSTPAT("??????? ????? ????? 001 ????? 11100 11", csrrw, Z,
-          word_t t = csr_val; CSR(csr_addr) = src1; R(rd) = t;);
+          word_t t = csr_val;
+          CSR(csr_addr) = src1; R(rd) = t;);
   INSTPAT("??????? ????? ????? 110 ????? 11101 11", csrrs, Z,
-          word_t t = csr_val; CSR(csr_addr) = t | src1; R(rd) = t);
+          word_t t = csr_val;
+          CSR(csr_addr) = t | src1; R(rd) = t);
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak, N,
           NEMUTRAP(s->pc, R(10))); // R(10) is $a0
-  //   INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall, N,
-  //           isa_raise_intr(word_t NO, vaddr_t epc));
+  INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall, N,
+          s->dnpc = isa_raise_intr(0, s->pc));
   // ------------------------------------------------------------------------------------------------
   // RV32M
   INSTPAT("0000001 ????? ????? 000 ????? 01100 11", mul, R,
