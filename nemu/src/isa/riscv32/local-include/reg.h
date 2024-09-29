@@ -31,6 +31,8 @@ static inline int check_reg_idx(int idx) {
 }
 
 static inline int check_csr_idx(int idx) {
+  Log("check_csr_idx\n");
+
   IFDEF(CONFIG_RT_CHECK, assert(idx >= 0 && idx < 4096));
   return idx;
 }
