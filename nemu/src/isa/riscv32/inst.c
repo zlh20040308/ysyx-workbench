@@ -144,7 +144,7 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2,
     immB();
     break;
   case TYPE_Z:
-    Log("Before src1R");
+    Log("Before src1R, rs1 = %x", rs1);
     src1R();
     Log("After src1R");
     immZ();
