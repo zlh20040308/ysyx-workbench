@@ -51,5 +51,8 @@ class Alu(val width: Int) extends Module{
     is(AluEnum.ALU_COPY_B) {
       io.out := io.B
     }
+    is(AluEnum.ALU_COPY_A) {
+      io.out := io.A
+    }
   }
 }

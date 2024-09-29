@@ -90,7 +90,7 @@ class Core extends Module {
       AluInstance.io.B := ImmGenInstance.io.out
     }
     is(BSelEnum.B_RS2) {
-      AluInstance.io.A := RegFileInstance.io.rs2
+      AluInstance.io.B := RegFileInstance.io.rs2
     }
   }
 
@@ -141,4 +141,6 @@ class Core extends Module {
   io.debug.pc    := pc
   io.debug.PCSel := CUInstance.io.PCSel
   io.debug.gpr   := RegFileInstance.io.gpr
+  io.debug.alu_op   := CUInstance.io.ALUSel
+
 }
