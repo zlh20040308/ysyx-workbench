@@ -305,7 +305,7 @@ static int decode_exec(Decode *s) {
     }
     funct_name = find_funct_symbol(s->pc, &pos);
     printf("ret [%s]\n", funct_name);
-    Log("ret_space_buf_ptr = %d", ret_space_buf_ptr);
+    // Log("ret_space_buf_ptr = %d", ret_space_buf_ptr);
     Assert(ret_space_buf_ptr - 1 < 1024,
            "Assertion failed: Out of bound,ret_space_buf_ptr = %d",
            ret_space_buf_ptr);
