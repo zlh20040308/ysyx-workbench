@@ -60,6 +60,9 @@ case $1 in
   nvboard)
     init NJU-ProjectN/nvboard master nvboard false NVBOARD_HOME
     ;;
+  rvdecoderdb)
+    init sequencer/rvdecoderdb master npc/rvdecoderdb false
+    ;;
   npc-chisel)
     if [ -d npc/playground ]; then
       echo "chisel repo is already initialized, skipping..."
