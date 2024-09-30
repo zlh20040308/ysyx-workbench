@@ -21,6 +21,9 @@ word_t isa_raise_intr(word_t NO, vaddr_t epc) {
   /* TODO: Trigger an interrupt/exception with ``NO''.
    * Then return the address of the interrupt/exception vector.
    */
+#ifdef CONFIG_ETRACE_COND
+  Log("ECALL, a7 = " FMT_WORD "", NO);
+#endif
   switch (NO) {
   case -1:
     cpu.sr[MCAUSE] = 0x0000000b;
@@ -29,5 +32,4 @@ word_t isa_raise_intr(word_t NO, vaddr_t epc) {
   cpu.sr[MEPC] = epc;
   return cpu.sr[MTVEC];
 }
-
 word_t isa_query_intr() { return INTR_EMPTY; }
