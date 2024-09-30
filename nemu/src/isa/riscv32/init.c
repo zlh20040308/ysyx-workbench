@@ -13,6 +13,7 @@
 * See the Mulan PSL v2 for more details.
 ***************************************************************************************/
 
+#include "isa-def.h"
 #include <isa.h>
 #include <memory/paddr.h>
 
@@ -32,6 +33,9 @@ static void restart() {
 
   /* The zero register is always 0. */
   cpu.gpr[0] = 0;
+
+  /* Enable DiffTest to Support the Exception Response Mechanism */
+  cpu.sr[MSTATUS] = 0x1800;
 }
 
 void init_isa() {
