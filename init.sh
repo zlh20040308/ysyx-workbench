@@ -63,9 +63,6 @@ case $1 in
   rvdecoderdb)
     init sequencer/rvdecoderdb master npc/rvdecoderdb false
     ;;
-  riscv-opcodes)
-    init riscv/riscv-opcodes master npc/riscv-opcodes false
-    ;;
   npc-chisel)
     if [ -d npc/playground ]; then
       echo "chisel repo is already initialized, skipping..."

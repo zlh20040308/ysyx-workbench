@@ -277,8 +277,9 @@ class Decode(val xlen: Int) extends Module {
   val rv32iExceptInstructions =
     Set("sbreak", "scall", "pause", "fence.tso", "fence", "slli_rv32", "srli_rv32", "srai_rv32")
 
-  val instTable         = rvdecoderdb.fromFile.instructions(os.pwd / "riscv-opcodes")
-  val rv32iTargetSets   = Set("rv_i","rv32_i")
+  val instTable =
+    rvdecoderdb.fromFile.instructions(os.pwd / "rvdecoderdb" / "rvdecoderdbtest" / "jvm" / "riscv-opcodes")
+  val rv32iTargetSets   = Set("rv_i", "rv32_i")
   val rvzicsrTargetSets = Set("rv_zicsr")
 
   // add implemented instructions here
