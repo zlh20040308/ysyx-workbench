@@ -24,12 +24,13 @@ word_t isa_raise_intr(word_t NO, vaddr_t epc) {
 #ifdef CONFIG_ETRACE_COND
   Log("ECALL, a7 = " FMT_WORD "", NO);
 #endif
+  cpu.sr[MEPC] = epc;
   switch (NO) {
   case -1:
+    cpu.sr[MEPC] = epc + 4;
     cpu.sr[MCAUSE] = 0x0000000b;
     break;
   }
-  cpu.sr[MEPC] = epc;
   return cpu.sr[MTVEC];
 }
 word_t isa_query_intr() { return INTR_EMPTY; }
