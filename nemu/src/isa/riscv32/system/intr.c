@@ -30,6 +30,9 @@ word_t isa_raise_intr(word_t NO, vaddr_t epc) {
     // cpu.sr[MEPC] = epc + 4;
     cpu.sr[MCAUSE] = 0x0000000b;
     break;
+  default:
+    cpu.sr[MCAUSE] = 0x00000008;
+    break;
   }
   return cpu.sr[MTVEC];
 }
