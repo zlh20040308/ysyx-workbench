@@ -17,7 +17,6 @@ logs/
 .coursier/
 out/
 rvdecoderdb/
-riscv-opcodes/
 waveform.vcd
 
 

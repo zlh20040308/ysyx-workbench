@@ -6,6 +6,7 @@
 !/nanos-lite/*
 !/navy-apps/*
 !/npc/*
+!/npc/Feng_3000/resources/vsrc/*
 !Makefile
 !README.md
 !.gitignore

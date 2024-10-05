@@ -24,7 +24,8 @@
  * You can modify this value as you want.
  */
 #define MAX_INST_TO_PRINT 10
-#define BUFFER_SIZE 5
+// #define BUFFER_SIZE 5
+#define BUFFER_SIZE 200
 
 CPU_state cpu = {};
 uint64_t g_nr_guest_inst = 0;
