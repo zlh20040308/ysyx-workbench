@@ -1,25 +1,12 @@
-# mill
-out/
-.bsp/
-.idea/
-.idea_modules/
-test_run_dir/
-.mill-jvm-opts
-.jvmopts
-
-*.out
-.vscode/
-.metals/
-.bloop/
+*.*
+*
+!*/
+!Makefile
+!*.mk
+!*.[cSh]
+!*.v
+!*.cc
+!*.cpp
+!.gitignore
+!README.md
 build/
-obj_dir/
-logs/
-.coursier/
-out/
-rvdecoderdb/
-waveform.vcd
-
-
-# DRAMsim3
-*.html
-dramsim3*.*
