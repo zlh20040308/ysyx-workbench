@@ -274,15 +274,26 @@ class Decode(val xlen: Int) extends Module {
   val io   = IO(new DecodeIO(xlen))
   val inst = io.inst
 
+  val rviExceptInstructions =
+    Set("fence")
+
   val rv32iExceptInstructions =
-    Set("sbreak", "scall", "pause", "fence.tso", "fence", "slli_rv32", "srli_rv32", "srai_rv32")
+    Set("slli_rv32", "srli_rv32", "srai_rv32")
 
   val instTable =
     rvdecoderdb.fromFile.instructions(os.pwd / "rvdecoderdb" / "rvdecoderdbtest" / "jvm" / "riscv-opcodes")
-  val rv32iTargetSets   = Set("rv_i", "rv32_i")
+  val rviTargetSets   = Set("rv_i")
+  val rv32iTargetSets   = Set("rv32_i")
   val rvzicsrTargetSets = Set("rv_zicsr")
 
   // add implemented instructions here
+    val rviInstList = instTable
+    .filter(instr => rviTargetSets.contains(instr.instructionSet.name))
+    .filter(instr => !rviExceptInstructions.contains(instr.name))
+    .filter(_.pseudoFrom.isEmpty)
+    .map(Insn(_))
+    .toSeq
+
   val rv32iInstList = instTable
     .filter(instr => rv32iTargetSets.contains(instr.instructionSet.name))
     .filter(instr => !rv32iExceptInstructions.contains(instr.name))
@@ -295,7 +306,9 @@ class Decode(val xlen: Int) extends Module {
     .map(Insn(_))
     .toSeq
 
-  val instList = rv32iInstList ++ rvzicsrInstList
+  val instList = rviInstList ++ rv32iInstList ++ rvzicsrInstList
+
+  println(s"The length of rviInstList is: ${rviInstList.length}")
 
   println(s"The length of rv32iInstList is: ${rv32iInstList.length}")
 
