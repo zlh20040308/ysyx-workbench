@@ -39,6 +39,7 @@ static debug_module_config_t difftest_dm_config = {
 struct diff_context_t {
   word_t gpr[MUXDEF(CONFIG_RVE, 16, 32)];
   word_t pc;
+  word_t sr[4096];
 };
 
 static sim_t* s = NULL;
@@ -101,11 +102,12 @@ __EXPORT void difftest_exec(uint64_t n) {
 
 __EXPORT void difftest_init(int port) {
   difftest_htif_args.push_back("");
-  const char *isa = "RV" MUXDEF(CONFIG_RV64, "64", "32") MUXDEF(CONFIG_RVE, "E", "I") "MAFDC";
+  // const char *isa = "RV" MUXDEF(CONFIG_RV64, "64", "32") MUXDEF(CONFIG_RVE, "E", "I") "MAFDC";
+  const char *isa = "RV32IM";
   cfg_t cfg(/*default_initrd_bounds=*/std::make_pair((reg_t)0, (reg_t)0),
             /*default_bootargs=*/nullptr,
             /*default_isa=*/isa,
-            /*default_priv=*/DEFAULT_PRIV,
+            /*default_priv=*/"M",
             /*default_varch=*/DEFAULT_VARCH,
             /*default_misaligned=*/false,
             /*default_endianness*/endianness_little,

@@ -24,10 +24,11 @@ word_t isa_raise_intr(word_t NO, vaddr_t epc) {
 #ifdef CONFIG_ETRACE_COND
   Log("ECALL, a7 = " FMT_WORD "", NO);
 #endif
+  /* Enable DiffTest to Support the Exception Response Mechanism */
+  cpu.sr[MSTATUS] = 0x1800;
   cpu.sr[MEPC] = epc;
   switch (NO) {
   case -1:
-    // cpu.sr[MEPC] = epc + 4;
     cpu.sr[MCAUSE] = 0x0000000b;
     // cpu.sr[MCAUSE] = 0x00000008;
     break;
