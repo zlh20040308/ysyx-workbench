@@ -35,7 +35,7 @@ static void restart() {
   cpu.gpr[0] = 0;
 
   /* Enable DiffTest to Support the Exception Response Mechanism */
-  cpu.sr[MSTATUS] = 0x1800;
+  // cpu.sr[MSTATUS] = 0x1800;
 }
 
 void init_isa() {
