@@ -39,7 +39,7 @@ static inline const char* reg_name(int idx) {
 
 static inline const char* csr_name(int idx) {
   extern const char* csrs[];
-  return csrs[check_reg_idx(idx)];
+  return csrs[check_sr_idx(idx)];
 }
 
 #endif
