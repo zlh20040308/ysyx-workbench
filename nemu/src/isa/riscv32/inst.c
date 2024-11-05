@@ -284,6 +284,8 @@ static int decode_exec(Decode *s) {
 
   R(0) = 0; // reset $zero to 0
 
+  CSRs(MSTATUS) = CSRs(MSTATUS) & 0x80207888;
+
 #ifdef CONFIG_FTRACE_COND
   const char *funct_name = "???";
   size_t rd_type = BITS(INSTPAT_INST(s), 11, 7);
