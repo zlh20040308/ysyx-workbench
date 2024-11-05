@@ -76,7 +76,7 @@ void sim_t::diff_set_regs(void* diff_context) {
   }
   state->pc = ctx->pc;
   state->mstatus->write(0xffffffff);
-  printf("%x\n", state->mstatus->read());
+  printf("state->mstatus = %lx\n", state->mstatus->read());
   assert(state->mstatus->read() == 0xffffffff);
 
   state->mstatus->write(ctx->sr[0x300]);
