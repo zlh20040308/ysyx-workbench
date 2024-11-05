@@ -53,8 +53,8 @@ __am_asm_trap:
   STORE t2, OFFSET_EPC(sp)
 
   # set mstatus.MPRV to pass difftest
-  li a0, (1 << 17)
-  or t1, t1, a0
+#   li a0, (1 << 17)
+#   or t1, t1, a0
   csrw mstatus, t1
 
   mv a0, sp
