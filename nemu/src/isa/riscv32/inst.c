@@ -106,6 +106,12 @@ enum {
     funct7 = BITS(i, 31, 25);                                                  \
   } while (0)
 
+#define update_mstatus()                                                       \
+  do {                                                                         \
+    CSRs(MSTATUS) = CSRs(MSTATUS) | ((CSRs(MSTATUS) & 0x80) >> 4);             \
+    CSRs(MSTATUS) = CSRs(MSTATUS) | 0x0080;                                    \
+  } while (0)
+
 static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2,
                            word_t *csr, word_t *imm, int type) {
   uint32_t i = s->isa.inst.val;
@@ -252,7 +258,8 @@ static int decode_exec(Decode *s) {
           CSRs(csr) = t | src1; R(rd) = t;);
 
   INSTPAT("0011000 00010 00000 000 00000 11100 11", mret, N,
-          s->dnpc = CSRs(MEPC);CSRs(MSTATUS) = CSRs(MSTATUS) | 0x0080;);
+          s->dnpc = CSRs(MEPC);
+          update_mstatus(););
   INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall, N,
           s->dnpc = isa_raise_intr(R(17), s->pc););
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak, N,
@@ -285,8 +292,6 @@ static int decode_exec(Decode *s) {
   R(0) = 0; // reset $zero to 0
 
   CSRs(MSTATUS) = (CSRs(MSTATUS) & 0x80207888) | 0x1800;
-
-
 
 #ifdef CONFIG_FTRACE_COND
   const char *funct_name = "???";
