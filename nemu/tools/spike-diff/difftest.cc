@@ -63,10 +63,10 @@ void sim_t::diff_get_regs(void *diff_context) {
     ctx->gpr[i] = state->XPR[i];
   }
   ctx->pc = state->pc;
-  ctx->sr[MTVEC] = state->mtvec->read();
-  ctx->sr[MSTATUS] = state->mstatus->read();
-  ctx->sr[MCAUSE] = state->mcause->read();
-  ctx->sr[MEPC] = state->mepc->read();
+  // ctx->sr[MTVEC] = state->mtvec->read();
+  // ctx->sr[MSTATUS] = state->mstatus->read();
+  // ctx->sr[MCAUSE] = state->mcause->read();
+  // ctx->sr[MEPC] = state->mepc->read();
 }
 
 void sim_t::diff_set_regs(void *diff_context) {
