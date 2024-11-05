@@ -32,7 +32,6 @@ bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
   }
   if (!difftest_check_csr(csr_name(MEPC), pc, ref_r->sr[MEPC], sr(MEPC))) {
     success = false;
-    Log("hahaha");
   }
   // if (!difftest_check_csr(csr_name(MSTATUS), pc, ref_r->sr[MSTATUS],
   //                         sr(MSTATUS))) {
@@ -40,13 +39,13 @@ bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
   // }
   if (!difftest_check_csr(csr_name(MTVEC), pc, ref_r->sr[MTVEC], sr(MTVEC))) {
     success = false;
-    Log("hahaha");
   }
+
   if (!difftest_check_csr(csr_name(MCAUSE), pc, ref_r->sr[MCAUSE],
                           sr(MCAUSE))) {
     success = false;
-    Log("hahaha");
   }
+  Log("hahaha");
 
   return success;
 }
