@@ -19,6 +19,10 @@
 #include <difftest-def.h>
 
 #define NR_GPR MUXDEF(CONFIG_RVE, 16, 32)
+#define MEPC 0x341
+#define MSTATUS 0x300
+#define MTVEC 0x305
+#define MCAUSE 0x342
 
 static std::vector<std::pair<reg_t, abstract_device_t*>> difftest_plugin_devices;
 static std::vector<std::string> difftest_htif_args;
@@ -69,6 +73,10 @@ void sim_t::diff_set_regs(void* diff_context) {
     state->XPR.write(i, (sword_t)ctx->gpr[i]);
   }
   state->pc = ctx->pc;
+  state->mtvec->write(ctx->sr[MTVEC]);
+  state->mstatus->write(ctx->sr[MSTATUS]);
+  state->mcause->write(ctx->sr[MCAUSE]);
+  state->mepc->write(ctx->sr[MEPC]);
 }
 
 void sim_t::diff_memcpy(reg_t dest, void* src, size_t n) {
