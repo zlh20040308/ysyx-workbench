@@ -31,6 +31,11 @@ void isa_reg_display() {
   for (size_t i = 0; i < ARRLEN(regs); i++) {
     printf("%s = 0x%08x\n", reg_name(i), gpr(i));
   }
+  printf("%s = 0x%08x\n", csr_name(MSTATUS), sr(MSTATUS));
+  printf("%s = 0x%08x\n", csr_name(MTVEC), sr(MTVEC));
+  printf("%s = 0x%08x\n", csr_name(MEPC), sr(MEPC));
+  printf("%s = 0x%08x\n", csr_name(MCAUSE), sr(MCAUSE));
+
 }
 
 word_t isa_reg_str2val(const char *s, bool *success) {
