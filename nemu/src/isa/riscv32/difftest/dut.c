@@ -15,6 +15,7 @@
 
 #include "../local-include/reg.h"
 #include "debug.h"
+#include "isa-def.h"
 #include <cpu/difftest.h>
 #include <isa.h>
 #include <stdbool.h>
@@ -26,7 +27,21 @@ bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
       return false;
     }
   }
-  
+  if (!difftest_check_csr(csr_name(MEPC), pc, ref_r->sr[MEPC], gpr(MEPC))) {
+    return false;
+  }
+  if (!difftest_check_csr(csr_name(MSTATUS), pc, ref_r->sr[MSTATUS],
+                          gpr(MSTATUS))) {
+    return false;
+  }
+  if (!difftest_check_csr(csr_name(MTVEC), pc, ref_r->sr[MTVEC], gpr(MTVEC))) {
+    return false;
+  }
+  if (!difftest_check_csr(csr_name(MCAUSE), pc, ref_r->sr[MCAUSE],
+                          gpr(MCAUSE))) {
+    return false;
+  }
+
   return true;
 }
 

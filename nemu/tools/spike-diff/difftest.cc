@@ -61,6 +61,10 @@ void sim_t::diff_get_regs(void* diff_context) {
     ctx->gpr[i] = state->XPR[i];
   }
   ctx->pc = state->pc;
+  ctx->sr[0x300] = state->mstatus->read();
+  ctx->sr[0x305] = state->mtvec->read();
+  ctx->sr[0x341] = state->mepc->read();
+  ctx->sr[0x342] = state->mcause->read();
 }
 
 void sim_t::diff_set_regs(void* diff_context) {
