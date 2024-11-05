@@ -78,7 +78,7 @@ void sim_t::diff_set_regs(void* diff_context) {
   state->mstatus->write(0xffffffff);
   printf("state->mstatus = %lx\n", state->mstatus->read());
   assert(state->mstatus->read() == 0xffffffff);
-
+0010-0000-0001-1000-1000-1000
   state->mstatus->write(ctx->sr[0x300]);
   state->mstatus->write(ctx->sr[0x300]);
   state->mtvec->write(ctx->sr[0x305]);
@@ -117,8 +117,8 @@ __EXPORT void difftest_exec(uint64_t n) {
 
 __EXPORT void difftest_init(int port) {
   difftest_htif_args.push_back("");
-  // const char *isa = "RV" MUXDEF(CONFIG_RV64, "64", "32") MUXDEF(CONFIG_RVE, "E", "I") "MAFDC";
-  const char *isa = "RV32IM";
+  const char *isa = "RV" MUXDEF(CONFIG_RV64, "64", "32") MUXDEF(CONFIG_RVE, "E", "I") "MAFDC";
+  // const char *isa = "RV32IM";
   cfg_t cfg(/*default_initrd_bounds=*/std::make_pair((reg_t)0, (reg_t)0),
             /*default_bootargs=*/nullptr,
             /*default_isa=*/isa,
