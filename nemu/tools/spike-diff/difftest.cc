@@ -75,10 +75,11 @@ void sim_t::diff_set_regs(void* diff_context) {
     state->XPR.write(i, (sword_t)ctx->gpr[i]);
   }
   state->pc = ctx->pc;
-  state->mstatus->write(0xffffffff);
-  printf("state->mstatus = %lx\n", state->mstatus->read());
-  assert(state->mstatus->read() == 0xffffffff);
+  // state->mstatus->write(0xffffffff);
+  // printf("state->mstatus = %lx\n", state->mstatus->read());
+  // assert(state->mstatus->read() == 0xffffffff);
 // 0010-0000-0001-1000-1000-1000
+// mask = 80207888
   state->mstatus->write(ctx->sr[0x300]);
   state->mstatus->write(ctx->sr[0x300]);
   state->mtvec->write(ctx->sr[0x305]);
