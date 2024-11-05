@@ -252,7 +252,7 @@ static int decode_exec(Decode *s) {
           CSRs(csr) = t | src1; R(rd) = t;);
 
   INSTPAT("0011000 00010 00000 000 00000 11100 11", mret, N,
-          s->dnpc = CSRs(MEPC););
+          s->dnpc = CSRs(MEPC);CSRs(MSTATUS) = CSRs(MSTATUS) | 0x0080;);
   INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall, N,
           s->dnpc = isa_raise_intr(R(17), s->pc););
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak, N,
@@ -285,7 +285,6 @@ static int decode_exec(Decode *s) {
   R(0) = 0; // reset $zero to 0
 
   CSRs(MSTATUS) = (CSRs(MSTATUS) & 0x80207888) | 0x1800;
-//   CSRs(MSTATUS) = 0x1800;
 
 
 
