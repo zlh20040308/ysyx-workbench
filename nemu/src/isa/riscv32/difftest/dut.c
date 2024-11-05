@@ -22,27 +22,29 @@
 #include <stddef.h>
 
 bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
+  bool success = true;
   for (size_t i = 0; i < MUXDEF(CONFIG_RVE, 16, 32); i++) {
     if (!difftest_check_reg(reg_name(i), pc, ref_r->gpr[i], gpr(i))) {
-      return false;
+      success = false;
+      break;
     }
   }
   if (!difftest_check_csr(csr_name(MEPC), pc, ref_r->sr[MEPC], sr(MEPC))) {
-    return false;
+    success = false;
   }
   // if (!difftest_check_csr(csr_name(MSTATUS), pc, ref_r->sr[MSTATUS],
   //                         sr(MSTATUS))) {
   //   return false;
   // }
   if (!difftest_check_csr(csr_name(MTVEC), pc, ref_r->sr[MTVEC], sr(MTVEC))) {
-    return false;
+    success = false;
   }
   if (!difftest_check_csr(csr_name(MCAUSE), pc, ref_r->sr[MCAUSE],
                           sr(MCAUSE))) {
-    return false;
+    success = false;
   }
 
-  return true;
+  return success;
 }
 
 void isa_difftest_attach() {}
