@@ -284,7 +284,10 @@ static int decode_exec(Decode *s) {
 
   R(0) = 0; // reset $zero to 0
 
-  CSRs(MSTATUS) = CSRs(MSTATUS) & 0x80207888;
+//   CSRs(MSTATUS) = CSRs(MSTATUS) & 0x80207888;
+  CSRs(MSTATUS) = 0x1800;
+
+
 
 #ifdef CONFIG_FTRACE_COND
   const char *funct_name = "???";
