@@ -16,6 +16,8 @@
 #include "mmu.h"
 #include "sim.h"
 #include "../../include/common.h"
+#include <cassert>
+#include <cstdio>
 #include <difftest-def.h>
 
 #define NR_GPR MUXDEF(CONFIG_RVE, 16, 32)
@@ -61,6 +63,10 @@ void sim_t::diff_get_regs(void* diff_context) {
     ctx->gpr[i] = state->XPR[i];
   }
   ctx->pc = state->pc;
+  ctx->sr[0x300] = state->mstatus->read();
+  ctx->sr[0x305] = state->mtvec->read();
+  ctx->sr[0x341] = state->mepc->read();
+  ctx->sr[0x342] = state->mcause->read();
 }
 
 void sim_t::diff_set_regs(void* diff_context) {
@@ -69,6 +75,16 @@ void sim_t::diff_set_regs(void* diff_context) {
     state->XPR.write(i, (sword_t)ctx->gpr[i]);
   }
   state->pc = ctx->pc;
+  // state->mstatus->write(0xffffffff);
+  // printf("state->mstatus = %lx\n", state->mstatus->read());
+  // assert(state->mstatus->read() == 0xffffffff);
+// write = 80207888
+// mask = 
+  state->mstatus->write(ctx->sr[0x300]);
+  state->mstatus->write(ctx->sr[0x300]);
+  state->mtvec->write(ctx->sr[0x305]);
+  state->mepc->write(ctx->sr[0x341]);
+  state->mcause->write(ctx->sr[0x342]);
 }
 
 void sim_t::diff_memcpy(reg_t dest, void* src, size_t n) {
@@ -102,8 +118,8 @@ __EXPORT void difftest_exec(uint64_t n) {
 
 __EXPORT void difftest_init(int port) {
   difftest_htif_args.push_back("");
-  // const char *isa = "RV" MUXDEF(CONFIG_RV64, "64", "32") MUXDEF(CONFIG_RVE, "E", "I") "MAFDC";
-  const char *isa = "RV32IM";
+  const char *isa = "RV" MUXDEF(CONFIG_RV64, "64", "32") MUXDEF(CONFIG_RVE, "E", "I") "MAFDC";
+  // const char *isa = "RV32IM";
   cfg_t cfg(/*default_initrd_bounds=*/std::make_pair((reg_t)0, (reg_t)0),
             /*default_bootargs=*/nullptr,
             /*default_isa=*/isa,
