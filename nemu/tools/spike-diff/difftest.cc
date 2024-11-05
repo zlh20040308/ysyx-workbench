@@ -17,6 +17,7 @@
 #include "sim.h"
 #include "../../include/common.h"
 #include <cassert>
+#include <cstdio>
 #include <difftest-def.h>
 
 #define NR_GPR MUXDEF(CONFIG_RVE, 16, 32)
@@ -75,8 +76,9 @@ void sim_t::diff_set_regs(void* diff_context) {
   }
   state->pc = ctx->pc;
   state->mstatus->write(0xffffffff);
+  printf("%x\n", state->mstatus->read());
   assert(state->mstatus->read() == 0xffffffff);
-  
+
   state->mstatus->write(ctx->sr[0x300]);
   state->mstatus->write(ctx->sr[0x300]);
   state->mtvec->write(ctx->sr[0x305]);
