@@ -26,7 +26,6 @@ word_t isa_raise_intr(word_t NO, vaddr_t epc) {
 #endif
   /* Enable DiffTest to Support the Exception Response Mechanism */
   cpu.sr[MSTATUS] = 0x1800;
-  // cpu.sr[MSTATUS] = 0x00201800;
   cpu.sr[MEPC] = epc;
   switch (NO) {
   case -1:
