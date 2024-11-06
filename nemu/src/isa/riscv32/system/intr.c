@@ -27,7 +27,7 @@ word_t isa_raise_intr(word_t NO, vaddr_t epc) {
   /* Enable DiffTest to Support the Exception Response Mechanism */
   cpu.sr[MSTATUS] = 0x1800;
   cpu.sr[MEPC] = epc;
-  cpu.sr[MCAUSE] = 0x0000000b;
+  // cpu.sr[MCAUSE] = 0x0000000b;
   return cpu.sr[MTVEC];
 }
 word_t isa_query_intr() { return INTR_EMPTY; }
