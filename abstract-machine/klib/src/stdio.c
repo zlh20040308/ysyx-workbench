@@ -8,6 +8,24 @@
 #define BUFFER_SIZE 4096
 static char buf[BUFFER_SIZE];
 
+// Helper function to convert an integer to hexadecimal string
+void itohex(uintptr_t value, char *buffer, size_t buffer_size) {
+  const char *hex_digits = "0123456789abcdef";
+  int index = buffer_size - 1;
+  buffer[index--] = '\0';
+
+  // Convert the value to hex and store it in reverse order
+  do {
+    buffer[index--] = hex_digits[value & 0xf];
+    value >>= 4;
+  } while (value != 0 && index > 0);
+
+  // If there's room, prepend "0x"
+  if (index >= 1) {
+    buffer[index--] = 'x';
+    buffer[index] = '0';
+  }
+}
 
 int printf(const char *fmt, ...) {
   va_list ap;
@@ -42,8 +60,8 @@ int printf(const char *fmt, ...) {
 //       }
 //       case 'x': {
 //         long num = longarg ? va_arg(ap, long) : va_arg(ap, int);
-//         int hexdigits = 2 * (longarg ? sizeof(long) : sizeof(int)) - 1;
-//         for (int i = hexdigits; i >= 0; i--) {
+//         int hex_digits = 2 * (longarg ? sizeof(long) : sizeof(int)) - 1;
+//         for (int i = hex_digits; i >= 0; i--) {
 //           int d = (num >> (4 * i)) & 0xF;
 //           out[pos] = (d < 10 ? '0' + d : 'a' + d - 10);
 //           pos++;
@@ -99,7 +117,6 @@ int printf(const char *fmt, ...) {
 //   out[pos++] = '\0';
 //   return pos;
 // }
-
 
 int vsprintf(char *out, const char *fmt, va_list ap) {
   int res = 0;
@@ -172,6 +189,20 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
         }
         pos += digits;
         count += digits;
+        format = 0;
+        break;
+      }
+      case 'p': { // New case for pointer
+        void *ptr = va_arg(ap, void *);
+        char ptr_str[2 * sizeof(void *) * 2 +
+                    3]; // Enough space for "0x" + hex + null
+        itohex((uintptr_t)ptr, ptr_str, sizeof(ptr_str));
+        size_t len = strlen(ptr_str);
+        if (len > 0 && pos + len < n) {
+          memcpy(out + pos, ptr_str, len);
+          pos += len;
+          count += len;
+        }
         format = 0;
         break;
       }
