@@ -198,11 +198,10 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
                     3]; // Enough space for "0x" + hex + null
         itohex((uintptr_t)ptr, ptr_str, sizeof(ptr_str));
         size_t len = strlen(ptr_str);
-        if (len > 0 && pos + len < n) {
-          memcpy(out + pos, ptr_str, len);
-          pos += len;
-          count += len;
+        for (size_t i = 0; i < len && pos < n; i++) {
+          out[pos++] = ptr_str[i];
         }
+        count += len;
         format = 0;
         break;
       }
