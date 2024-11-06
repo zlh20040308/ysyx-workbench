@@ -43,7 +43,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   }
 
   printf("ELF loaded, entry point at: %p\n", (void *)elf_header.e_entry);
-  return 0;
+  return (uintptr_t)elf_header.e_entry;
 }
 
 void naive_uload(PCB *pcb, const char *filename) {
