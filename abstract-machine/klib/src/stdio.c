@@ -5,7 +5,7 @@
 
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
-#define BUFFER_SIZE 1024
+#define BUFFER_SIZE 4096
 static char buf[BUFFER_SIZE];
 
 
