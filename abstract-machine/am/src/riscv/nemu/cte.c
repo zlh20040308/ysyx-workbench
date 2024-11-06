@@ -7,12 +7,9 @@ static Context *(*user_handler)(Event, Context *) = NULL;
 Context *__am_irq_handle(Context *c) {
   if (user_handler) {
     Event ev = {0};
-    switch (c->mcause) {
-    case 0x0000000b:
-      c->mepc += 4;
-      ev.event = EVENT_YIELD;
-      break;
-    case 0x00000008:
+    switch (c->gpr[17]) {
+    case -1:
+    case 1:
       c->mepc += 4;
       ev.event = EVENT_YIELD;
       break;
