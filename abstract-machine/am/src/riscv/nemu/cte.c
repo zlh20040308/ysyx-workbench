@@ -15,7 +15,7 @@ Context *__am_irq_handle(Context *c) {
       c->mepc += 4;
       ev.event = EVENT_SYSCALL;
     } else {
-      printf("Invalid event type = %d\n", ev.event);
+      printf("Invalid event type = %d\n", c->gpr[17]);
       ev.event = EVENT_ERROR;
     }
 
