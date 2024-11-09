@@ -1,4 +1,5 @@
 #include "syscall.h"
+#include <stdio.h>
 void do_syscall(Context *c) {
   uintptr_t a[4];
   a[0] = c->GPR1;
@@ -12,9 +13,13 @@ void do_syscall(Context *c) {
     c->GPR2 = 0;
     break;
   case SYS_write:
-    Log("fd = %d", c->GPR2);
-    Log("en = %d", c->GPR4);
-
+    if (c->GPR2 == 1) {
+      char *str_ptr = (char *)(c->GPR3);
+      int len = c->GPR4;
+      while (len--) {
+        putch(*str_ptr++);
+      }
+    }
     break;
   default:
     panic("Unhandled syscall ID = %d", a[0]);
