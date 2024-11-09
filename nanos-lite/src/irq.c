@@ -5,6 +5,9 @@ static Context *do_event(Event e, Context *c) {
   case EVENT_YIELD:
     printf("You son of bitch\n");
     break;
+  case EVENT_ERROR:
+    printf("Ops, something go wrong!\n");
+    break;
   default:
     panic("Unhandled event ID = %d", e.event);
   }
