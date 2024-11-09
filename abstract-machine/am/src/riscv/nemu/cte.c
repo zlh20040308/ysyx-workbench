@@ -1,6 +1,7 @@
 #include <am.h>
 #include <klib.h>
 #include <riscv/riscv.h>
+#include <stdio.h>
 
 static Context *(*user_handler)(Event, Context *) = NULL;
 
@@ -11,6 +12,7 @@ Context *__am_irq_handle(Context *c) {
     case -1:
     case 1:
       c->mepc += 4;
+      printf("ahhahahaaaaaaaaaaaaaaa\n");
       ev.event = EVENT_YIELD;
       break;
     default:
