@@ -8,18 +8,14 @@ static Context *(*user_handler)(Event, Context *) = NULL;
 Context *__am_irq_handle(Context *c) {
   if (user_handler) {
     Event ev = {0};
-    switch (c->gpr[17]) {
-    case 0:
-    // case -1:
-    case 1:
+    if (c->gpr[17] < 0) {
       c->mepc += 4;
-      printf("ahhahahaaaaaaaaaaaaaaa\n");
       ev.event = EVENT_YIELD;
-      break;
-    default:
-      printf("c->gpr[17] = %d\n",c->gpr[17]);
+    } else if (c->gpr[17] >= 0 && c->gpr[17] <= 19) {
+      c->mepc += 4;
+      ev.event = EVENT_SYSCALL;
+    } else {
       ev.event = EVENT_ERROR;
-      break;
     }
 
     c = user_handler(ev, c);
