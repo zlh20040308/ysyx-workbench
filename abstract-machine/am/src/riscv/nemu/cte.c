@@ -16,6 +16,7 @@ Context *__am_irq_handle(Context *c) {
       ev.event = EVENT_YIELD;
       break;
     default:
+      printf("ahhahahaaaaaaaaaaaaaaa\n");
       ev.event = EVENT_ERROR;
       break;
     }
