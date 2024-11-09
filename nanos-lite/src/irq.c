@@ -9,7 +9,7 @@ static Context *do_event(Event e, Context *c) {
     do_syscall(c);
     break;
   case EVENT_ERROR:
-    panic("Ops, something go wrong!\n");
+    panic("Ops, something go wrong!");
     break;
   default:
   Log("haha = %d",EVENT_YIELD);
