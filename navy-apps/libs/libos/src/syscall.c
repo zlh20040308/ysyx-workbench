@@ -60,6 +60,11 @@ void _exit(int status) {
   while (1);
 }
 
+int _yield(const char *path, int flags, mode_t mode) {
+  _syscall_(SYS_yield, status, 0, 0);
+  return 0;
+}
+
 int _open(const char *path, int flags, mode_t mode) {
   _exit(SYS_open);
   return 0;
