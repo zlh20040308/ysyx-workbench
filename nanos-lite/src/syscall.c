@@ -11,6 +11,11 @@ void do_syscall(Context *c) {
     yield();
     c->GPR2 = 0;
     break;
+  case SYS_write:
+    Log("fd = %d", c->GPR2);
+    Log("en = %d", c->GPR4);
+
+    break;
   default:
     panic("Unhandled syscall ID = %d", a[0]);
   }
