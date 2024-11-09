@@ -8,7 +8,7 @@ static Context *(*user_handler)(Event, Context *) = NULL;
 Context *__am_irq_handle(Context *c) {
   if (user_handler) {
     Event ev = {0};
-    if (c->gpr[17] < 0) {
+    if (c->gpr[17] == -1) {
       c->mepc += 4;
       ev.event = EVENT_YIELD;
     } else if (c->gpr[17] >= 0 && c->gpr[17] <= 19) {
