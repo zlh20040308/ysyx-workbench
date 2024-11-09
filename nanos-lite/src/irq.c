@@ -12,6 +12,7 @@ static Context *do_event(Event e, Context *c) {
     printf("Ops, something go wrong!\n");
     break;
   default:
+  Log("haha = %d",EVENT_YIELD);
     panic("Unhandled event ID = %d", e.event);
   }
 
