@@ -24,11 +24,7 @@ static uint8_t pmem[CONFIG_MSIZE] = {};
 uint8_t *guest_to_host(uint32_t paddr) { return pmem + paddr - CONFIG_MBASE; }
 uint32_t host_to_guest(uint8_t *haddr) { return haddr - pmem + CONFIG_MBASE; }
 
-extern "C" void ram_write_helper(uint32_t addr, uint32_t wdata, uint32_t wmask,
-                                 bool wen) {
-  if (!wen) {
-    return;
-  }
+extern "C" void ram_write_helper(uint32_t addr, uint32_t wdata, uint32_t wmask) {
   if (addr < CONFIG_MBASE || addr > PMEM_RIGHT) {
     printf("Write pmem out of bound!\n");
     exit(1);
@@ -50,6 +46,7 @@ extern "C" uint32_t ram_read_helper(uint32_t addr) {
     return *((uint32_t *)guest_to_host(CONFIG_MBASE));
   }
   if (addr < CONFIG_MBASE || addr > PMEM_RIGHT) {
+    // printf("ssssssssssssssssssssssssssss Addr = 0x%x\n", addr);
     return *((uint32_t *)guest_to_host(CONFIG_MBASE));
   }
   uint32_t *waddr = (uint32_t *)guest_to_host(addr);
@@ -147,7 +144,9 @@ int main(int argc, char *argv[]) {
       // printf("\n");
     }
     // m_trace->dump(sim_time);
+    printf("\n");
   }
+
   if (dut->io_debug_gpr[10] == 0) {
     printf("Well done!!!!\n");
   } else {

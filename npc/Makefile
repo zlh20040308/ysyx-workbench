@@ -1,9 +1,9 @@
 BUILD_DIR = ./build
 CSRC += $(shell find $(abspath ./sim) -name "*.cpp")
-VSRCS = $(shell find $(abspath ../build) -name "*.sv")
+VSRC = $(shell find $(NPC_HOME)/build -name "*.sv")
 HSRC += $(shell find $(abspath ./sim) -name "*.h")
-TOP_NAME := NPC
-SEARCHPATH := $(NPC_HOME)/generated/npc
+TOP_NAME := Top
+SEARCHPATH := $(NPC_HOME)/build
 
 VERILATOR_FLAGS += -I$(SEARCHPATH)
 VERILATOR_FLAGS += --top $(TOP_NAME)
@@ -23,10 +23,11 @@ DIFFTEST		:= $(NEMU_HOME)/build/riscv32-nemu-interpreter-so
 OBJ_DIR			:= ./obj_dir
 BIN				:= $(OBJ_DIR)/V$(TOP_NAME)
 
-IMG				?= ../am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.bin
+IMG				?= ../am-kernels/tests/cpu-tests/build/wanshu-riscv32e-npc.bin
 
 #RUN_FLAGS		:= --diff=${DIFFTEST}
-RUN_FLAGS		:= --img=${IMG} --diff=${DIFFTEST}
+RUN_FLAGS		+= --img=${IMG} --diff=${DIFFTEST}
+RUN_FLAGS		+= -b
 NPC_EXEC		:= ${BIN} ${RUN_FLAGS}
 
 .PHONY:run gdb wave clean

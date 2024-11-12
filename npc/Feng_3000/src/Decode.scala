@@ -247,6 +247,12 @@ object WbEn extends BoolDecodeField[Insn] {
   override def genTable(i: Insn): BitPat = if (Utils.writeRd(i.inst)) y else n
 }
 
+object Valid extends BoolDecodeField[Insn] {
+  override def name: String = "Valid"
+  val ldInstructions = Set("lb", "lh", "lw", "lbu", "lhu")
+  override def genTable(i: Insn): BitPat = if (Utils.isS(i.inst) || ldInstructions.contains(i.inst.name)) y else n
+}
+
 object Ebreak extends BoolDecodeField[Insn] {
   override def name: String = "Ebreak"
 
@@ -267,6 +273,7 @@ class DecodeIO(val xlen: Int) extends Bundle {
   val WbSel  = Output(WbSelEnum())
   val MemRW  = Output(Bool())
   val WbEn   = Output(Bool())
+  val Valid  = Output(Bool())
   val Ebreak = Output(Bool())
 }
 
@@ -317,7 +324,7 @@ class Decode(val xlen: Int) extends Module {
   println(s"The length of instList is: ${instList.length}")
   val decodeTable = new DecodeTable(
     instList,
-    Seq(PCSel, ASel, BSel, ImmSel, ALUSel, BrType, StType, LdType, CSRCmd, WbSel, MemRW, WbEn, Ebreak)
+    Seq(PCSel, ASel, BSel, ImmSel, ALUSel, BrType, StType, LdType, CSRCmd, WbSel, MemRW, WbEn, Valid, Ebreak)
   )
 
   val decodedBundle = decodeTable.decode(inst)
@@ -334,6 +341,7 @@ class Decode(val xlen: Int) extends Module {
   io.WbSel  := decodedBundle(WbSel)
   io.MemRW  := decodedBundle(MemRW)
   io.WbEn   := decodedBundle(WbEn)
+  io.Valid  := decodedBundle(Valid)
   io.Ebreak := decodedBundle(Ebreak)
 
 }
