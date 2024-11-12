@@ -57,7 +57,7 @@ void add_mmio_map(const char *name, word_t addr, void *space, uint32_t len,
                          .high = addr + len - 1,
                          .space = space,
                          .callback = callback};
-  printf("Add mmio map %s@[0x%x, 0x%x]\n", maps[nr_map].name, maps[nr_map].low,
+  Log("Add mmio map %s@[0x%x, 0x%x]", maps[nr_map].name, maps[nr_map].low,
          maps[nr_map].high);
 
   nr_map++;

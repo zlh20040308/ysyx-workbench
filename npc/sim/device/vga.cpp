@@ -44,6 +44,7 @@ static void init_screen() {
   SDL_SetWindowTitle(window, "NPC-SIM");
   texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888,
                               SDL_TEXTUREACCESS_STATIC, SCREEN_W, SCREEN_H);
+  SDL_RenderPresent(renderer);
 }
 
 static inline void update_screen() {
@@ -54,7 +55,7 @@ static inline void update_screen() {
 }
 
 void vga_update_screen() {
-  if (vgactl_port_base[1] != 0) {
+  if (vgactl_port_base[1]) {
     update_screen();
     vgactl_port_base[1] = 0;
   }

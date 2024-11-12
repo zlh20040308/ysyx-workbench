@@ -47,7 +47,6 @@ word_t pmem_read(word_t addr, int len) {
     return pmem_ret;
   } else {
     // this is outside pmem, call device mmio read
-    Log("addr = %d\n", addr);
     word_t mmio_ret = mmio_read(addr, len);
     return mmio_ret;
   }

@@ -15,6 +15,7 @@
  ***************************************************************************************/
 #pragma once
 #include <common.h>
+#include <stdio.h>
 #include <verilator-sim.h>
 
 
@@ -36,18 +37,18 @@ word_t host_to_guest(uint8_t *haddr);
 extern VTop *top;
 
 static inline word_t host_read(void *addr, int len) {
-  switch (len) {
-  case 1:
-    return *(uint8_t *)addr;
-  case 2:
-    return *(uint16_t *)addr;
-  case 4:
-    return *(uint32_t *)addr;
-  // case 8: return *(uint64_t *)addr;
-  default:
-    printf("[memory] Do not support this read length\n");
-    assert(0);
-  }
+  return *(uint32_t *)addr;
+  // switch (len) {
+  // case 1:
+  //   return *(uint8_t *)addr;
+  // case 2:
+  //   return *(uint16_t *)addr;
+  // case 4:
+  //   return *(uint32_t *)addr;
+  // default:
+  //   Log("[memory] Do not support this read length = %d\n", len);
+  //   assert(0);
+  // }
 }
 
 static inline void host_write(void *addr, int len, word_t data) {
@@ -61,9 +62,8 @@ static inline void host_write(void *addr, int len, word_t data) {
   case 4:
     *(uint32_t *)addr = data;
     return;
-  // case 8: *(uint64_t *)addr = data; return;
   default:
-    printf("[memory] Do not support this write length\n");
+    Log("[memory] Do not support this write length = %d", len);
     assert(0);
   }
 }

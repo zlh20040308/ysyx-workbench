@@ -56,6 +56,9 @@ static char *rl_gets() {
 int cmd_c(char *args) {
   while (npc_state.state == NPC_RUNNING || npc_state.state == NPC_STOP) {
     sim_one_cycle();
+#ifdef COFIG_DEVICES
+  device_update();
+#endif   
   }
   printf(
       "[sdb] NPC's state is not NPC_RUNNING or NPC_STOP, can not continue\n");

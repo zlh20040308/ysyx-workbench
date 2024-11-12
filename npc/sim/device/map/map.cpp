@@ -25,6 +25,8 @@
 
 #define IO_SPACE_MAX (2 * 1024 * 1024)
 
+// #define CONFIG_DTRACE_COND
+
 static uint8_t *io_space = NULL;
 static uint8_t *p_space = NULL;
 
@@ -83,11 +85,14 @@ word_t map_read(word_t addr, int len, IOMap *map) {
   word_t offset = addr - map->low;
   invoke_callback(map->callback, offset, len, false); // prepare data to read
   word_t ret = host_read(map->space + offset, len);
-  Log("Device: %s (Address Space: "FMT_PADDR" - "FMT_PADDR")", map->name,
-         map->low, map->high);
+#ifdef CONFIG_DTRACE_COND
+
+  Log("Device: %s (Address Space: " FMT_PADDR " - " FMT_PADDR ")", map->name,
+      map->low, map->high);
   Log("Action: READ");
   Log("Accessed Address: " FMT_PADDR, addr);
-  Log("Read Data: "FMT_WORD"\n", ret);
+  Log("Read Data: " FMT_WORD "\n", ret);
+#endif
   return ret;
 }
 
@@ -102,4 +107,11 @@ void map_write(word_t addr, int len, word_t data, IOMap *map) {
   word_t offset = addr - map->low;
   host_write(map->space + offset, len, data);
   invoke_callback(map->callback, offset, len, true);
+#ifdef CONFIG_DTRACE_COND
+  Log("Device: %s (Address Space: " FMT_PADDR " - " FMT_PADDR ")", map->name,
+      map->low, map->high);
+  Log("Action: WRITE");
+  Log("Accessed Address: " FMT_PADDR, addr);
+  Log("Write Data: " FMT_WORD "\n", data);
+#endif
 }

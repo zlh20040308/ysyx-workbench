@@ -33,8 +33,8 @@ typedef uint32_t word_t;
 
 // static enum { NPC_RUNNING, NPC_STOP, NPC_END, NPC_ABORT, NPC_QUIT };
 
-#define FMT_WORD "0x%08"
-#define FMT_PADDR "0x%08"
+#define FMT_WORD "0x%08x"
+#define FMT_PADDR "0x%08x"
 
 #define NPC_RUNNING 0
 #define NPC_STOP 1
@@ -44,8 +44,9 @@ typedef uint32_t word_t;
 
 uint64_t get_time();
 
+
 #define Log(format, ...) \
-  printf("\33[1;35m[%s,%d,%s] " format "\33[0m\n", \
+  printf("\33[38;5;214m[%s,%d,%s] " format "\33[0m\n", \
       __FILE__, __LINE__, __func__, ## __VA_ARGS__)
 
 #define TODO() panic("please implement me")

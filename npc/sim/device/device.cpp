@@ -28,8 +28,6 @@ void init_map();
 void send_key(uint8_t scancode, bool is_keydown);
 void vga_update_screen();
 
-word_t device_last = 0;
-
 void sdl_clear_event_queue() {
   SDL_Event event;
   while (SDL_PollEvent(&event))
@@ -38,11 +36,12 @@ void sdl_clear_event_queue() {
 }
 
 void device_update() {
-  word_t device_now = get_time();
-  if (device_now - device_last < (1000000 / 60)) {
+  static uint64_t last = 0;
+  word_t now = get_time();
+  if (now - last < (1000000 / 60)) {
     return;
   }
-  device_last = device_now;
+  last = now;
 
 #ifdef CONFIG_VGA_CTL_MMIO
   vga_update_screen();
@@ -51,30 +50,21 @@ void device_update() {
   SDL_Event event;
   while (SDL_PollEvent(&event)) {
     switch (event.type) {
-    case SDL_QUIT: {
-      npc_state.state = NPC_STOP;
+    case SDL_QUIT:
+      npc_state.state = NPC_QUIT;
       break;
-    }
+    // If a key was pressed
     case SDL_KEYDOWN:
     case SDL_KEYUP: {
-
-#ifdef CONFIG_I8042_DATA_MMIO
-      // printf("[device-keyboard] SDL event catch key with scancode %d, have
-      // event \"%s\"\n", event.key.keysym.scancode, event.key.type ==
-      // SDL_KEYDOWN ? "KEY DOWN" : "KEY UP");
       uint8_t k = event.key.keysym.scancode;
       bool is_keydown = (event.key.type == SDL_KEYDOWN);
       send_key(k, is_keydown);
       break;
-#else
-      break;
-#endif
     }
     default:
       break;
     }
   }
-  return;
 }
 
 void init_device() {
