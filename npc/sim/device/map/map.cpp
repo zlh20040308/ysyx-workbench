@@ -83,6 +83,11 @@ word_t map_read(word_t addr, int len, IOMap *map) {
   word_t offset = addr - map->low;
   invoke_callback(map->callback, offset, len, false); // prepare data to read
   word_t ret = host_read(map->space + offset, len);
+  Log("Device: %s (Address Space: "FMT_PADDR" - "FMT_PADDR")", map->name,
+         map->low, map->high);
+  Log("Action: READ");
+  Log("Accessed Address: " FMT_PADDR, addr);
+  Log("Read Data: "FMT_WORD"\n", ret);
   return ret;
 }
 

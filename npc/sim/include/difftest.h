@@ -15,9 +15,9 @@
  ***************************************************************************************/
 #pragma once
 #include <common.h>
-//#include <dlfcn.h>
+#include <dlfcn.h>
 
-// #define CONFIG_DIFFTEST
+#define CONFIG_DIFFTEST
 
 enum { DIFFTEST_TO_DUT, DIFFTEST_TO_REF };
 

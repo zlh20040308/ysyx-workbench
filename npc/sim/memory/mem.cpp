@@ -42,10 +42,12 @@ void out_of_bound(word_t addr) {
 word_t pmem_read(word_t addr, int len) {
   if (in_pmem(addr)) {
     // this is inside pmem, just call guest_to_host and host_read
+    // Log("addr = %d\n", addr);
     word_t pmem_ret = host_read(guest_to_host(addr), len);
     return pmem_ret;
   } else {
     // this is outside pmem, call device mmio read
+    Log("addr = %d\n", addr);
     word_t mmio_ret = mmio_read(addr, len);
     return mmio_ret;
   }
