@@ -1,69 +1,58 @@
-TOPNAME = Top
-INC_PATH ?=
-
-VERILATOR = verilator
-VERILATOR_CFLAGS += -MMD --build --trace -cc  \
-				-O3 --x-assign fast --x-initial fast --noassert
-
 BUILD_DIR = ./build
-OBJ_DIR = $(BUILD_DIR)/obj_dir
-BIN = $(BUILD_DIR)/$(TOPNAME)
-SIMBIN = $(BIN)_sim
-VSRCS_DIR = $(BUILD_DIR)/vsrc
-Feng_3000_HOME = $(shell pwd)
+CSRC += $(shell find $(abspath ./sim) -name "*.cpp")
+VSRC = $(shell find $(NPC_HOME)/build -name "*.sv")
+HSRC += $(shell find $(abspath ./sim) -name "*.h")
+TOP_NAME := Top
+SEARCHPATH := $(NPC_HOME)/build
 
+VERILATOR_FLAGS += -I$(SEARCHPATH)
+VERILATOR_FLAGS += --top $(TOP_NAME)
+#Usage: Debug -> GDB, Trace -> wave
+#VERILATOR_FLAGS += --trace --cc --exe --debug --build
+VERILATOR_FLAGS += --trace --debug --cc --exe --build
+VERILATOR_FLAGS += -Wno-lint
+VERILATOR_FLAGS += -Wno-style
+VERILATOR_FLAGS += -Wno-UNUSED
+VERILATOR_FLAGS += -MMD --build -cc  \
+				 -O3 --x-assign fast --x-initial fast
 
-# project source
-VSRCS = $(shell find $(abspath ./$(BUILD_DIR)) -name "*.sv")
-CSRCS = $(shell find $(abspath ./csrc) -name "*.c" -or -name "*.cc" -or -name "*.cpp")
-INC_PATH = CSRCS
+INC_PATH		?= $(NPC_HOME)/sim/include
+CFLAGS			+= -g -I$(INC_PATH)
+CFLAGS			+= -I$(INC_PATH)
+LDFLAGS			+= -lreadline -lSDL2 -ldl
 
-SIMCSRCS = $(CSRCS)
+DIFFTEST		:= $(NEMU_HOME)/build/riscv32-nemu-interpreter-so
+OBJ_DIR			:= ./obj_dir
+BIN				:= $(OBJ_DIR)/V$(TOP_NAME)
 
-$(shell mkdir -p $(BUILD_DIR))
+IMG				?= ../am-kernels/tests/cpu-tests/build/wanshu-riscv32e-npc.bin
 
+#RUN_FLAGS		:= --diff=${DIFFTEST}
+RUN_FLAGS		+= --img=${IMG} --diff=${DIFFTEST}
+RUN_FLAGS		+= -b
+NPC_EXEC		:= ${BIN} ${RUN_FLAGS}
 
-# rules for verilator
-INCFLAGS = $(addprefix -I, $(INC_PATH))
-CXXFLAGS += $(INCFLAGS) -DTOP_NAME="\"V$(TOPNAME)\""
+.PHONY:run gdb wave clean
 
+com:${CSRC} ${VSRC}
+	@verilator ${VERILATOR_FLAGS} ${CSRC} ${VSRC} $(addprefix -CFLAGS , $(CFLAGS)) -LDFLAGS -lSDL2 -LDFLAGS -lreadline
 
-default: verilog
+run:com
+	$(call git_commit, "sim NPC")
+	@${NPC_EXEC}
+
+gdb:com ${DIFFTEST}
+	$(call git_commit, "gdb NPC")
+	@gdb --silent -s ${BIN} --args ${NPC_EXEC}
+
+wave:
+	@gtkwave $(OBJ_DIR)/dump.vcd
+
+clean:
+	rm -rf ${OBJ_DIR}
 
 verilog:
 	mkdir -p $(BUILD_DIR)
 	-rm $(BUILD_DIR)/* -r
 	mill -i Feng_3000.runMain Feng_3000.Elaborate --target-dir $(BUILD_DIR)
-	# mill -i  Feng_3000.Elaborate --target-dir $(BUILD_DIR)
-	
-init:
-	git submodule update --init --recursive
 
-
-help:
-	mill -i Feng_3000.runMain Feng_3000.Elaborate --help
-	# mill -i  Feng_3000.Elaborate --help
-
-
-clean:
-	-rm -rf $(BUILD_DIR)
-	-rm -rf ./out
-
-$(SIMBIN): $(VSRCS) $(SIMCSRCS)
-	rm -rf $(OBJ_DIR)
-	rm -rf ./*.vcd
-	$(VERILATOR) $(VERILATOR_CFLAGS) \
-		-I$(abspath ./csrc)/ --top-module $(TOPNAME) $^ \
-		$(addprefix -CFLAGS , $(CXXFLAGS)) $(addprefix -LDFLAGS , $(LDFLAGS)) \
-		--Mdir $(OBJ_DIR) --exe -o $(abspath $(BIN))
-
-
-all: default
-
-sim: $(SIMBIN)
-	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
-	@$(BIN)
-	# @gtkwave waveform.vcd
-
-
-.PHONY: default all sim $(BIN) run clean init help verilog

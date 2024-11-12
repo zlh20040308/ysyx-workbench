@@ -25,17 +25,9 @@ word_t isa_raise_intr(word_t NO, vaddr_t epc) {
   Log("ECALL, a7 = " FMT_WORD "", NO);
 #endif
   /* Enable DiffTest to Support the Exception Response Mechanism */
-  cpu.sr[MSTATUS] = 0x1800;
+  cpu.sr[MSTATUS] = NO;
   cpu.sr[MEPC] = epc;
-  switch (NO) {
-  case -1:
-    cpu.sr[MCAUSE] = 0x0000000b;
-    // cpu.sr[MCAUSE] = 0x00000008;
-    break;
-  default:
-    cpu.sr[MCAUSE] = 0x00000008;
-    break;
-  }
+  cpu.sr[MCAUSE] = 0x0000000b;
   return cpu.sr[MTVEC];
 }
 word_t isa_query_intr() { return INTR_EMPTY; }

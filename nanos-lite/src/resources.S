@@ -1,7 +1,11 @@
 .section .data
 .global ramdisk_start, ramdisk_end
 ramdisk_start:
-.incbin "build/ramdisk.img"
+#ifdef __LP64__
+.incbin "build/ramdisk64.img"
+#else
+.incbin "build/ramdisk32.img"
+#endif
 ramdisk_end:
 
 .section .rodata

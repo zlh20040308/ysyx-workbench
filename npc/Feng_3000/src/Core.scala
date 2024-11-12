@@ -99,6 +99,7 @@ class Core extends Module {
   io.dmem.wdata := RegFileInstance.io.rs2
   io.dmem.wmask := WmaskGenInstance.io.wmask
   io.dmem.wen   := CUInstance.io.MemRW
+  io.dmem.valid := CUInstance.io.Valid
 
   /* ---------- WmaskGen ---------- */
 

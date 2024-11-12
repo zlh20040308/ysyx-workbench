@@ -1,24 +1,22 @@
 #include <am.h>
 #include <klib.h>
 #include <riscv/riscv.h>
+#include <stdio.h>
 
 static Context *(*user_handler)(Event, Context *) = NULL;
 
 Context *__am_irq_handle(Context *c) {
   if (user_handler) {
     Event ev = {0};
-    switch (c->mcause) {
-    case 0x0000000b:
+    if (c->gpr[17] == -1) {
       c->mepc += 4;
       ev.event = EVENT_YIELD;
-      break;
-    case 0x00000008:
+    } else if (c->gpr[17] >= 0 && c->gpr[17] <= 19) {
       c->mepc += 4;
-      ev.event = EVENT_YIELD;
-      break;
-    default:
+      ev.event = EVENT_SYSCALL;
+    } else {
+      printf("Invalid event type = %d\n", c->gpr[17]);
       ev.event = EVENT_ERROR;
-      break;
     }
 
     c = user_handler(ev, c);

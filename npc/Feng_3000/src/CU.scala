@@ -19,6 +19,7 @@ class CUIO(val xlen: Int) extends Bundle {
   val WbSel   = Output(WbSelEnum())
   val MemRW   = Output(Bool())
   val WbEn    = Output(Bool())
+  val Valid   = Output(Bool())
   val Ebreak  = Output(Bool())
 }
 
@@ -38,6 +39,7 @@ class CU(val xlen: Int) extends Module {
   io.MemRW       := decode.io.MemRW
   io.WbEn        := decode.io.WbEn
   io.Ebreak      := decode.io.Ebreak
+  io.Valid       := decode.io.Valid
   io.CSRCmd      := decode.io.CSRCmd
 
   switch(decode.io.BrType) {
