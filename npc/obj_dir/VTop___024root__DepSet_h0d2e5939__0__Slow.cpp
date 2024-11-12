@@ -51,7 +51,7 @@ VL_ATTR_COLD void VTop___024root___eval_settle(VTop___024root* vlSelf) {
 #ifdef VL_DEBUG
                 VTop___024root___dump_triggers__stl(vlSelf);
 #endif
-                VL_FATAL_MT("/home/feng/OS/ysyx-workbench/npc/build/Top.sv", 2, "", "Settle region did not converge.");
+                VL_FATAL_MT("/home/feng/code/ysyx-workbench/npc/build/Top.sv", 2, "", "Settle region did not converge.");
             }
             vlSelf->__VstlIterCount = ((IData)(1U) 
                                        + vlSelf->__VstlIterCount);
@@ -131,22 +131,21 @@ VL_ATTR_COLD void VTop___024root___ctor_var_reset(VTop___024root* vlSelf) {
     vlSelf->io_debug_PCSel = VL_RAND_RESET_I(2);
     vlSelf->io_debug_alu_op = VL_RAND_RESET_I(4);
     VL_RAND_RESET_W(512, vlSelf->io_debug_gpr);
-    vlSelf->Top__DOT__core__DOT___ImmGenInstance_io_out = VL_RAND_RESET_I(32);
+    vlSelf->Top__DOT___core_io_dmem_addr = VL_RAND_RESET_I(32);
+    vlSelf->Top__DOT___core_io_dmem_valid = VL_RAND_RESET_I(1);
+    vlSelf->Top__DOT___core_io_dmem_wmask = VL_RAND_RESET_I(4);
     vlSelf->Top__DOT__core__DOT___CSRInstance_io_rdata = VL_RAND_RESET_I(32);
+    vlSelf->Top__DOT__core__DOT___CUInstance_io_StType = VL_RAND_RESET_I(2);
     vlSelf->Top__DOT__core__DOT__pc = VL_RAND_RESET_I(32);
     vlSelf->Top__DOT__core__DOT__pc_plus4 = VL_RAND_RESET_I(32);
+    vlSelf->Top__DOT__core__DOT___GEN_ARRAY_IDX = VL_RAND_RESET_I(2);
     vlSelf->Top__DOT__core__DOT____Vcellinp__AluInstance__io_B = VL_RAND_RESET_I(32);
     vlSelf->Top__DOT__core__DOT____Vcellinp__AluInstance__io_A = VL_RAND_RESET_I(32);
     vlSelf->Top__DOT__core__DOT____Vcellinp__CSRInstance__io_wdata = VL_RAND_RESET_I(32);
-    vlSelf->Top__DOT__core__DOT__AluInstance__DOT__io_out_0 = VL_RAND_RESET_I(32);
     vlSelf->Top__DOT__core__DOT__CompareInstance__DOT___GEN = VL_RAND_RESET_I(1);
     vlSelf->Top__DOT__core__DOT__CompareInstance__DOT___GEN_0 = VL_RAND_RESET_I(8);
     vlSelf->Top__DOT__core__DOT__CompareInstance__DOT____VdfgTmp_hf84125da__0 = 0;
-    vlSelf->Top__DOT__core__DOT__CUInstance__DOT__io_Valid_0 = VL_RAND_RESET_I(1);
-    vlSelf->Top__DOT__core__DOT__CUInstance__DOT__io_WbEn_0 = VL_RAND_RESET_I(1);
-    vlSelf->Top__DOT__core__DOT__CUInstance__DOT__io_WbSel_0 = VL_RAND_RESET_I(2);
-    vlSelf->Top__DOT__core__DOT__CUInstance__DOT__io_StType_0 = VL_RAND_RESET_I(2);
-    vlSelf->Top__DOT__core__DOT__CUInstance__DOT___decode_io_PCSel = VL_RAND_RESET_I(2);
+    vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_PCSel = VL_RAND_RESET_I(2);
     vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_invMatrixOutputs = VL_RAND_RESET_I(30);
     vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_andMatrixOutputs_15_2 = VL_RAND_RESET_I(1);
     vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_andMatrixOutputs_hi = VL_RAND_RESET_I(2);
@@ -194,6 +193,7 @@ VL_ATTR_COLD void VTop___024root___ctor_var_reset(VTop___024root* vlSelf) {
     vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_orMatrixOutputs_hi_lo_hi_lo = VL_RAND_RESET_I(2);
     vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_orMatrixOutputs_hi_15 = VL_RAND_RESET_I(15);
     vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT____VdfgTmp_he8b0e597__0 = 0;
+    vlSelf->Top__DOT__core__DOT__RegFileInstance__DOT__io_wen_0 = VL_RAND_RESET_I(1);
     vlSelf->Top__DOT__core__DOT__RegFileInstance__DOT__io_rs1_0 = VL_RAND_RESET_I(32);
     vlSelf->Top__DOT__core__DOT__RegFileInstance__DOT__io_rs2_0 = VL_RAND_RESET_I(32);
     for (int __Vi0 = 0; __Vi0 < 16; ++__Vi0) {
@@ -207,8 +207,8 @@ VL_ATTR_COLD void VTop___024root___ctor_var_reset(VTop___024root* vlSelf) {
     for (int __Vi0 = 0; __Vi0 < 4096; ++__Vi0) {
         vlSelf->Top__DOT__core__DOT__CSRInstance__DOT__csrs_ext__DOT__Memory[__Vi0] = VL_RAND_RESET_I(32);
     }
+    vlSelf->Top__DOT__core__DOT__ImmGenInstance__DOT__io_out_0 = VL_RAND_RESET_I(32);
     vlSelf->Top__DOT__memory__DOT__io_imem_inst_0 = VL_RAND_RESET_I(32);
-    vlSelf->Top__DOT__memory__DOT__io_dmem_wmask_0 = VL_RAND_RESET_I(4);
     vlSelf->Top__DOT__memory__DOT__mem__DOT__rdata = VL_RAND_RESET_I(32);
     vlSelf->Top__DOT__memory__DOT__mem__DOT__unnamedblk1__DOT__full_mask = 0;
     vlSelf->__Vfunc_ram_read_helper__0__Vfuncout = 0;
