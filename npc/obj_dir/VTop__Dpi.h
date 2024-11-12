@@ -16,9 +16,9 @@ extern "C" {
 
 
     // DPI IMPORTS
-    // DPI import at /home/feng/OS/ysyx-workbench/npc/build/ram_2r1w.sv:8:29
+    // DPI import at /home/feng/code/ysyx-workbench/npc/build/ram_2r1w.sv:8:29
     extern int ram_read_helper(int addr);
-    // DPI import at /home/feng/OS/ysyx-workbench/npc/build/ram_2r1w.sv:2:30
+    // DPI import at /home/feng/code/ysyx-workbench/npc/build/ram_2r1w.sv:2:30
     extern void ram_write_helper(int addr, int wdata, int wmask);
 
 #ifdef __cplusplus
