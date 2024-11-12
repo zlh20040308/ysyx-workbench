@@ -25,8 +25,8 @@
 
 typedef struct {
   word_t gpr[NR_GPRs];
-  word_t csr[NR_CSRs];
   word_t pc;
+  word_t csr[NR_CSRs];
 } rtl_CPU_State;
 
 extern rtl_CPU_State cpu;
