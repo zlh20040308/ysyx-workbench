@@ -24,7 +24,8 @@ static uint8_t pmem[CONFIG_MSIZE] = {};
 uint8_t *guest_to_host(uint32_t paddr) { return pmem + paddr - CONFIG_MBASE; }
 uint32_t host_to_guest(uint8_t *haddr) { return haddr - pmem + CONFIG_MBASE; }
 
-extern "C" void ram_write_helper(uint32_t addr, uint32_t wdata, uint32_t wmask) {
+extern "C" void ram_write_helper(uint32_t addr, uint32_t wdata,
+                                 uint32_t wmask) {
   if (addr < CONFIG_MBASE || addr > PMEM_RIGHT) {
     printf("Write pmem out of bound!\n");
     exit(1);
@@ -45,15 +46,17 @@ extern "C" uint32_t ram_read_helper(uint32_t addr) {
   if (dut->reset == 1) {
     return *((uint32_t *)guest_to_host(CONFIG_MBASE));
   }
-  if (addr < CONFIG_MBASE || addr > PMEM_RIGHT) {
-    // printf("ssssssssssssssssssssssssssss Addr = 0x%x\n", addr);
-    return *((uint32_t *)guest_to_host(CONFIG_MBASE));
+  if (addr >= CONFIG_MBASE && addr <= PMEM_RIGHT) {
+    uint32_t *waddr = (uint32_t *)guest_to_host(addr);
+    // printf("Read pmem\n");
+    printf("Addr = 0x%x\n", addr);
+    // printf("Data = 0x%x\n", *waddr);
+    return *waddr;
+    
+  }else{
+    printf("Something go wrong\n");
+    exit(1);
   }
-  uint32_t *waddr = (uint32_t *)guest_to_host(addr);
-  // printf("Read pmem\n");
-  // printf("Addr = 0x%x\n", addr);
-  // printf("Data = 0x%x\n", *waddr);
-  return *waddr;
 }
 
 static long load_img() {

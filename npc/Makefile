@@ -13,8 +13,6 @@ VERILATOR_FLAGS += --trace --debug --cc --exe --build
 VERILATOR_FLAGS += -Wno-lint
 VERILATOR_FLAGS += -Wno-style
 VERILATOR_FLAGS += -Wno-UNUSED
-VERILATOR_FLAGS += -MMD --build -cc  \
-				 -O3 --x-assign fast --x-initial fast
 
 INC_PATH		?= $(NPC_HOME)/sim/include
 CFLAGS			+= -g -I$(INC_PATH)

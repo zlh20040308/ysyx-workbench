@@ -13,4 +13,5 @@
 !init.sh
 /nvboard
 /am-kernels
-/ysyxSoC/fceux-am
+/ysyxSoC
+/fceux-am
