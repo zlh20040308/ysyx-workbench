@@ -96,6 +96,8 @@ static struct rule
 
 static regex_t re[NR_REGEX] = {};
 word_t isa_reg_str2val(const char *s, bool *success);
+word_t isa_csr_str2val(const char *s, bool *success);
+
 word_t paddr_read(paddr_t addr, int len);
 
 /* Rules are used for many times.
@@ -339,9 +341,16 @@ static word_t eval(int p, int q, bool *success)
       case TK_HEX:
         num = strtoul(tokens[p].str, &endptr, 16);
         break;
-      case TK_CSR:
       case TK_REG:
         num = isa_reg_str2val(tokens[p].str, success);
+        Log("num = %d, reg = %s success = %d", num, tokens[p].str, *success);
+        if (!(*success))
+        {
+          return 1;
+        }
+        break;
+      case TK_CSR:
+        num = isa_csr_str2val(tokens[p].str, success);
         Log("num = %d, reg = %s success = %d", num, tokens[p].str, *success);
         if (!(*success))
         {

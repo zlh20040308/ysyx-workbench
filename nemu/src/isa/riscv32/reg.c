@@ -46,6 +46,14 @@ word_t isa_reg_str2val(const char *s, bool *success) {
       return gpr(i);
     }
   }
+  *success = false;
+  Log("success = %d", *success);
+  return 0;
+}
+
+
+word_t isa_csr_str2val(const char *s, bool *success) {
+  Log("input_csr = %s", s);
   if (strcmp(csr_name(MSTATUS), s + 1) == 0) {
     *success = true;
     return sr(MSTATUS);
