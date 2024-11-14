@@ -88,7 +88,7 @@ static struct rule
     {"<", TK_L},                            // less
     {"!=", TK_NOTEQ},                       // not equal
     {"&&", TK_LAND},                        // logical and
-    {"\\$[msu][a-zA-Z0-9]+", TK_CSR},  // CSR (Control and Status Register)
+    {"\\$[m][a-zA-Z0-9]+", TK_CSR},  // CSR (Control and Status Register)
     {"\\$[$a-zA-Z0-9][a-zA-Z0-9]", TK_REG}, // register
 };
 
