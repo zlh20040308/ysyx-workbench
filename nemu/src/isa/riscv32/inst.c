@@ -114,9 +114,12 @@ enum {
 
 static word_t _ecall(word_t a7, vaddr_t epc) {
   word_t NO;
+  csr_mstatus_t mstatus = {.packed = CSRs(MSTATUS)};
+  mstatus.mpie = mstatus.mie;
+  CSRs(MSTATUS) = mstatus.packed;
   switch (a7) {
   default:
-    NO = 0x1800;
+    NO = 0x0000000b;
     break;
   }
   return isa_raise_intr(NO, epc);

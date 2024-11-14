@@ -35,7 +35,6 @@ void isa_reg_display() {
   printf("%s = 0x%08x\n", csr_name(MTVEC), sr(MTVEC));
   printf("%s = 0x%08x\n", csr_name(MEPC), sr(MEPC));
   printf("%s = 0x%08x\n", csr_name(MCAUSE), sr(MCAUSE));
-
 }
 
 word_t isa_reg_str2val(const char *s, bool *success) {
@@ -46,6 +45,30 @@ word_t isa_reg_str2val(const char *s, bool *success) {
       *success = true;
       return gpr(i);
     }
+  }
+  *success = false;
+  Log("success = %d", *success);
+  return 0;
+}
+
+
+word_t isa_csr_str2val(const char *s, bool *success) {
+  Log("input_csr = %s", s);
+  if (strcmp(csr_name(MSTATUS), s + 1) == 0) {
+    *success = true;
+    return sr(MSTATUS);
+  }
+  if (strcmp(csr_name(MTVEC), s + 1) == 0) {
+    *success = true;
+    return sr(MTVEC);
+  }
+  if (strcmp(csr_name(MEPC), s + 1) == 0) {
+    *success = true;
+    return sr(MEPC);
+  }
+  if (strcmp(csr_name(MCAUSE), s + 1) == 0) {
+    *success = true;
+    return sr(MCAUSE);
   }
   *success = false;
   Log("success = %d", *success);
