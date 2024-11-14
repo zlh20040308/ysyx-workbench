@@ -14,9 +14,10 @@
  ***************************************************************************************/
 
 #include "sdb.h"
+#include <isa.h>
 
 #define NR_WP 32
-
+extern CPU_state cpu;
 typedef struct watchpoint
 {
   int NO;
@@ -102,6 +103,7 @@ bool traverse_watchpoints_and_show_changes()
       if (val != temp->oldvalue)
       {
         changed = true;
+        printf("NOW PC = %d\n", cpu.pc);
         printf("Watchpoint %d: %s\n", temp->NO, temp->EXPR);
         printf("Old value: 0x%x\n", temp->oldvalue);
         printf("New value: 0x%x\n", val);
