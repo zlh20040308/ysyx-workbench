@@ -15,6 +15,7 @@
  ***************************************************************************************/
 #pragma once
 #include <common.h>
+#include "utils.h"
 
 #include "../../obj_dir/VTop.h"
 #include "verilated.h"
@@ -30,12 +31,6 @@ typedef struct {
 } rtl_CPU_State;
 
 extern rtl_CPU_State cpu;
-
-typedef struct {
-  int state;
-  word_t halt_pc;
-  uint32_t halt_ret;
-} NPCState;
 
 extern NPCState npc_state;
 
