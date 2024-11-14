@@ -103,7 +103,7 @@ bool traverse_watchpoints_and_show_changes()
       if (val != temp->oldvalue)
       {
         changed = true;
-        printf("NOW PC = %d\n", cpu.pc);
+        printf("NOW PC = "FMT_WORD"\n", cpu.pc);
         printf("Watchpoint %d: %s\n", temp->NO, temp->EXPR);
         printf("Old value: 0x%x\n", temp->oldvalue);
         printf("New value: 0x%x\n", val);
