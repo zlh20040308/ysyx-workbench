@@ -89,7 +89,7 @@ static struct rule
     {"!=", TK_NOTEQ},                       // not equal
     {"&&", TK_LAND},                        // logical and
     {"\\$[$a-zA-Z0-9][a-zA-Z0-9]", TK_REG}, // register
-    {"\\$[msu][a-z][a-z0-9]*", TK_CSR},  // CSR (Control and Status Register)
+    {"\\$[$msu][a-z][a-z0-9]*", TK_CSR},  // CSR (Control and Status Register)
 };
 
 #define NR_REGEX ARRLEN(rules)
