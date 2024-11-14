@@ -15,7 +15,7 @@
  ***************************************************************************************/
 
 #define CONFIG_PLATFORM_VERILATOR
-// #define CONFIG_PLATFORM_IVERILOG
+//#define CONFIG_PLATFORM_IVERILOG
 
 #include <common.h>
 #include <device.h>
@@ -33,18 +33,19 @@ bool is_exit_status_bad() {
 }
 
 int main(int argc, char *argv[]) {
-  Log("Welcome to NPC-SIM!\n");
-  Log("[npc-sim] initializing memory & devices\n");
+  printf("Welcome to NPC-SIM!\n");
+  printf("[npc-sim] initializing memory & devices\n");
   init_mem();
   init_device();
-  Log("[npc-sim] initializing monitor\n");
+  printf("[npc-sim] initializing monitor\n");
   init_monitor(argc, argv);
-  Log("[npc-sim] initializing verilator-sim\n");
+  printf("[npc-sim] initializing verilator-sim\n");
   sim_init();
-  Log("[npc-sim] entering sdb main loop\n");
+  printf("[npc-sim] entering sdb main loop\n");
   sdb_main_loop();
-  Log("[npc-sim] leaving sdb main loop\n");
+  printf("[npc-sim] leaving sdb main loop\n");
   sim_exit();
-  Log("Goodbye\n");
+  printf("Goodbye\n");
+
   return is_exit_status_bad();
 }

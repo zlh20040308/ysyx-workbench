@@ -24,9 +24,6 @@
 bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
   bool success = true;
   for (size_t i = 0; i < MUXDEF(CONFIG_RVE, 16, 32); i++) {
-    // if (i == 6) {
-    //   continue;
-    // }
     if (!difftest_check_reg(reg_name(i), pc, ref_r->gpr[i], gpr(i))) {
       success = false;
       break;

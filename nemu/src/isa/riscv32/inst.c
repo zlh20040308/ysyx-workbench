@@ -113,11 +113,10 @@ enum {
   } while (0)
 
 static word_t _ecall(word_t a7, vaddr_t epc) {
-  CSRs(MSTATUS) = 0x1800;
   word_t NO;
   switch (a7) {
   default:
-    NO = 0x0000000b;
+    NO = 0x1800;
     break;
   }
   return isa_raise_intr(NO, epc);
