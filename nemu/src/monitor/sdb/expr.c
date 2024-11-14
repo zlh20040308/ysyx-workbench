@@ -22,8 +22,7 @@
 
 #define EXPR_LENGTH 200
 
-enum
-{
+enum {
   TK_NOTYPE = 256,
   TK_EQ,
   TK_DEC,
@@ -36,6 +35,7 @@ enum
   TK_G,
   TK_LT,
   TK_L,
+  TK_CSR,
   // TK_NEG,
 
   /* TODO: Add more token types */
@@ -73,21 +73,23 @@ static struct rule
     {" +", TK_NOTYPE}, // spaces
     {"\\+", '+'},      // plus
     {"==", TK_EQ},     // equal
-    // {"-[ ]*[0-9]+", TK_NEG},       // negative numbers with optional spaces (负数)
-    {"\\-", '-'},                  // minus
-    {"\\*", '*'},                  // multiply or dereference
-    {"\\/", '/'},                  // divide
-    {"0[xX][0-9a-fA-F]+", TK_HEX}, // hexadecimal numbers
-    {"[0-9]+", TK_DEC},            // decimal numbers
-    {"\\(", '('},                  // left parenthesis
-    {"\\)", ')'},                  // right parenthesis
-    {">=", TK_GT},                 // greater than
-    {">", TK_G},                   // greater
-    {"<=", TK_LT},                 // less than
-    {"<", TK_L},                   // less
-    {"!=", TK_NOTEQ},              // not equal
-    {"&&", TK_LAND},               // logical and
-    {"\\$[$a-zA-Z0-9][a-zA-Z0-9]", TK_REG},  // register
+    // {"-[ ]*[0-9]+", TK_NEG},       // negative numbers with optional spaces
+    // (负数)
+    {"\\-", '-'},                           // minus
+    {"\\*", '*'},                           // multiply or dereference
+    {"\\/", '/'},                           // divide
+    {"0[xX][0-9a-fA-F]+", TK_HEX},          // hexadecimal numbers
+    {"[0-9]+", TK_DEC},                     // decimal numbers
+    {"\\(", '('},                           // left parenthesis
+    {"\\)", ')'},                           // right parenthesis
+    {">=", TK_GT},                          // greater than
+    {">", TK_G},                            // greater
+    {"<=", TK_LT},                          // less than
+    {"<", TK_L},                            // less
+    {"!=", TK_NOTEQ},                       // not equal
+    {"&&", TK_LAND},                        // logical and
+    {"\\$[$a-zA-Z0-9][a-zA-Z0-9]", TK_REG}, // register
+    {"\\$[msu][a-z][a-z0-9]*", TK_CSR},  // CSR (Control and Status Register)
 };
 
 #define NR_REGEX ARRLEN(rules)
@@ -174,6 +176,9 @@ static bool make_token(char *e)
         case TK_REG:
           tokens[nr_token].type = TK_REG;
           break;
+        case TK_CSR:
+          tokens[nr_token].type = TK_CSR;
+          break;
         case TK_LAND:
           tokens[nr_token].type = TK_LAND;
           break;
@@ -241,6 +246,8 @@ static const char *token_to_str(int type)
     return "LAND";
   case TK_REG:
     return "REG";
+  case TK_CSR:
+    return "CSR";
   case TK_GT:
     return "GT";
   case TK_G:
@@ -319,7 +326,7 @@ static word_t eval(int p, int q, bool *success)
      * For now this token should be a number.
      * Return the value of the number.
      */
-    if (tokens[p].type == TK_DEC || tokens[p].type == TK_HEX || tokens[p].type == TK_REG)
+    if (tokens[p].type == TK_DEC || tokens[p].type == TK_HEX || tokens[p].type == TK_REG || tokens[p].type == TK_CSR)
     {
       char *endptr = "";
       word_t num;
@@ -332,6 +339,7 @@ static word_t eval(int p, int q, bool *success)
       case TK_HEX:
         num = strtoul(tokens[p].str, &endptr, 16);
         break;
+      case TK_CSR:
       case TK_REG:
         num = isa_reg_str2val(tokens[p].str, success);
         Log("num = %d, reg = %s success = %d", num, tokens[p].str, *success);
