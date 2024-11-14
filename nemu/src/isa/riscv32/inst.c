@@ -116,7 +116,7 @@ static word_t _ecall(word_t a7, vaddr_t epc) {
   word_t NO;
   switch (a7) {
   default:
-    NO = 0x1800;
+    NO = 0x0000000b;
     break;
   }
   return isa_raise_intr(NO, epc);
