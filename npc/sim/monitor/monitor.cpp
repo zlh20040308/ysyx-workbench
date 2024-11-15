@@ -18,8 +18,9 @@
 #include <mem.h>
 #include <monitor.h>
 
-//#define INSERT_NOP_INSTR
+// #define INSERT_NOP_INSTR
 
+extern char *elf_file;
 char *image_path = NULL;
 char *diff_so_file = NULL;
 
@@ -74,6 +75,11 @@ void init_monitor(int argc, char *argv[]) {
          "CONFIG_DIFFTEST macro in difftest.h\n");
 #endif
 
+#ifdef CONFIG_FTRACE
+  assert(elf_file != NULL);
+  parse_elf();
+#endif
+
   printf("[monitor] monitor initialized\n");
 
   return;
@@ -81,10 +87,12 @@ void init_monitor(int argc, char *argv[]) {
 
 void parse_args(int argc, char *argv[]) {
   const struct option table[] = {
-      {"batch", no_argument, NULL, 'b'},
-      {"diff", required_argument, NULL, 'd'},
-      {"help", no_argument, NULL, 'h'},
-      {"img", required_argument, NULL, 'i'},
+    {"batch", no_argument, NULL, 'b'},
+    {"diff", required_argument, NULL, 'd'},
+    {"help", no_argument, NULL, 'h'},
+    {"img", required_argument, NULL, 'i'},
+    {"elf", optional_argument, NULL, 'e'},
+    {0, 0, NULL, 0},
   };
   int o;
   while ((o = getopt_long(argc, argv, "-bhd:i:", table, NULL)) != -1) {
@@ -102,6 +110,9 @@ void parse_args(int argc, char *argv[]) {
       image_path = optarg;
       printf("image_path = \"%s\"\n", image_path);
       break;
+    case 'e':
+      elf_file = optarg;
+      break; // 当命令行指定 -e 参数，将全局静态变量 elf_file 设置成 镜像文件路径
     default:
       printf("Usage: %s [OPTION...] IMAGE [args]\n\n", argv[0]);
       printf("\t-b,--batch              run with batch mode\n");

@@ -25,10 +25,12 @@ BIN				:= $(OBJ_DIR)/V$(TOP_NAME)
 
 IMG				?= ../am-kernels/tests/cpu-tests/build/wanshu-riscv32e-npc.bin
 
-#RUN_FLAGS		:= --diff=${DIFFTEST}
+ARGS ?=
+
 RUN_FLAGS		+= --img=${IMG} --diff=${DIFFTEST}
-RUN_FLAGS		+= -b
-NPC_EXEC		:= ${BIN} ${RUN_FLAGS}
+# RUN_FLAGS		+= -b
+NPC_EXEC		:= ${BIN} $(ARGS) ${RUN_FLAGS}
+NEMU_EXEC       += -e$(ELF)
 
 .PHONY:run gdb wave clean
 

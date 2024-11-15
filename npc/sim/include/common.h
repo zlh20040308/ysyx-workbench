@@ -42,6 +42,8 @@ typedef uint32_t word_t;
 #define NPC_ABORT 3
 #define NPC_QUIT 4
 
+#define CONFIG_FTRACE
+
 uint64_t get_time();
 
 
