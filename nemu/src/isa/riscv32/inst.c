@@ -128,6 +128,7 @@ static word_t _ecall(word_t a7, vaddr_t epc) {
 }
 
 static void write_to_csr(word_t csr_id, word_t data) {
+  Log("in csr data = %x", data);
   switch (csr_id) {
   case MSTATUS:
     // CSRs(csr_id) = data & 0x80207888;
