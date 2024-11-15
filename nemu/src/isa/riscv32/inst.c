@@ -289,6 +289,7 @@ static int decode_exec(Decode *s) {
   INSTPAT("??????? ????? ????? 010 ????? 11100 11", csrrs, Z,
           word_t t = CSRs(csr);
           Log("t = %x", t);
+          Log("scr1 = %x", src1);
           write_to_csr(csr, t | src1); R(rd) = t;);
 
   INSTPAT("0011000 00010 00000 000 00000 11100 11", mret, N,
