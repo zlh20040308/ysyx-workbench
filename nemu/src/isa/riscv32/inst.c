@@ -128,9 +128,9 @@ static word_t _ecall(word_t a7, vaddr_t epc) {
 static void write_to_csr(word_t csr_id, word_t data) {
   switch (csr_id) {
   case MSTATUS:
-    // CSRs(csr_id) = data & 0x80207888;
-    // CSRs(csr_id) = CSRs(csr_id) | 0x1800;
-    CSRs(csr_id) = data & 0x8021F888;
+    CSRs(csr_id) = data & 0x80207888;
+    CSRs(csr_id) = CSRs(csr_id) | 0x1000;
+    // CSRs(csr_id) = data & 0x8021F888;
     break;
   case MTVEC:
   case MCAUSE:
