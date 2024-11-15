@@ -128,11 +128,9 @@ static word_t _ecall(word_t a7, vaddr_t epc) {
 }
 
 static void write_to_csr(word_t csr_id, word_t data) {
-  Log("in csr data = %x", data);
   switch (csr_id) {
   case MSTATUS:
     CSRs(csr_id) = (data & 0x80207888) | CSRs(csr_id);
-    // CSRs(csr_id) = CSRs(csr_id) | 0x1800;
     break;
   case MTVEC:
   case MCAUSE:
@@ -143,7 +141,6 @@ static void write_to_csr(word_t csr_id, word_t data) {
     panic("Unrecognized csr!");
     break;
   }
-  Log("back csr MSTATUS = %x", CSRs(csr_id));
 }
 
 static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2,
@@ -289,8 +286,6 @@ static int decode_exec(Decode *s) {
           write_to_csr(csr, src1); R(rd) = t;);
   INSTPAT("??????? ????? ????? 010 ????? 11100 11", csrrs, Z,
           word_t t = CSRs(csr);
-          Log("t = %x", t);
-          Log("scr1 = %x", src1);
           write_to_csr(csr, t | src1); R(rd) = t;);
 
   INSTPAT("0011000 00010 00000 000 00000 11100 11", mret, N,
