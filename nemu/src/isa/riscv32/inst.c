@@ -144,6 +144,7 @@ static void write_to_csr(word_t csr_id, word_t data) {
     panic("Unrecognized csr!");
     break;
   }
+  Log("back csr MSTATUS = %x", CSRs(csr_id));
 }
 
 static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2,
