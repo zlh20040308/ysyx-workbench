@@ -131,9 +131,8 @@ static void write_to_csr(word_t csr_id, word_t data) {
   Log("in csr data = %x", data);
   switch (csr_id) {
   case MSTATUS:
-    // CSRs(csr_id) = data & 0x80207888;
+    CSRs(csr_id) = (data & 0x80207888) | CSRs(csr_id);
     // CSRs(csr_id) = CSRs(csr_id) | 0x1800;
-    CSRs(csr_id) = data & 0x80206088;
     break;
   case MTVEC:
   case MCAUSE:
