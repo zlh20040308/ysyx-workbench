@@ -129,6 +129,7 @@ static void write_to_csr(word_t csr_id, word_t data) {
   switch (csr_id) {
   case MSTATUS:
     CSRs(csr_id) = data & 0x80207888;
+    CSRs(csr_id) = CSRs(csr_id) | 0x1800;
     break;
   case MTVEC:
   case MCAUSE:
@@ -320,7 +321,7 @@ static int decode_exec(Decode *s) {
 
   R(0) = 0; // reset $zero to 0
 
-  // CSRs(MSTATUS) = CSRs(MSTATUS) | 0x1800;
+  
 
 #ifdef CONFIG_FTRACE_COND
   const char *funct_name = "???";
