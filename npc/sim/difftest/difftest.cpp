@@ -56,9 +56,16 @@ void init_difftest(char *ref_so_file, word_t img_size) {
   Log("[difftest] initialized PC = 0x%x", cpu.pc);
 
   ref_difftest_init(1234);
+  Log("[difftest] initialized PC = 0x%x", cpu.pc);
+  Log("[difftest] initialized PC = 0x%x", cpu.pc);
+
   ref_difftest_memcpy(MEM_START, guest_to_host(MEM_START), img_size,
                       DIFFTEST_TO_REF);
+  Log("[difftest] initialized PC = 0x%x", cpu.pc);
+  
   ref_difftest_regcpy(&cpu, DIFFTEST_TO_REF);
+  Log("[difftest] initialized PC = 0x%x", cpu.pc);
+
 
 #else
   Log("[difftest] not enabled\n");
