@@ -35,6 +35,8 @@ __EXPORT void difftest_regcpy(void *dut, bool direction) {
   if (direction == DIFFTEST_TO_REF) {
     Log("difftest_regcpy cpu ccc pc = %d", cpu.pc);
     Log("difftest_regcpy cpu _dut pc = %d", _dut->pc);
+    Log("difftest_regcpy cpu _dut pc = %p", _dut);
+
     
 
     for (int i = 0; i < 16; i = i + 1) {

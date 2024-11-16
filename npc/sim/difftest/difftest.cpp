@@ -57,7 +57,8 @@ void init_difftest(char *ref_so_file, word_t img_size) {
 
   ref_difftest_init(1234);
   Log("[difftest] initialized PC = 0x%x", cpu.pc);
-  Log("[difftest] initialized PC = 0x%x", cpu.pc);
+  Log("difftest_regcpy cpu _dut pc = %p", &cpu);
+
 
   ref_difftest_memcpy(MEM_START, guest_to_host(MEM_START), img_size,
                       DIFFTEST_TO_REF);
