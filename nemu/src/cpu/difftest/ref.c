@@ -26,8 +26,6 @@ __EXPORT void difftest_memcpy(paddr_t addr, void *buf, size_t n,
   } else {
     assert(0);
   }
-  Log("difftest_memcpy cpu pc = %d", cpu.pc);
-
 }
 
 __EXPORT void difftest_regcpy(void *dut, bool direction) {
