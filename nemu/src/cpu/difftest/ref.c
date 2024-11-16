@@ -58,6 +58,7 @@ __EXPORT void difftest_regcpy(void *dut, bool direction) {
 
 __EXPORT void difftest_exec(uint64_t n) {
   Log("hahahaha");
+  Log("cpu pc = %d", cpu.pc);
   cpu_exec(n);
   Log("hahahaha");
 }
