@@ -33,12 +33,6 @@ __EXPORT void difftest_memcpy(paddr_t addr, void *buf, size_t n,
 __EXPORT void difftest_regcpy(void *dut, bool direction) {
   CPU_state *_dut = (CPU_state *)dut;
   if (direction == DIFFTEST_TO_REF) {
-    Log("difftest_regcpy cpu ccc pc = %d", cpu.pc);
-    Log("difftest_regcpy cpu _dut pc = %d", _dut->pc);
-    Log("difftest_regcpy cpu _dut pc = %p", _dut);
-
-    
-
     for (int i = 0; i < 16; i = i + 1) {
       cpu.gpr[i] = _dut->gpr[i];
     }
@@ -48,8 +42,6 @@ __EXPORT void difftest_regcpy(void *dut, bool direction) {
     cpu.sr[MEPC] = _dut->sr[MEPC];
     cpu.pc = _dut->pc;
   } else {
-  Log("difftest_regcpy zzz cpu pc = %d", cpu.pc);
-
     for (int i = 0; i < 16; i = i + 1) {
       _dut->gpr[i] = cpu.gpr[i];
       // Log("gpr x%d is 0x%lx", i, cpu.gpr[i]);
@@ -64,26 +56,18 @@ __EXPORT void difftest_regcpy(void *dut, bool direction) {
     // Log("csr0x342 is 0x%lx", cpu.csr[0x342]);
     _dut->pc = cpu.pc;
   }
-  Log("difftest_regcpy cpu pc = %d", cpu.pc);
-
 }
 
 __EXPORT void difftest_exec(uint64_t n) {
-  Log("hahahaha");
-  Log("cpu pc = %d", cpu.pc);
   cpu_exec(n);
-  Log("hahahaha");
 }
 
 __EXPORT void difftest_raise_intr(word_t NO) { assert(0); }
 
 __EXPORT void difftest_init(int port) {
   void init_mem();
-  Log("nemu as ref init mem");
   init_mem();
   /* Perform ISA dependent initialization. */
-  Log("nemu as ref init isa");
   init_isa();
   isa_reg_display();
-  Log("PC = %x", cpu.pc);
 }

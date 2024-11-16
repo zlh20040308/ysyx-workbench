@@ -5,7 +5,7 @@
 #include "verilated.h"
 #include "verilated_vcd_c.h"
 
-#define NR_GPRs 16
+#define NR_GPRs 32
 #define NR_CSRs 4096
 
 typedef struct {
