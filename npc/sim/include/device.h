@@ -1,6 +1,7 @@
 #pragma once
 #include <common.h>
 #include <difftest.h>
+#include <verilator-sim.h>
 
 #define COFIG_DEVICES
 
@@ -14,6 +15,8 @@
 #define CONFIG_VGA_CTL_MMIO 0xa0000100
 #define CONFIG_FB_ADDR 0xa1000000
 #endif
+
+
 
 typedef void (*io_callback_t)(uint32_t, int, bool);
 uint8_t *new_space(int size);
@@ -38,6 +41,7 @@ static inline int find_mapid_by_addr(IOMap *maps, int size, word_t addr) {
   // printf("[find_mapid_by_addr] paddr is 0x%8x\n", addr);
   for (i = 0; i < size; i++) {
     if (map_inside(maps + i, addr)) {
+      Log("addr = %x, pc = %x, ", addr, cpu.pc);
       difftest_skip_ref();
       return i;
     }

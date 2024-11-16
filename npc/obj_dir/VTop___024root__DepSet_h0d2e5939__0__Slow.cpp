@@ -225,7 +225,6 @@ VL_ATTR_COLD void VTop___024root___ctor_var_reset(VTop___024root* vlSelf) {
     vlSelf->Top__DOT__memory__DOT__mem__DOT__rdata = VL_RAND_RESET_I(32);
     vlSelf->Top__DOT__memory__DOT__mem__DOT__unnamedblk1__DOT__full_mask = 0;
     vlSelf->__Vfunc_ram_read_helper__0__Vfuncout = 0;
-    vlSelf->__Vfunc_ram_read_helper__1__Vfuncout = 0;
     vlSelf->__Vtrigrprev__TOP__clock = VL_RAND_RESET_I(1);
     for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
         vlSelf->__Vm_traceActivity[__Vi0] = 0;

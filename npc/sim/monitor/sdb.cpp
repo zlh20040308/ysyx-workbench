@@ -41,6 +41,17 @@ static char *rl_gets() {
 int cmd_c(char *args) {
   while (npc_state.state == NPC_RUNNING || npc_state.state == NPC_STOP) {
     sim_one_cycle();
+    // static int step = 1;
+    // if (step-- == 0) {
+    //   display_regs();
+    //   exit(0);
+    // }
+    if (cpu.pc == 0x80036798) {
+      display_regs();
+      exit(0);
+    }
+    Log("ggggggg cpu.pc = %x", cpu.pc);
+
 #ifdef CONFIG_DIFFTEST
     difftest_one_exec();
     difftest_check_reg();

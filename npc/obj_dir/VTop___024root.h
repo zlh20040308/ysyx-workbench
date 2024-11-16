@@ -118,7 +118,6 @@ class VTop___024root final : public VerilatedModule {
         IData/*31:0*/ Top__DOT__memory__DOT__mem__DOT__rdata;
         IData/*31:0*/ Top__DOT__memory__DOT__mem__DOT__unnamedblk1__DOT__full_mask;
         IData/*31:0*/ __Vfunc_ram_read_helper__0__Vfuncout;
-        IData/*31:0*/ __Vfunc_ram_read_helper__1__Vfuncout;
         IData/*31:0*/ __VstlIterCount;
         IData/*31:0*/ __VactIterCount;
         VlUnpacked<IData/*31:0*/, 16> Top__DOT__core__DOT__RegFileInstance__DOT__regs_ext__DOT__Memory;

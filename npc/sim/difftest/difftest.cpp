@@ -52,22 +52,9 @@ void init_difftest(char *ref_so_file, word_t img_size) {
       (void (*)(int))dlsym(handle, "difftest_init");
   assert(ref_difftest_init);
 
-  cpu.pc = 0x80000000;
-  Log("[difftest] initialized PC = 0x%x", cpu.pc);
-
   ref_difftest_init(1234);
-  Log("[difftest] initialized PC = 0x%x", cpu.pc);
-  Log("difftest_regcpy cpu _dut pc = %p", &cpu);
-
-
   ref_difftest_memcpy(MEM_START, guest_to_host(MEM_START), img_size,
                       DIFFTEST_TO_REF);
-  Log("[difftest] initialized PC = 0x%x", cpu.pc);
-  
-  ref_difftest_regcpy(&cpu, DIFFTEST_TO_REF);
-  Log("[difftest] initialized PC = 0x%x", cpu.pc);
-
-
 #else
   Log("[difftest] not enabled\n");
 #endif
@@ -82,13 +69,23 @@ void difftest_skip_ref() {
 }
 
 void difftest_one_exec() {
+  Log("cpu.pc = %x", cpu.pc);
   if (is_skip_ref) {
+    Log("is_skip_ref cpu.pc = %x", cpu.pc);
     ref_difftest_regcpy(&cpu, DIFFTEST_TO_REF);
     is_skip_ref = false;
     assert(!is_skip_ref);
-    return;
+    // return;
   }
+  rtl_CPU_State ref;
+  ref_difftest_regcpy(&ref, DIFFTEST_TO_DUT);
+  Log("ref.pc = %x", ref.pc);
   ref_difftest_exec(1);
+  // rtl_CPU_State ref;
+  // ref_difftest_regcpy(&ref, DIFFTEST_TO_DUT);
+  // Log("ref.pc = %x", ref.pc);
+  // Log("difftest_check_reg() = %d", difftest_check_reg());
+
   return;
 }
 

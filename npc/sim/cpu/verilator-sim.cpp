@@ -33,12 +33,10 @@ word_t time_of_exec;
 void reset() {
   top->reset = 1;
   top->eval();
-  int loop = 20;
-  while (loop) {
-    top->clock ^= 1;
-    top->eval();
-    loop--;
-  }
+  top->clock ^= 1;
+  top->eval();
+  top->clock ^= 1;
+  top->eval();
   top->reset = 0;
   top->eval();
 }
@@ -68,7 +66,7 @@ void sim_init() {
   reset();
   assert(top->io_debug_gpr[0] == 0);
   assert(top->io_debug_mstatus == 0x1800);
-
+  assert(top->io_debug_pc == 0x80000000);
 
   printf("[simulation] NPC has been resetted\n");
   return;
@@ -100,6 +98,9 @@ void sim_one_cycle() {
 
 
   get_regs(); // used as print registers or difftest
+
+  Log("top->io_debug_pc = %x", top->io_debug_pc);
+  Log("cpu.pc = %x", cpu.pc);
   // display_regs();
 
   if (top->io_ebreak == 1) {

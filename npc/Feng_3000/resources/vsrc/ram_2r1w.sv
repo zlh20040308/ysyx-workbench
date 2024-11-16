@@ -28,7 +28,7 @@ assign imem_inst = ram_read_helper(imem_addr);
 reg [31:0] rdata;
 assign dmem_rdata = rdata;
 
-always @(*) begin
+always @(posedge clk) begin
   int full_mask = 32'b0; // 预先给 full_mask 一个默认值，以防止 latch 推断
   if (valid) begin // 有读写请求时
     rdata = ram_read_helper(dmem_addr);
