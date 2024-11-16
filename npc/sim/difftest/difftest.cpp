@@ -114,7 +114,7 @@ bool difftest_check_reg() {
     return false;
   }
 
-  for (int i = 0; i < NR_GPRs; i = i + 1) {
+  for (int i = 0; i < NR_GPRs; ++i) {
     if (cpu.gpr[i] != ref.gpr[i]) {
       printf("[difftest] ERROR: GPR[%d] is different at PC 0x%x, ref is 0x%x, "
              "dut is 0x%x\n",

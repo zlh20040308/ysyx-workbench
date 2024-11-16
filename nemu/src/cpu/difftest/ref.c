@@ -68,4 +68,5 @@ __EXPORT void difftest_init(int port) {
   Log("nemu as ref init isa");
   init_isa();
   isa_reg_display();
+  Log("PC = %x", cpu.pc);
 }
