@@ -67,4 +67,5 @@ __EXPORT void difftest_init(int port) {
   /* Perform ISA dependent initialization. */
   Log("nemu as ref init isa");
   init_isa();
+  isa_reg_display();
 }
