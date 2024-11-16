@@ -35,12 +35,31 @@ class Core extends Module {
 
   /* ---------- PC ---------- */
   val pc_plus4 = pc + 4.U
+  // val pc_csr   = WireInit(0.U(WORD_LEN.W))
+
+  // when (CUInstance.io.CSRCmd === CSRCmdEnum.CSR_Ecall) {
+  //   pc_csr := CSRInstance.io.mtvec
+  // }.elsewhen(CUInstance.io.CSRCmd === CSRCmdEnum.CSR_Mret) {
+  //   pc_csr := CSRInstance.io.mepc
+  // }
+
+  val pc_csr = MuxCase(
+    0.U,
+    Array(
+      (CUInstance.io.CSRCmd === CSRCmdEnum.CSR_Ecall) -> CSRInstance.io.mtvec,
+      (CUInstance.io.CSRCmd === CSRCmdEnum.CSR_Mret)  -> CSRInstance.io.mepc
+    ).toIndexedSeq
+  )
+
   switch(CUInstance.io.PCSel) {
     is(PCSelEnum.PC_4) {
       pc := pc_plus4
     }
     is(PCSelEnum.PC_ALU) {
       pc := JPCGenInstance.io.pc_alu
+    }
+    is(PCSelEnum.PC_CSR) {
+      pc := pc_csr
     }
   }
 
@@ -139,9 +158,12 @@ class Core extends Module {
   io.ebreak := CUInstance.io.Ebreak
 
   /* ---------- DebugPort ---------- */
-  io.debug.pc    := pc
-  io.debug.PCSel := CUInstance.io.PCSel
-  io.debug.gpr   := RegFileInstance.io.gpr
-  io.debug.alu_op   := CUInstance.io.ALUSel
-
+  io.debug.pc      := pc
+  io.debug.PCSel   := CUInstance.io.PCSel
+  io.debug.gpr     := RegFileInstance.io.gpr
+  io.debug.alu_op  := CUInstance.io.ALUSel
+  io.debug.mtvec   := CSRInstance.io.mtvec
+  io.debug.mepc    := CSRInstance.io.mepc
+  io.debug.mcause  := CSRInstance.io.mcause
+  io.debug.mstatus := CSRInstance.io.mstatus
 }

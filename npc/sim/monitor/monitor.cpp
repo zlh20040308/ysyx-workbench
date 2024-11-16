@@ -24,6 +24,8 @@ extern char *elf_file;
 char *image_path = NULL;
 char *diff_so_file = NULL;
 
+// extern long parse_elf();
+
 uint32_t default_img[] = {
     // need to support both RV32 and RV64
     // this image add some nop instruction so it will not cause structural
@@ -77,7 +79,7 @@ void init_monitor(int argc, char *argv[]) {
 
 #ifdef CONFIG_FTRACE
   assert(elf_file != NULL);
-  parse_elf();
+  // parse_elf();
 #endif
 
   printf("[monitor] monitor initialized\n");
@@ -95,7 +97,7 @@ void parse_args(int argc, char *argv[]) {
     {0, 0, NULL, 0},
   };
   int o;
-  while ((o = getopt_long(argc, argv, "-bhd:i:", table, NULL)) != -1) {
+  while ((o = getopt_long(argc, argv, "-bhd:i:e::", table, NULL)) != -1) {
     switch (o) {
     case 'b':
       sdb_set_batch_mode();
@@ -118,6 +120,7 @@ void parse_args(int argc, char *argv[]) {
       printf("\t-b,--batch              run with batch mode\n");
       printf("\t-d,--diff=REF_SO        run DiffTest with reference REF_SO\n");
       printf("\t-i,--image=IMAGE_PATH   run NPC with image at IMAGE_PATH\n");
+      printf("\t-e,--elf=ELF_PATH       run NPC with elf file at ELF_PATH\n");
       printf("\n");
       exit(0);
     }

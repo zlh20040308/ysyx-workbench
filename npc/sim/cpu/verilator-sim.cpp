@@ -14,7 +14,9 @@
  * See the Mulan PSL v2 for more details.
  ***************************************************************************************/
 
+#include <cassert>
 #include <common.h>
+#include <cstdio>
 #include <device.h>
 #include <difftest.h>
 #include <math.h>
@@ -79,7 +81,8 @@ void sim_init() {
   printf("[simulation] simulation initialized, now reset NPC\n");
 
   reset();
-  top->eval();
+  assert(top->io_debug_gpr[0] == 0);
+  assert(top->io_debug_mstatus == 0x1800);
 
   printf("[simulation] NPC has been resetted\n");
   return;

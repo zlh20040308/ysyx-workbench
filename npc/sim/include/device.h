@@ -15,7 +15,7 @@
  ***************************************************************************************/
 #pragma once
 #include <common.h>
-//#include<difftest.h>
+#include <difftest.h>
 
 #define COFIG_DEVICES
 
@@ -53,7 +53,7 @@ static inline int find_mapid_by_addr(IOMap *maps, int size, word_t addr) {
   // printf("[find_mapid_by_addr] paddr is 0x%8x\n", addr);
   for (i = 0; i < size; i++) {
     if (map_inside(maps + i, addr)) {
-      // difftest_skip_ref();
+      difftest_skip_ref();
       return i;
     }
   }

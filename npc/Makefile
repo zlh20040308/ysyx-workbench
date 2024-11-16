@@ -30,7 +30,7 @@ ARGS ?=
 RUN_FLAGS		+= --img=${IMG} --diff=${DIFFTEST}
 # RUN_FLAGS		+= -b
 NPC_EXEC		:= ${BIN} $(ARGS) ${RUN_FLAGS}
-NEMU_EXEC       += -e$(ELF)
+NPC_EXEC       += -e$(ELF)
 
 .PHONY:run gdb wave clean
 

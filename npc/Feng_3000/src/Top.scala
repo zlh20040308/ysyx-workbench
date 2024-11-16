@@ -9,6 +9,10 @@ class DebugPort extends Bundle {
   val PCSel = Output(PCSelEnum())
   val alu_op = Output(AluEnum())
   val gpr = Output(Vec(16, UInt(WORD_LEN.W)))
+  val mtvec   = Output(UInt(WORD_LEN.W))
+  val mepc    = Output(UInt(WORD_LEN.W))
+  val mcause  = Output(UInt(WORD_LEN.W))
+  val mstatus = Output(UInt(WORD_LEN.W))
 }
 
 class Top extends Module {
