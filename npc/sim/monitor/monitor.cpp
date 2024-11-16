@@ -1,18 +1,3 @@
-/***************************************************************************************
- * Copyright (c) 2023 Yusong Yan, Beijing 101 High School
- * Copyright (c) 2023 Yusong Yan, University of Washington - Seattle
- *
- * YSYX-NPC-SIM is licensed under Mulan PSL v2.
- * You can use this software according to the terms and conditions of the Mulan
- *PSL v2. You may obtain a copy of Mulan PSL v2 at:
- *          http://license.coscl.org.cn/MulanPSL2
- *
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY
- *KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
- *NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
- *
- * See the Mulan PSL v2 for more details.
- ***************************************************************************************/
 
 #include <difftest.h>
 #include <mem.h>
@@ -63,19 +48,19 @@ uint32_t default_img[] = {
 word_t img_size = -1;
 
 void init_monitor(int argc, char *argv[]) {
-  printf("[monitor] parse args\n");
+  Log("[monitor] parse args");
   parse_args(argc, argv);
-  printf("[monitor] loading images\n");
+  Log("[monitor] loading images");
   load_image();
 
 #ifdef CONFIG_DIFFTEST
-  printf("[monitor] difftest enabled\n");
+  Log("[monitor] difftest enabled");
   assert(diff_so_file != NULL);
   assert(img_size > 0);
-  difftest_init(diff_so_file, img_size);
+  init_difftest(diff_so_file, img_size);
 #else
-  printf("[monitor] difftest not enabled, to enable difftest, unannotate the "
-         "CONFIG_DIFFTEST macro in difftest.h\n");
+  Log("[monitor] difftest not enabled, to enable difftest, unannotate the "
+         "CONFIG_DIFFTEST macro in difftest.h");
 #endif
 
 #ifdef CONFIG_FTRACE
@@ -83,7 +68,7 @@ void init_monitor(int argc, char *argv[]) {
   // parse_elf();
 #endif
 
-  printf("[monitor] monitor initialized\n");
+  Log("[monitor] monitor initialized");
 
   return;
 }
@@ -106,12 +91,12 @@ void parse_args(int argc, char *argv[]) {
     case 'd':
       assert(optarg != NULL);
       diff_so_file = optarg;
-      printf("diff_so_file = \"%s\"\n", diff_so_file);
+      Log("diff_so_file = \"%s\"", diff_so_file);
       break;
     case 'i':
       assert(optarg != NULL);
       image_path = optarg;
-      printf("image_path = \"%s\"\n", image_path);
+      Log("image_path = \"%s\"", image_path);
       break;
     case 'e':
       elf_file = optarg;
@@ -152,7 +137,7 @@ void load_image() {
   img_size = image_size;
   assert(img_size == image_size);
 
-  printf("[monitor] image %s with size %d\n", image_path, image_size);
+  Log("[monitor] image %s with size %d", image_path, image_size);
 
   fseek(fp, 0, SEEK_SET);
   int fread_ret = fread(guest_to_host(MEM_START), image_size, 1, fp);

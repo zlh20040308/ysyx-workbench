@@ -1,18 +1,3 @@
-/***************************************************************************************
- * Copyright (c) 2023 Yusong Yan, Beijing 101 High School
- * Copyright (c) 2023 Yusong Yan, University of Washington - Seattle
- *
- * YSYX-NPC-SIM is licensed under Mulan PSL v2.
- * You can use this software according to the terms and conditions of the Mulan
- *PSL v2. You may obtain a copy of Mulan PSL v2 at:
- *          http://license.coscl.org.cn/MulanPSL2
- *
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY
- *KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
- *NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
- *
- * See the Mulan PSL v2 for more details.
- ***************************************************************************************/
 
 #include <dlfcn.h>
 
@@ -33,12 +18,12 @@ static bool is_skip_ref = false;
 
 word_t mem_img_size = -1;
 
-void difftest_init(char *ref_so_file, word_t img_size) {
+void init_difftest(char *ref_so_file, word_t img_size) {
 #ifdef CONFIG_DIFFTEST
   assert(ref_so_file != NULL);
   assert(img_size >= 0);
-  printf("[difftest] initializing diifferential testing, the ref-so-file is "
-         "%s, img-size is %d\n",
+  Log("[difftest] initializing diifferential testing, the ref-so-file is "
+         "%s, img-size is %d",
          ref_so_file, img_size);
   mem_img_size = img_size;
   assert(mem_img_size >= 0);
@@ -68,7 +53,7 @@ void difftest_init(char *ref_so_file, word_t img_size) {
   assert(ref_difftest_init);
 
   cpu.pc = 0x80000000;
-  printf("[difftest] initialized PC = 0x%x\n", cpu.pc);
+  Log("[difftest] initialized PC = 0x%x", cpu.pc);
 
   ref_difftest_init(1234);
   ref_difftest_memcpy(MEM_START, guest_to_host(MEM_START), img_size,
@@ -76,7 +61,7 @@ void difftest_init(char *ref_so_file, word_t img_size) {
   ref_difftest_regcpy(&cpu, DIFFTEST_TO_REF);
 
 #else
-  printf("[difftest] not enabled\n");
+  Log("[difftest] not enabled\n");
 #endif
 
   return;
@@ -109,14 +94,14 @@ bool difftest_check_reg() {
   assert(&ref != NULL);
 
   if (cpu.pc != ref.pc) {
-    printf("[difftest] ERROR: PC is different, ref is 0x%x, dut is 0x%x\n",
+    Log("[difftest] ERROR: PC is different, ref is 0x%x, dut is 0x%x\n",
            ref.pc, cpu.pc);
     return false;
   }
 
   for (int i = 0; i < NR_GPRs; ++i) {
     if (cpu.gpr[i] != ref.gpr[i]) {
-      printf("[difftest] ERROR: GPR[%d] is different at PC 0x%x, ref is 0x%x, "
+      Log("[difftest] ERROR: GPR[%d] is different at PC 0x%x, ref is 0x%x, "
              "dut is 0x%x\n",
              i, cpu.pc, ref.gpr[i], cpu.gpr[i]);
       return false;
