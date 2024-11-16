@@ -26,6 +26,8 @@ __EXPORT void difftest_memcpy(paddr_t addr, void *buf, size_t n,
   } else {
     assert(0);
   }
+  Log("difftest_memcpy cpu pc = %d", cpu.pc);
+
 }
 
 __EXPORT void difftest_regcpy(void *dut, bool direction) {
@@ -54,6 +56,8 @@ __EXPORT void difftest_regcpy(void *dut, bool direction) {
     // Log("csr0x342 is 0x%lx", cpu.csr[0x342]);
     _dut->pc = cpu.pc;
   }
+  Log("difftest_regcpy cpu pc = %d", cpu.pc);
+
 }
 
 __EXPORT void difftest_exec(uint64_t n) {
