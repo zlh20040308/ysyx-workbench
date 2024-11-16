@@ -33,6 +33,8 @@ __EXPORT void difftest_memcpy(paddr_t addr, void *buf, size_t n,
 __EXPORT void difftest_regcpy(void *dut, bool direction) {
   CPU_state *_dut = (CPU_state *)dut;
   if (direction == DIFFTEST_TO_REF) {
+  Log("difftest_regcpy cpu pc = %d", cpu.pc);
+
     for (int i = 0; i < 16; i = i + 1) {
       cpu.gpr[i] = _dut->gpr[i];
     }
@@ -42,6 +44,8 @@ __EXPORT void difftest_regcpy(void *dut, bool direction) {
     cpu.sr[MEPC] = _dut->sr[MEPC];
     cpu.pc = _dut->pc;
   } else {
+  Log("difftest_regcpy cpu pc = %d", cpu.pc);
+
     for (int i = 0; i < 16; i = i + 1) {
       _dut->gpr[i] = cpu.gpr[i];
       // Log("gpr x%d is 0x%lx", i, cpu.gpr[i]);
