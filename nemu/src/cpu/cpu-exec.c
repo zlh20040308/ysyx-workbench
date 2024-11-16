@@ -196,7 +196,6 @@ void assert_fail_msg()
 
 /* Simulate how the CPU works. */
 void cpu_exec(uint64_t n) {
-  Log("step n = %ld", n);
   g_print_step = (n < MAX_INST_TO_PRINT);
   switch (nemu_state.state)
   {
@@ -209,6 +208,7 @@ void cpu_exec(uint64_t n) {
   }
 
   uint64_t timer_start = get_time();
+  Log("step n = %ld", n);
 
   execute(n);
 
