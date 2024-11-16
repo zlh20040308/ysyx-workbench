@@ -62,7 +62,9 @@ __EXPORT void difftest_raise_intr(word_t NO) { assert(0); }
 
 __EXPORT void difftest_init(int port) {
   void init_mem();
+  Log("nemu as ref init mem");
   init_mem();
   /* Perform ISA dependent initialization. */
+  Log("nemu as ref init isa");
   init_isa();
 }

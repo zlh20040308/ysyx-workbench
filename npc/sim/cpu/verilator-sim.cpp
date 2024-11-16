@@ -83,6 +83,7 @@ void sim_init() {
   reset();
   assert(top->io_debug_gpr[0] == 0);
   assert(top->io_debug_mstatus == 0x1800);
+  
 
   printf("[simulation] NPC has been resetted\n");
   return;
@@ -118,6 +119,11 @@ void sim_one_cycle() {
   get_regs(); // used as print registers or difftest
   // display_regs();
 
+#ifdef CONFIG_DIFFTEST
+    difftest_one_exec();
+    printf("HAHA\n");
+#endif
+
   if (top->io_ebreak == 1) {
     printf("NPC simulation finished at cycle = %ld, a0 = %d, ", cycle - 1,
            top->io_debug_gpr[10]);
@@ -127,10 +133,6 @@ void sim_one_cycle() {
       printf("HIT BAD  TRAP\n");
     }
     npc_state.state = NPC_END;
-
-#ifdef CONFIG_DIFFTEST
-    difftest_one_exec();
-#endif
   }
 
   return;

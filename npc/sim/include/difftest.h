@@ -17,7 +17,7 @@
 #include <common.h>
 #include <dlfcn.h>
 
-#define CONFIG_DIFFTEST
+#define CONFIG_DIFFTEST 1
 
 enum { DIFFTEST_TO_DUT, DIFFTEST_TO_REF };
 

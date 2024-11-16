@@ -69,6 +69,7 @@ void init_monitor(int argc, char *argv[]) {
   load_image();
 
 #ifdef CONFIG_DIFFTEST
+  printf("[monitor] difftest enabled\n");
   assert(diff_so_file != NULL);
   assert(img_size > 0);
   difftest_init(diff_so_file, img_size);
