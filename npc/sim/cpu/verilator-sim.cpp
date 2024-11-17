@@ -15,6 +15,9 @@ word_t last_diff_pc = 0;
 #define NPC_RUNNING 0
 #define NPC_STOPPED 1
 
+bool top_prev_clock = 1;
+
+
 //#define CONFIG_RUNTIME_MESSAGE
 
 int memory_delay = 0;
@@ -42,7 +45,7 @@ void reset() {
 }
 
 void sim_init() {
-  printf("[simulation] initializing simulation\n");
+  Log("[simulation] initializing simulation");
 
 #ifdef CONFIG_VCD_OUTPUT
   contextp = new VerilatedContext;
@@ -61,14 +64,14 @@ void sim_init() {
   instruction = 0;
   time_of_exec = 0;
 
-  printf("[simulation] simulation initialized, now reset NPC\n");
+  Log("[simulation] simulation initialized, now reset NPC");
 
   reset();
   assert(top->io_debug_gpr[0] == 0);
   assert(top->io_debug_mstatus == 0x1800);
   assert(top->io_debug_pc == 0x80000000);
 
-  printf("[simulation] NPC has been resetted\n");
+  Log("[simulation] NPC has been resetted");
   return;
 }
 
@@ -88,19 +91,31 @@ void sim_exit() {
 void sim_one_cycle() {
   assert(top);
 
+  // cycle = cycle + 1;
+  // Log("before top->io_debug_pc = %x", top->io_debug_pc);
+  // Log("cpu.pc = %x", cpu.pc);
+  // Log("top->clock = %x", top->clock);
+  // exit(0);
+    // Log("HAHA1");
+
+
+  top->clock ^= 1;
+  step_and_dump_wave();
+    // Log("HAHA2");
+
+
+  top->clock ^= 1;
+  step_and_dump_wave();
+  // Log("HAHA3");
   cycle = cycle + 1;
+  
 
-  top->clock ^= 1;
-  step_and_dump_wave();
-
-  top->clock ^= 1;
-  step_and_dump_wave();
 
 
   get_regs(); // used as print registers or difftest
 
-  Log("top->io_debug_pc = %x", top->io_debug_pc);
-  Log("cpu.pc = %x", cpu.pc);
+  // Log("top->io_debug_pc = %x", top->io_debug_pc);
+  // Log("cpu.pc = %x", cpu.pc);
   // display_regs();
 
   if (top->io_ebreak == 1) {

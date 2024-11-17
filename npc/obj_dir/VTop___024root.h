@@ -24,7 +24,8 @@ class VTop___024root final : public VerilatedModule {
         VL_OUT8(io_ebreak,0,0);
         VL_OUT8(io_debug_PCSel,1,0);
         VL_OUT8(io_debug_alu_op,3,0);
-        CData/*0:0*/ Top__DOT___core_io_dmem_valid;
+        VL_OUT8(io_debug_Valid,0,0);
+        VL_OUT8(io_debug_wen,0,0);
         CData/*3:0*/ Top__DOT___core_io_dmem_wmask;
         CData/*1:0*/ Top__DOT__core__DOT___CUInstance_io_StType;
         CData/*1:0*/ Top__DOT__core__DOT___GEN_ARRAY_IDX;
@@ -82,9 +83,9 @@ class VTop___024root final : public VerilatedModule {
         CData/*0:0*/ Top__DOT__core__DOT__CSRInstance__DOT___GEN_3;
         CData/*0:0*/ Top__DOT__core__DOT__CSRInstance__DOT___GEN_6;
         CData/*0:0*/ Top__DOT__core__DOT__CSRInstance__DOT___GEN_7;
-        CData/*0:0*/ Top__DOT__core__DOT__CSRInstance__DOT___GEN_8;
     };
     struct {
+        CData/*0:0*/ Top__DOT__core__DOT__CSRInstance__DOT___GEN_8;
         CData/*0:0*/ Top__DOT__core__DOT__CSRInstance__DOT___GEN_10;
         CData/*0:0*/ Top__DOT__core__DOT__CSRInstance__DOT___GEN_12;
         CData/*0:0*/ Top__DOT__core__DOT__CSRInstance__DOT____VdfgTmp_h55f09636__0;
@@ -101,7 +102,9 @@ class VTop___024root final : public VerilatedModule {
         VL_OUT(io_debug_mepc,31,0);
         VL_OUT(io_debug_mcause,31,0);
         VL_OUT(io_debug_mstatus,31,0);
-        IData/*31:0*/ Top__DOT___core_io_dmem_addr;
+        VL_OUT(io_debug_addr,31,0);
+        VL_OUT(io_debug_wdata,31,0);
+        VL_OUT(io_debug_rdata,31,0);
         IData/*31:0*/ Top__DOT__core__DOT__pc;
         VlWide<4>/*127:0*/ Top__DOT__core__DOT___GEN_0;
         IData/*31:0*/ Top__DOT__core__DOT____Vcellinp__AluInstance__io_B;
@@ -109,7 +112,6 @@ class VTop___024root final : public VerilatedModule {
         IData/*31:0*/ Top__DOT__core__DOT____Vcellinp__CSRInstance__io_wdata;
         IData/*29:0*/ Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_invMatrixOutputs;
         IData/*31:0*/ Top__DOT__core__DOT__RegFileInstance__DOT__io_rs1_0;
-        IData/*31:0*/ Top__DOT__core__DOT__RegFileInstance__DOT__io_rs2_0;
         IData/*31:0*/ Top__DOT__core__DOT__CSRInstance__DOT___csrs_ext_R1_data;
         IData/*31:0*/ Top__DOT__core__DOT__CSRInstance__DOT__mret_mstatus;
         IData/*31:0*/ Top__DOT__core__DOT__CSRInstance__DOT____Vcellinp__csrs_ext__W7_data;
@@ -118,6 +120,7 @@ class VTop___024root final : public VerilatedModule {
         IData/*31:0*/ Top__DOT__memory__DOT__mem__DOT__rdata;
         IData/*31:0*/ Top__DOT__memory__DOT__mem__DOT__unnamedblk1__DOT__full_mask;
         IData/*31:0*/ __Vfunc_ram_read_helper__0__Vfuncout;
+        IData/*31:0*/ __Vfunc_ram_read_helper__1__Vfuncout;
         IData/*31:0*/ __VstlIterCount;
         IData/*31:0*/ __VactIterCount;
         VlUnpacked<IData/*31:0*/, 16> Top__DOT__core__DOT__RegFileInstance__DOT__regs_ext__DOT__Memory;

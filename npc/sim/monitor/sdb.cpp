@@ -40,28 +40,37 @@ static char *rl_gets() {
 
 int cmd_c(char *args) {
   while (npc_state.state == NPC_RUNNING || npc_state.state == NPC_STOP) {
+    // Log("HAHA1");
     sim_one_cycle();
     // static int step = 1;
     // if (step-- == 0) {
     //   display_regs();
     //   exit(0);
     // }
-    if (cpu.pc == 0x80036798) {
-      display_regs();
-      exit(0);
-    }
-    Log("ggggggg cpu.pc = %x", cpu.pc);
+    // if (cpu.pc == 0x80036798) {
+    //   display_regs();
+    //   exit(0);
+    // }
+    // Log("ggggggg cpu.pc = %x", cpu.pc);
 
-#ifdef CONFIG_DIFFTEST
-    difftest_one_exec();
-    difftest_check_reg();
-#endif
 #ifdef COFIG_DEVICES
     device_update();
 #endif
+    // Log("HAHA2");
+    
+
+#ifdef CONFIG_DIFFTEST
+    difftest_one_exec();
+    // Log("HAHA3");
+
+    if (difftest_check_reg() == false) {
+      npc_state.state = NPC_ABORT;
+      display_regs();
+      return -1;
+    }
+#endif
   }
-  printf(
-      "[sdb] NPC's state is not NPC_RUNNING or NPC_STOP, can not continue\n");
+  Log("[sdb] NPC's state is not NPC_RUNNING or NPC_STOP, can not continue");
   return 0;
 }
 

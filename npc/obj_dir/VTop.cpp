@@ -17,12 +17,17 @@ VTop::VTop(VerilatedContext* _vcontextp__, const char* _vcname__)
     , io_ebreak{vlSymsp->TOP.io_ebreak}
     , io_debug_PCSel{vlSymsp->TOP.io_debug_PCSel}
     , io_debug_alu_op{vlSymsp->TOP.io_debug_alu_op}
+    , io_debug_Valid{vlSymsp->TOP.io_debug_Valid}
+    , io_debug_wen{vlSymsp->TOP.io_debug_wen}
     , io_debug_pc{vlSymsp->TOP.io_debug_pc}
     , io_debug_gpr{vlSymsp->TOP.io_debug_gpr}
     , io_debug_mtvec{vlSymsp->TOP.io_debug_mtvec}
     , io_debug_mepc{vlSymsp->TOP.io_debug_mepc}
     , io_debug_mcause{vlSymsp->TOP.io_debug_mcause}
     , io_debug_mstatus{vlSymsp->TOP.io_debug_mstatus}
+    , io_debug_addr{vlSymsp->TOP.io_debug_addr}
+    , io_debug_wdata{vlSymsp->TOP.io_debug_wdata}
+    , io_debug_rdata{vlSymsp->TOP.io_debug_rdata}
     , __PVT____024unit{vlSymsp->TOP.__PVT____024unit}
     , rootp{&(vlSymsp->TOP)}
 {

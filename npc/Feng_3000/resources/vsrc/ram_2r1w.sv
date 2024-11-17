@@ -22,24 +22,33 @@ module ram_2r1w (
 );
 
 // 读取指令内存
-assign imem_inst = ram_read_helper(imem_addr);
-
+assign  imem_inst = ram_read_helper(imem_addr);
 
 reg [31:0] rdata;
 assign dmem_rdata = rdata;
+// assign dmem_rdata = rdata;
+// assign dmem_rdata = valid ? ram_read_helper(dmem_addr) : 32'b0;
+
+always @(*) begin
+  if (valid) begin // 有读写请求时
+    rdata = ram_read_helper(dmem_addr);
+  end
+  else begin
+    rdata = 0;
+  end
+end
+
+
 
 always @(posedge clk) begin
   int full_mask = 32'b0; // 预先给 full_mask 一个默认值，以防止 latch 推断
   if (valid) begin // 有读写请求时
-    rdata = ram_read_helper(dmem_addr);
+    // rdata = ram_read_helper(dmem_addr);
     if (dmem_wen) begin // 有写请求时
       // 将 dmem_wmask 展开为完整的 32 位掩码
       full_mask = {{8{dmem_wmask[3]}}, {8{dmem_wmask[2]}}, {8{dmem_wmask[1]}}, {8{dmem_wmask[0]}}};
       ram_write_helper(dmem_addr, dmem_wdata, full_mask);
     end
-  end
-  else begin
-    rdata = 0;
   end
 end
 

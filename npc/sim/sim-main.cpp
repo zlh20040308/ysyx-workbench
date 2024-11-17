@@ -30,7 +30,7 @@ int main(int argc, char *argv[]) {
   sdb_main_loop();
   Log("[npc-sim] leaving sdb main loop");
   sim_exit();
-  Log("Goodbye\n");
+  Log("Goodbye");
 
   return is_exit_status_bad();
 }

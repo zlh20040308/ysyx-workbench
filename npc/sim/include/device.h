@@ -16,10 +16,9 @@
 #define CONFIG_FB_ADDR 0xa1000000
 #endif
 
-
-
 typedef void (*io_callback_t)(uint32_t, int, bool);
 uint8_t *new_space(int size);
+extern uint64_t cycle; 
 
 typedef struct {
   const char *name;
@@ -38,10 +37,12 @@ static bool map_inside(IOMap *map, word_t addr) {
 
 static inline int find_mapid_by_addr(IOMap *maps, int size, word_t addr) {
   int i;
-  // printf("[find_mapid_by_addr] paddr is 0x%8x\n", addr);
+  // Log("paddr is 0x%8x, cpu.pc = %x, top->pc = %x", addr, cpu.pc,
+  //     top->io_debug_pc);
   for (i = 0; i < size; i++) {
     if (map_inside(maps + i, addr)) {
-      Log("addr = %x, pc = %x, ", addr, cpu.pc);
+      // Log("paddr is 0x%8x, cpu.pc = %x, top->pc = %x, clock = %d, cycle = %d", addr, cpu.pc,
+      //     top->io_debug_pc, top->clock, cycle);
       difftest_skip_ref();
       return i;
     }

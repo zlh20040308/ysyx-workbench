@@ -13,6 +13,13 @@ class DebugPort extends Bundle {
   val mepc    = Output(UInt(WORD_LEN.W))
   val mcause  = Output(UInt(WORD_LEN.W))
   val mstatus = Output(UInt(WORD_LEN.W))
+  val Valid = Output(Bool())
+
+  val addr  = Output(UInt(WORD_LEN.W))
+  val wdata = Output(UInt(WORD_LEN.W))
+  val wen   = Output(Bool())
+  val rdata = Output(UInt(WORD_LEN.W))
+
 }
 
 class Top extends Module {

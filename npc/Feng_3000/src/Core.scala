@@ -166,4 +166,11 @@ class Core extends Module {
   io.debug.mepc    := CSRInstance.io.mepc
   io.debug.mcause  := CSRInstance.io.mcause
   io.debug.mstatus := CSRInstance.io.mstatus
+  io.debug.Valid   := CUInstance.io.Valid
+  io.debug.addr    := io.dmem.addr  
+  io.debug.wdata   := io.dmem.wdata 
+  io.debug.wen     := io.dmem.wen   
+  io.debug.rdata   := io.dmem.rdata 
+
+
 }

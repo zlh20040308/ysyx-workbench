@@ -135,8 +135,11 @@ VL_ATTR_COLD void VTop___024root___ctor_var_reset(VTop___024root* vlSelf) {
     vlSelf->io_debug_mepc = VL_RAND_RESET_I(32);
     vlSelf->io_debug_mcause = VL_RAND_RESET_I(32);
     vlSelf->io_debug_mstatus = VL_RAND_RESET_I(32);
-    vlSelf->Top__DOT___core_io_dmem_addr = VL_RAND_RESET_I(32);
-    vlSelf->Top__DOT___core_io_dmem_valid = VL_RAND_RESET_I(1);
+    vlSelf->io_debug_Valid = VL_RAND_RESET_I(1);
+    vlSelf->io_debug_addr = VL_RAND_RESET_I(32);
+    vlSelf->io_debug_wdata = VL_RAND_RESET_I(32);
+    vlSelf->io_debug_wen = VL_RAND_RESET_I(1);
+    vlSelf->io_debug_rdata = VL_RAND_RESET_I(32);
     vlSelf->Top__DOT___core_io_dmem_wmask = VL_RAND_RESET_I(4);
     vlSelf->Top__DOT__core__DOT___CUInstance_io_StType = VL_RAND_RESET_I(2);
     vlSelf->Top__DOT__core__DOT__pc = VL_RAND_RESET_I(32);
@@ -199,7 +202,6 @@ VL_ATTR_COLD void VTop___024root___ctor_var_reset(VTop___024root* vlSelf) {
     vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT____VdfgTmp_h3b7b4b58__0 = 0;
     vlSelf->Top__DOT__core__DOT__RegFileInstance__DOT__io_wen_0 = VL_RAND_RESET_I(1);
     vlSelf->Top__DOT__core__DOT__RegFileInstance__DOT__io_rs1_0 = VL_RAND_RESET_I(32);
-    vlSelf->Top__DOT__core__DOT__RegFileInstance__DOT__io_rs2_0 = VL_RAND_RESET_I(32);
     for (int __Vi0 = 0; __Vi0 < 16; ++__Vi0) {
         vlSelf->Top__DOT__core__DOT__RegFileInstance__DOT__regs_ext__DOT__Memory[__Vi0] = VL_RAND_RESET_I(32);
     }
@@ -225,6 +227,7 @@ VL_ATTR_COLD void VTop___024root___ctor_var_reset(VTop___024root* vlSelf) {
     vlSelf->Top__DOT__memory__DOT__mem__DOT__rdata = VL_RAND_RESET_I(32);
     vlSelf->Top__DOT__memory__DOT__mem__DOT__unnamedblk1__DOT__full_mask = 0;
     vlSelf->__Vfunc_ram_read_helper__0__Vfuncout = 0;
+    vlSelf->__Vfunc_ram_read_helper__1__Vfuncout = 0;
     vlSelf->__Vtrigrprev__TOP__clock = VL_RAND_RESET_I(1);
     for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
         vlSelf->__Vm_traceActivity[__Vi0] = 0;

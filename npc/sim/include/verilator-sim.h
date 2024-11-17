@@ -8,6 +8,7 @@
 #define NR_GPRs 32
 #define NR_CSRs 4096
 
+
 typedef struct {
   word_t gpr[NR_GPRs];
   word_t pc;

@@ -1,7 +1,10 @@
 
 #include <common.h>
+#include <cstdint>
 #include <device.h>
 #include <mem.h>
+extern bool top_prev_clock;
+uint32_t last_pc = 0;
 
 static uint8_t *pmem = NULL;
 
@@ -31,6 +34,7 @@ word_t pmem_read(word_t addr, int len) {
     word_t pmem_ret = host_read(guest_to_host(addr), len);
     return pmem_ret;
   } else {
+    // Log("addr = %x\n", addr);
     // this is outside pmem, call device mmio read
     word_t mmio_ret = mmio_read(addr, len);
     return mmio_ret;
@@ -48,6 +52,7 @@ void pmem_write(word_t addr, int len, word_t data) {
     host_write(guest_to_host(addr), len, data);
     return;
   } else {
+    // Log("addr = %x\n", addr);
     // this is outside pmem, call device mmio read
     mmio_write(addr, len, data);
     return;
@@ -61,6 +66,13 @@ void pmem_write(word_t addr, int len, word_t data) {
 
 extern "C" void ram_write_helper(uint32_t addr, uint32_t wdata,
                                  uint32_t wmask) {
+  if (top->reset == 1) {
+    return;
+  }
+  // if (top->io_debug_pc == last_pc) {
+  //   return;
+  // }
+  last_pc = top->io_debug_pc;
   int len = 1;
   switch (wmask) {
   case 0x000000FF:
@@ -82,5 +94,9 @@ extern "C" uint32_t ram_read_helper(uint32_t addr) {
   if (top->reset == 1) {
     return 0;
   }
+  // if (top->io_debug_pc == last_pc) {
+  //   return 0;
+  // }
+  last_pc = top->io_debug_pc;
   return pmem_read(addr, 4);
 }

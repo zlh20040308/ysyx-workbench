@@ -43,14 +43,16 @@ void init_map() {
 
 static bool check_bound(IOMap *map, word_t addr) {
   if (map == NULL) {
-    printf("[device] address = 0x%x is out of bound\n", addr);
+    Log("[device] address = 0x%x is out of bound, pc = %x", addr,
+        top->io_debug_pc);
+    Log("valid = %d", top->io_debug_Valid);
     npc_state.state = NPC_ABORT;
     return false;
   } else {
     if (addr <= map->high && addr >= map->low) {
       return true;
     } else {
-      printf("[device] address = 0x%x is out of bound %s@[0x%x, 0x%x]\n", addr,
+      Log("[device] address = 0x%x is out of bound %s@[0x%x, 0x%x]\n", addr,
              map->name, map->low, map->high);
       npc_state.state = NPC_ABORT;
       return false;
@@ -62,8 +64,8 @@ word_t map_read(word_t addr, int len, IOMap *map) {
   assert(len >= 1 && len <= 8);
 
   if (!check_bound(map, addr)) {
-    // return -1;
-    return 0;
+    return -1;
+    // return 0;
   }
 
   check_bound(map, addr);

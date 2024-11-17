@@ -28,9 +28,8 @@ IMG				?= ../am-kernels/tests/cpu-tests/build/wanshu-riscv32e-npc.bin
 ARGS ?=
 
 RUN_FLAGS		+= --img=${IMG} --diff=${DIFFTEST}
-# RUN_FLAGS		+= -b
 NPC_EXEC		:= ${BIN} $(ARGS) ${RUN_FLAGS}
-NPC_EXEC       += -e$(ELF)
+NPC_EXEC        += -e$(ELF)
 
 .PHONY:run gdb wave clean
 
