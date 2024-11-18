@@ -31,4 +31,4 @@ sdb: image
 
 
 gdb: image
-	bear -- $(MAKE) -C $(NEMU_HOME) ISA=$(ISA) gdb ARGS="$(NEMUFLAGS)" IMG=$(IMAGE).bin ELF=$(IMAGE).elf
+	bear -- $(MAKE) -C $(NEMU_HOME) ISA=$(ISA) gdb ARGS="-b $(NEMUFLAGS)" IMG=$(IMAGE).bin ELF=$(IMAGE).elf
