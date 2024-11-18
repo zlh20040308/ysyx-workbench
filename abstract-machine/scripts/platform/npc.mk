@@ -29,4 +29,4 @@ sdb: image
 	bear -- $(MAKE) -C $(NPC_HOME) run ARGS="$(NPCFLAGS)" IMG=$(IMAGE).bin ELF=$(IMAGE).elf
 
 gdb: image
-	bear -- $(MAKE) -C $(NPC_HOME) gdb ARGS="-b $(NPCFLAGS)" IMG=$(IMAGE).bin ELF=$(IMAGE).elf
+	$(MAKE) -C $(NPC_HOME) gdb ARGS="-b $(NPCFLAGS)" IMG=$(IMAGE).bin ELF=$(IMAGE).elf
