@@ -70,7 +70,7 @@ void difftest_skip_ref() {
 
 void difftest_one_exec() {
   if (is_skip_ref) {
-    Log("is_skip_ref cpu.pc = %x, clock = %d", cpu.pc, top->clock);
+    // Log("is_skip_ref cpu.pc = %x, clock = %d", cpu.pc, top->clock);
     ref_difftest_regcpy(&cpu, DIFFTEST_TO_REF);
     is_skip_ref = false;
     assert(!is_skip_ref);

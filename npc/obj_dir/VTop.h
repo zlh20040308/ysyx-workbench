@@ -33,9 +33,13 @@ class VTop VL_NOT_FINAL : public VerilatedModel {
     VL_OUT8(&io_ebreak,0,0);
     VL_OUT8(&io_debug_PCSel,1,0);
     VL_OUT8(&io_debug_alu_op,3,0);
+    VL_OUT8(&io_debug_imm_sel,2,0);
     VL_OUT8(&io_debug_Valid,0,0);
     VL_OUT8(&io_debug_wen,0,0);
+    VL_OUT8(&io_debug_CSRCmd,2,0);
+    VL_OUT16(&io_debug_csr_id,11,0);
     VL_OUT(&io_debug_pc,31,0);
+    VL_OUT(&io_debug_alu_out,31,0);
     VL_OUTW(&io_debug_gpr,511,0,16);
     VL_OUT(&io_debug_mtvec,31,0);
     VL_OUT(&io_debug_mepc,31,0);
@@ -44,6 +48,7 @@ class VTop VL_NOT_FINAL : public VerilatedModel {
     VL_OUT(&io_debug_addr,31,0);
     VL_OUT(&io_debug_wdata,31,0);
     VL_OUT(&io_debug_rdata,31,0);
+    VL_OUT(&io_debug_CSRWdata,31,0);
 
     // CELLS
     // Public to allow access to /* verilator public */ items.

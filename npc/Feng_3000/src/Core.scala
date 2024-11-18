@@ -35,13 +35,6 @@ class Core extends Module {
 
   /* ---------- PC ---------- */
   val pc_plus4 = pc + 4.U
-  // val pc_csr   = WireInit(0.U(WORD_LEN.W))
-
-  // when (CUInstance.io.CSRCmd === CSRCmdEnum.CSR_Ecall) {
-  //   pc_csr := CSRInstance.io.mtvec
-  // }.elsewhen(CUInstance.io.CSRCmd === CSRCmdEnum.CSR_Mret) {
-  //   pc_csr := CSRInstance.io.mepc
-  // }
 
   val pc_csr = MuxCase(
     0.U,
@@ -132,11 +125,14 @@ class Core extends Module {
   CSRInstance.io.CSRCmd := CUInstance.io.CSRCmd
   CSRInstance.io.addr   := io.imem.inst(31, 20)
 
-  when(CUInstance.io.ImmSel === ImmSelEnum.IMM_Z) {
-    CSRInstance.io.wdata := ImmGenInstance.io.out
-  }.otherwise {
-    CSRInstance.io.wdata := AluInstance.io.out
-  }
+  val csr_wdata = MuxCase(
+    AluInstance.io.out,
+    Array(
+      (CUInstance.io.ImmSel === ImmSelEnum.IMM_Z) -> ImmGenInstance.io.out,
+    ).toIndexedSeq
+  )
+
+  CSRInstance.io.wdata := csr_wdata
 
   /* ---------- JPCGen ---------- */
   JPCGenInstance.io.alu_data := AluInstance.io.out
@@ -171,6 +167,11 @@ class Core extends Module {
   io.debug.wdata   := io.dmem.wdata 
   io.debug.wen     := io.dmem.wen   
   io.debug.rdata   := io.dmem.rdata 
+  io.debug.csr_id  := io.imem.inst(31, 20)
+  io.debug.CSRCmd  := CUInstance.io.CSRCmd
+  io.debug.CSRWdata := csr_wdata
+  io.debug.alu_out  := AluInstance.io.out
+  io.debug.imm_sel  := CUInstance.io.ImmSel
 
-
+  
 }

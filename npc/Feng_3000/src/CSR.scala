@@ -28,22 +28,13 @@ class CSR(xlen: Int) extends Module {
 
   csrs(MSTATUS) := M_MODE_MSTATUS
 
-  switch(io.CSRCmd) {
-    is(CSRCmdEnum.CSR_S) {
-      csrs(io.addr) := csrs(io.addr) | io.wdata
-    }
-    is(CSRCmdEnum.CSR_N) {
-      io.rdata := csrs(io.addr)
-    }
-  }
-
   val ecall_mstatus = ((csrs(MSTATUS) & MSTATUS_MIE_BIT) << 4) | (csrs(MSTATUS) & ~MSTATUS_MPIE_BIT)
   val mret_mstatus  = ((csrs(MSTATUS) & MSTATUS_MPIE_BIT) >> 4) | (csrs(MSTATUS) & ~MSTATUS_MIE_BIT) | MSTATUS_MPIE_BIT
 
   switch(io.CSRCmd) {
     is(CSRCmdEnum.CSR_S) {
       when(io.addr === MSTATUS) {
-        csrs(io.addr) := (csrs(io.addr) | io.wdata) & M_MODE_MASK
+        csrs(io.addr) := ((csrs(io.addr) | io.wdata)) & M_MODE_MASK
       }.otherwise {
         csrs(io.addr) := csrs(io.addr) | io.wdata
       }

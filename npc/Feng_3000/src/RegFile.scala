@@ -18,7 +18,7 @@ class RegFileIO(xlen: Int) extends Bundle {
 
 class RegFile(xlen: Int) extends Module {
   val io   = IO(new RegFileIO(xlen))
-  val regs = Mem(16, UInt(xlen.W))
+  val regs = Mem(32, UInt(xlen.W))
   io.rs1 := Mux(io.raddr1.orR, regs(io.raddr1), 0.U)
   io.rs2 := Mux(io.raddr2.orR, regs(io.raddr2), 0.U)
 

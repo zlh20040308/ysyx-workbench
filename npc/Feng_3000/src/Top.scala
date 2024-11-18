@@ -8,6 +8,10 @@ class DebugPort extends Bundle {
   val pc = Output(UInt(WORD_LEN.W))
   val PCSel = Output(PCSelEnum())
   val alu_op = Output(AluEnum())
+  val alu_out = Output(UInt(WORD_LEN.W))
+  val imm_sel = Output(ImmSelEnum())
+
+
   val gpr = Output(Vec(16, UInt(WORD_LEN.W)))
   val mtvec   = Output(UInt(WORD_LEN.W))
   val mepc    = Output(UInt(WORD_LEN.W))
@@ -19,6 +23,11 @@ class DebugPort extends Bundle {
   val wdata = Output(UInt(WORD_LEN.W))
   val wen   = Output(Bool())
   val rdata = Output(UInt(WORD_LEN.W))
+  val csr_id = Output(UInt(12.W))
+  val CSRCmd = Output(CSRCmdEnum())
+  val CSRWdata = Output(UInt(WORD_LEN.W))
+
+
 
 }
 

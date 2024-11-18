@@ -107,7 +107,7 @@ object ImmSel extends DecodeField[Insn, ImmSelEnum.Type] {
     } else if (immzInstructions.contains(i.inst.name)) {
       BitPat(ImmSelEnum.IMM_Z.litValue.U(ImmSelEnum.getWidth.W))
     } else {
-      dontCarePattern
+      BitPat(ImmSelEnum.IMM_X.litValue.U(ImmSelEnum.getWidth.W))
     }
   }
 }
