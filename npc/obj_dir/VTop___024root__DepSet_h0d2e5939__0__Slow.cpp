@@ -145,12 +145,12 @@ VL_ATTR_COLD void VTop___024root___ctor_var_reset(VTop___024root* vlSelf) {
     vlSelf->io_debug_csr_id = VL_RAND_RESET_I(12);
     vlSelf->io_debug_CSRCmd = VL_RAND_RESET_I(3);
     vlSelf->io_debug_CSRWdata = VL_RAND_RESET_I(32);
+    vlSelf->io_debug_next_pc = VL_RAND_RESET_I(32);
     vlSelf->Top__DOT___core_io_dmem_wmask = VL_RAND_RESET_I(4);
     vlSelf->Top__DOT__core__DOT___CSRInstance_io_rdata = VL_RAND_RESET_I(32);
     vlSelf->Top__DOT__core__DOT___CUInstance_io_StType = VL_RAND_RESET_I(2);
     vlSelf->Top__DOT__core__DOT__pc = VL_RAND_RESET_I(32);
-    vlSelf->Top__DOT__core__DOT___GEN_ARRAY_IDX = VL_RAND_RESET_I(2);
-    VL_RAND_RESET_W(128, vlSelf->Top__DOT__core__DOT___GEN_0);
+    vlSelf->Top__DOT__core__DOT___GEN_ARRAY_IDX_0 = VL_RAND_RESET_I(2);
     vlSelf->Top__DOT__core__DOT____Vcellinp__AluInstance__io_B = VL_RAND_RESET_I(32);
     vlSelf->Top__DOT__core__DOT____Vcellinp__AluInstance__io_A = VL_RAND_RESET_I(32);
     vlSelf->Top__DOT__core__DOT__CompareInstance__DOT___GEN = VL_RAND_RESET_I(1);

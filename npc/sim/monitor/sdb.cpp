@@ -1,10 +1,13 @@
 
+#include <cstdio>
 #include <device.h>
 #include <mem.h>
 #include <monitor.h>
 #include <verilator-sim.h>
 
 bool is_batch_mode = false;
+extern int prev_t1;
+extern int prev_a5;
 
 static struct {
   const char *name;
@@ -57,7 +60,6 @@ int cmd_c(char *args) {
     device_update();
 #endif
     // Log("HAHA2");
-    
 
 #ifdef CONFIG_DIFFTEST
     difftest_one_exec();
@@ -71,6 +73,9 @@ int cmd_c(char *args) {
 #endif
   }
   Log("[sdb] NPC's state is not NPC_RUNNING or NPC_STOP, can not continue");
+  display_regs();
+  Log("prev_t1 = %x\n", prev_t1);
+  Log("prev_a5 = %x\n", prev_a5);
   return 0;
 }
 
@@ -113,6 +118,9 @@ int cmd_s(char *args) {
     } else {
       printf("[sdb] NPC's state is not NPC_RUNNING or NPC_STOP, can not "
              "continue\n");
+      display_regs();
+      Log("prev_t1 = %x\n", prev_t1);
+      Log("prev_a5 = %x\n", prev_a5);
     }
     return 0;
   } else {
@@ -124,6 +132,9 @@ int cmd_s(char *args) {
       } else {
         printf("[sdb] NPC's state is not NPC_RUNNING or NPC_STOP, can not "
                "continue\n");
+        display_regs();
+        Log("prev_t1 = %x\n", prev_t1);
+        Log("prev_a5 = %x\n", prev_a5);
       }
     }
     return 0;

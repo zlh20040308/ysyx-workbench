@@ -33,6 +33,7 @@ VTop::VTop(VerilatedContext* _vcontextp__, const char* _vcname__)
     , io_debug_wdata{vlSymsp->TOP.io_debug_wdata}
     , io_debug_rdata{vlSymsp->TOP.io_debug_rdata}
     , io_debug_CSRWdata{vlSymsp->TOP.io_debug_CSRWdata}
+    , io_debug_next_pc{vlSymsp->TOP.io_debug_next_pc}
     , __PVT____024unit{vlSymsp->TOP.__PVT____024unit}
     , rootp{&(vlSymsp->TOP)}
 {

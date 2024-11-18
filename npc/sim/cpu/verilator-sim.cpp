@@ -16,9 +16,9 @@ word_t last_diff_pc = 0;
 #define NPC_STOPPED 1
 
 bool top_prev_clock = 1;
-
-
-//#define CONFIG_RUNTIME_MESSAGE
+int prev_t1 = 0;
+int prev_a5 = 0;
+// #define CONFIG_RUNTIME_MESSAGE
 
 int memory_delay = 0;
 
@@ -96,23 +96,22 @@ void sim_one_cycle() {
   // Log("cpu.pc = %x", cpu.pc);
   // Log("top->clock = %x", top->clock);
   // exit(0);
-    // Log("HAHA1");
-
-
-  top->clock ^= 1;
-  step_and_dump_wave();
-    // Log("HAHA2");
-
+  Log("HAHA1");
 
   top->clock ^= 1;
   step_and_dump_wave();
-  // Log("HAHA3");
-  cycle = cycle + 1;
-  
+  Log("HAHA2");
+  if (top->io_debug_gpr[6] != 0x2f4110) {
+    prev_t1 = top->io_debug_gpr[6];
+  }
+  prev_a5 = top->io_debug_gpr[15];
 
-
+  top->clock ^= 1;
+  step_and_dump_wave();
+  Log("HAHA3");
 
   get_regs(); // used as print registers or difftest
+  cycle = cycle + 1;
 
   // Log("top->io_debug_pc = %x", top->io_debug_pc);
   // Log("cpu.pc = %x", cpu.pc);

@@ -6,7 +6,7 @@
 void get_regs() {
   assert(top);
 
-  cpu.pc = top->io_debug_pc;
+  cpu.pc = top->io_debug_next_pc;
 
   if (NR_GPRs == 16 || NR_GPRs == 32) {
     cpu.gpr[0] = top->io_debug_gpr[0];

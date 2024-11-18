@@ -26,9 +26,7 @@ class DebugPort extends Bundle {
   val csr_id = Output(UInt(12.W))
   val CSRCmd = Output(CSRCmdEnum())
   val CSRWdata = Output(UInt(WORD_LEN.W))
-
-
-
+  val next_pc = Output(UInt(WORD_LEN.W))
 }
 
 class Top extends Module {

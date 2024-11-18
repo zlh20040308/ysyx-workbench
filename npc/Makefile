@@ -42,7 +42,9 @@ run:com
 
 gdb:com ${DIFFTEST}
 	$(call git_commit, "gdb NPC")
-	@gdb --silent -s ${BIN} --args ${NPC_EXEC}
+	# @gdb --silent -s ${BIN} --args ${NPC_EXEC}
+	@gdb ${BIN} --args ${NPC_EXEC}
+
 
 wave:
 	@gtkwave $(OBJ_DIR)/dump.vcd

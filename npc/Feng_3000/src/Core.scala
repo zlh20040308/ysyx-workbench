@@ -43,18 +43,16 @@ class Core extends Module {
       (CUInstance.io.CSRCmd === CSRCmdEnum.CSR_Mret)  -> CSRInstance.io.mepc
     ).toIndexedSeq
   )
+  val next_pc = MuxCase(
+    pc_plus4,
+    Array(
+      (CUInstance.io.PCSel === PCSelEnum.PC_4) -> pc_plus4,
+      (CUInstance.io.PCSel === PCSelEnum.PC_ALU) -> JPCGenInstance.io.pc_alu,
+      (CUInstance.io.PCSel === PCSelEnum.PC_CSR) -> pc_csr,
+    ).toIndexedSeq
+  )
 
-  switch(CUInstance.io.PCSel) {
-    is(PCSelEnum.PC_4) {
-      pc := pc_plus4
-    }
-    is(PCSelEnum.PC_ALU) {
-      pc := JPCGenInstance.io.pc_alu
-    }
-    is(PCSelEnum.PC_CSR) {
-      pc := pc_csr
-    }
-  }
+  pc := next_pc
 
   /* ---------- IMEM ---------- */
   io.imem.addr := pc
@@ -172,6 +170,5 @@ class Core extends Module {
   io.debug.CSRWdata := csr_wdata
   io.debug.alu_out  := AluInstance.io.out
   io.debug.imm_sel  := CUInstance.io.ImmSel
-
-  
+  io.debug.next_pc  := next_pc
 }

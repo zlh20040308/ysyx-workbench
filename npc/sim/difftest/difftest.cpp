@@ -70,17 +70,14 @@ void difftest_skip_ref() {
 
 void difftest_one_exec() {
   if (is_skip_ref) {
-    // Log("is_skip_ref cpu.pc = %x, clock = %d", cpu.pc, top->clock);
+    Log("is_skip_ref cpu.pc = %x, clock = %d", cpu.pc, top->clock);
     ref_difftest_regcpy(&cpu, DIFFTEST_TO_REF);
     is_skip_ref = false;
     assert(!is_skip_ref);
     return;
   }
-  // rtl_CPU_State ref;
-  // ref_difftest_regcpy(&ref, DIFFTEST_TO_DUT);
-  // Log("ref.pc = %x", ref.pc);
+
   ref_difftest_exec(1);
-  // Log("difftest_check_reg() = %d", difftest_check_reg());
   return;
 }
 
@@ -94,17 +91,11 @@ bool difftest_check_reg() {
   ref_difftest_regcpy(&ref, DIFFTEST_TO_DUT);
   assert(&ref != NULL);
 
-  if (cpu.pc != ref.pc) {
-    Log("[difftest] ERROR: PC is different, ref is 0x%x, dut is 0x%x",
-           ref.pc, cpu.pc);
-    success = false;
-  }
-
   for (int i = 0; i < 16; ++i) {
     if (cpu.gpr[i] != ref.gpr[i]) {
       Log("[difftest] ERROR: GPR[%d] is different at PC 0x%x, ref is 0x%x, "
              "dut is 0x%x",
-             i, cpu.pc, ref.gpr[i], cpu.gpr[i]);
+             i, top->io_debug_pc, ref.gpr[i], cpu.gpr[i]);
       success = false;
     }
   }

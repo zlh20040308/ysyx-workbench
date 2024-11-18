@@ -30,7 +30,7 @@ class VTop___024root final : public VerilatedModule {
         VL_OUT8(io_debug_CSRCmd,2,0);
         CData/*3:0*/ Top__DOT___core_io_dmem_wmask;
         CData/*1:0*/ Top__DOT__core__DOT___CUInstance_io_StType;
-        CData/*1:0*/ Top__DOT__core__DOT___GEN_ARRAY_IDX;
+        CData/*1:0*/ Top__DOT__core__DOT___GEN_ARRAY_IDX_0;
         CData/*0:0*/ Top__DOT__core__DOT__CompareInstance__DOT___GEN;
         CData/*7:0*/ Top__DOT__core__DOT__CompareInstance__DOT___GEN_0;
         CData/*0:0*/ Top__DOT__core__DOT__CompareInstance__DOT____VdfgTmp_hf84125da__0;
@@ -110,9 +110,9 @@ class VTop___024root final : public VerilatedModule {
         VL_OUT(io_debug_wdata,31,0);
         VL_OUT(io_debug_rdata,31,0);
         VL_OUT(io_debug_CSRWdata,31,0);
+        VL_OUT(io_debug_next_pc,31,0);
         IData/*31:0*/ Top__DOT__core__DOT___CSRInstance_io_rdata;
         IData/*31:0*/ Top__DOT__core__DOT__pc;
-        VlWide<4>/*127:0*/ Top__DOT__core__DOT___GEN_0;
         IData/*31:0*/ Top__DOT__core__DOT____Vcellinp__AluInstance__io_B;
         IData/*31:0*/ Top__DOT__core__DOT____Vcellinp__AluInstance__io_A;
         IData/*29:0*/ Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_invMatrixOutputs;

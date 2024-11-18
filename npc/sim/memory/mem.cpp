@@ -3,9 +3,6 @@
 #include <cstdint>
 #include <device.h>
 #include <mem.h>
-extern bool top_prev_clock;
-uint32_t last_pc = 0;
-
 static uint8_t *pmem = NULL;
 
 void init_mem() {
@@ -69,10 +66,6 @@ extern "C" void ram_write_helper(uint32_t addr, uint32_t wdata,
   if (top->reset == 1) {
     return;
   }
-  // if (top->io_debug_pc == last_pc) {
-  //   return;
-  // }
-  last_pc = top->io_debug_pc;
   int len = 1;
   switch (wmask) {
   case 0x000000FF:
@@ -94,9 +87,5 @@ extern "C" uint32_t ram_read_helper(uint32_t addr) {
   if (top->reset == 1) {
     return 0;
   }
-  // if (top->io_debug_pc == last_pc) {
-  //   return 0;
-  // }
-  last_pc = top->io_debug_pc;
   return pmem_read(addr, 4);
 }
