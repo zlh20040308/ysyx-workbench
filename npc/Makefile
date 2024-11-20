@@ -56,4 +56,6 @@ verilog:
 	mkdir -p $(BUILD_DIR)
 	-rm $(BUILD_DIR)/* -r
 	mill -i Feng_3000.runMain Feng_3000.Elaborate --target-dir $(BUILD_DIR)
+	
+include ../Makefile
 
