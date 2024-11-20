@@ -18,6 +18,8 @@ word_t last_diff_pc = 0;
 bool top_prev_clock = 1;
 int prev_t1 = 0;
 int prev_a5 = 0;
+uint32_t cur_pc = 0;
+
 // #define CONFIG_RUNTIME_MESSAGE
 
 int memory_delay = 0;
@@ -90,25 +92,30 @@ void sim_exit() {
 
 void sim_one_cycle() {
   assert(top);
+  cur_pc = top->io_debug_pc;
 
   // cycle = cycle + 1;
   // Log("before top->io_debug_pc = %x", top->io_debug_pc);
   // Log("cpu.pc = %x", cpu.pc);
   // Log("top->clock = %x", top->clock);
   // exit(0);
-  Log("HAHA1");
+  // Log("HAHA1, cpu.pc = %x, top->pc = %x, top->next_pc = %x", cpu.pc,
+  //     top->io_debug_pc, top->io_debug_next_pc);
 
   top->clock ^= 1;
   step_and_dump_wave();
-  Log("HAHA2");
-  if (top->io_debug_gpr[6] != 0x2f4110) {
-    prev_t1 = top->io_debug_gpr[6];
-  }
-  prev_a5 = top->io_debug_gpr[15];
+  // Log("HAHA2, cpu.pc = %x, top->pc = %x, top->next_pc = %x", cpu.pc,
+  //     top->io_debug_pc, top->io_debug_next_pc);
+  Log("a0 = %x", top->io_debug_gpr[10]);
+
 
   top->clock ^= 1;
   step_and_dump_wave();
-  Log("HAHA3");
+  // Log("HAHA3, cpu.pc = %x, top->pc = %x, top->next_pc = %x", cpu.pc,
+  //     top->io_debug_pc, top->io_debug_next_pc);
+  // Log("reg_wdata = %x, WbSel = %d", top->io_debug_reg_wdata,
+  // top->io_debug_WbSel);
+  
 
   get_regs(); // used as print registers or difftest
   cycle = cycle + 1;

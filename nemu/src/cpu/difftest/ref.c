@@ -39,6 +39,7 @@ __EXPORT void difftest_regcpy(void *dut, bool direction) {
     cpu.sr[MCAUSE] = _dut->sr[MCAUSE];
     cpu.sr[MEPC] = _dut->sr[MEPC];
     cpu.pc = _dut->pc;
+    Log("gpr x%d is 0x%x", 10, cpu.gpr[10]);
   } else {
     for (int i = 0; i < 16; i = i + 1) {
       _dut->gpr[i] = cpu.gpr[i];

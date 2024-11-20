@@ -20,17 +20,17 @@ class VTop___024root final : public VerilatedModule {
     // Anonymous structures to workaround compiler member-count bugs
     struct {
         VL_IN8(clock,0,0);
+        VL_OUT8(io_debug_Valid,0,0);
+        VL_OUT8(io_debug_wen,0,0);
         VL_IN8(reset,0,0);
         VL_OUT8(io_ebreak,0,0);
         VL_OUT8(io_debug_PCSel,1,0);
         VL_OUT8(io_debug_alu_op,3,0);
         VL_OUT8(io_debug_imm_sel,2,0);
-        VL_OUT8(io_debug_Valid,0,0);
-        VL_OUT8(io_debug_wen,0,0);
         VL_OUT8(io_debug_CSRCmd,2,0);
+        VL_OUT8(io_debug_WbSel,1,0);
         CData/*3:0*/ Top__DOT___core_io_dmem_wmask;
         CData/*1:0*/ Top__DOT__core__DOT___CUInstance_io_StType;
-        CData/*1:0*/ Top__DOT__core__DOT___GEN_ARRAY_IDX_0;
         CData/*0:0*/ Top__DOT__core__DOT__CompareInstance__DOT___GEN;
         CData/*7:0*/ Top__DOT__core__DOT__CompareInstance__DOT___GEN_0;
         CData/*0:0*/ Top__DOT__core__DOT__CompareInstance__DOT____VdfgTmp_hf84125da__0;
@@ -78,13 +78,14 @@ class VTop___024root final : public VerilatedModule {
         CData/*1:0*/ Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_orMatrixOutputs_lo_hi_lo_hi;
         CData/*7:0*/ Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_orMatrixOutputs_lo_hi_8;
         CData/*1:0*/ Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_orMatrixOutputs_hi_lo_hi_lo;
+        CData/*3:0*/ Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_orMatrixOutputs_hi_hi_hi_3;
         CData/*0:0*/ Top__DOT__core__DOT__CUInstance__DOT__decode__DOT____VdfgTmp_h8c6fa575__0;
         CData/*0:0*/ Top__DOT__core__DOT__CUInstance__DOT__decode__DOT____VdfgTmp_h3b7b4b58__0;
         CData/*0:0*/ Top__DOT__core__DOT__RegFileInstance__DOT__io_wen_0;
         CData/*0:0*/ Top__DOT__core__DOT__CSRInstance__DOT___GEN_1;
-        CData/*0:0*/ Top__DOT__core__DOT__CSRInstance__DOT___GEN_2;
     };
     struct {
+        CData/*0:0*/ Top__DOT__core__DOT__CSRInstance__DOT___GEN_2;
         CData/*0:0*/ Top__DOT__core__DOT__CSRInstance__DOT___GEN_5;
         CData/*0:0*/ Top__DOT__core__DOT__CSRInstance__DOT___GEN_6;
         CData/*0:0*/ Top__DOT__core__DOT__CSRInstance__DOT___GEN_7;
@@ -95,6 +96,9 @@ class VTop___024root final : public VerilatedModule {
         CData/*0:0*/ Top__DOT__core__DOT__CSRInstance__DOT____VdfgTmp_h9faecc81__0;
         CData/*0:0*/ Top__DOT__core__DOT__CSRInstance__DOT____VdfgTmp_hd6e9dc5c__0;
         CData/*0:0*/ __Vtrigrprev__TOP__clock;
+        CData/*0:0*/ __Vtrigrprev__TOP__io_debug_Valid;
+        CData/*0:0*/ __Vtrigrprev__TOP__io_debug_wen;
+        CData/*0:0*/ __VactDidInit;
         CData/*0:0*/ __VactContinue;
         VL_OUT16(io_debug_csr_id,11,0);
         SData/*14:0*/ Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_orMatrixOutputs_lo_14;
@@ -111,8 +115,11 @@ class VTop___024root final : public VerilatedModule {
         VL_OUT(io_debug_rdata,31,0);
         VL_OUT(io_debug_CSRWdata,31,0);
         VL_OUT(io_debug_next_pc,31,0);
+        VL_OUT(io_debug_reg_wdata,31,0);
         IData/*31:0*/ Top__DOT__core__DOT___CSRInstance_io_rdata;
         IData/*31:0*/ Top__DOT__core__DOT__pc;
+        VlWide<4>/*127:0*/ Top__DOT__core__DOT___GEN;
+        VlWide<4>/*127:0*/ Top__DOT__core__DOT___GEN_0;
         IData/*31:0*/ Top__DOT__core__DOT____Vcellinp__AluInstance__io_B;
         IData/*31:0*/ Top__DOT__core__DOT____Vcellinp__AluInstance__io_A;
         IData/*29:0*/ Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_invMatrixOutputs;
@@ -120,20 +127,21 @@ class VTop___024root final : public VerilatedModule {
         IData/*31:0*/ Top__DOT__core__DOT__CSRInstance__DOT__mret_mstatus;
         IData/*31:0*/ Top__DOT__core__DOT__CSRInstance__DOT____Vcellinp__csrs_ext__W7_data;
         IData/*31:0*/ Top__DOT__core__DOT__ImmGenInstance__DOT__io_out_0;
-        IData/*31:0*/ Top__DOT__memory__DOT__io_imem_inst_0;
+        IData/*31:0*/ Top__DOT__memory__DOT__mem__DOT__imem;
         IData/*31:0*/ Top__DOT__memory__DOT__mem__DOT__rdata;
         IData/*31:0*/ Top__DOT__memory__DOT__mem__DOT__unnamedblk1__DOT__full_mask;
-        IData/*31:0*/ __Vfunc_ram_read_helper__0__Vfuncout;
-        IData/*31:0*/ __Vfunc_ram_read_helper__1__Vfuncout;
         IData/*31:0*/ __VstlIterCount;
+        IData/*31:0*/ __Vtrigrprev__TOP__io_debug_pc;
+        IData/*31:0*/ __Vtrigrprev__TOP__io_debug_alu_out;
+        IData/*31:0*/ __Vtrigrprev__TOP__io_debug_wdata;
         IData/*31:0*/ __VactIterCount;
         VlUnpacked<IData/*31:0*/, 32> Top__DOT__core__DOT__RegFileInstance__DOT__regs_ext__DOT__Memory;
         VlUnpacked<IData/*31:0*/, 4096> Top__DOT__core__DOT__CSRInstance__DOT__csrs_ext__DOT__Memory;
-        VlUnpacked<CData/*0:0*/, 2> __Vm_traceActivity;
+        VlUnpacked<CData/*0:0*/, 4> __Vm_traceActivity;
     };
     VlTriggerVec<1> __VstlTriggered;
-    VlTriggerVec<1> __VactTriggered;
-    VlTriggerVec<1> __VnbaTriggered;
+    VlTriggerVec<4> __VactTriggered;
+    VlTriggerVec<4> __VnbaTriggered;
 
     // INTERNAL VARIABLES
     VTop__Syms* const vlSymsp;

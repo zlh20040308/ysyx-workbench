@@ -27,6 +27,8 @@ class DebugPort extends Bundle {
   val CSRCmd = Output(CSRCmdEnum())
   val CSRWdata = Output(UInt(WORD_LEN.W))
   val next_pc = Output(UInt(WORD_LEN.W))
+  val reg_wdata = Output(UInt(WORD_LEN.W))
+  val WbSel    = Output(WbSelEnum())
 }
 
 class Top extends Module {
@@ -40,6 +42,7 @@ class Top extends Module {
 
   core.io.imem <> memory.io.imem
   core.io.dmem <> memory.io.dmem
+  memory.io.pc := core.io.debug.pc
   io.ebreak := core.io.ebreak
 
 

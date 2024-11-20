@@ -13,14 +13,15 @@ VTop::VTop(VerilatedContext* _vcontextp__, const char* _vcname__)
     : VerilatedModel{*_vcontextp__}
     , vlSymsp{new VTop__Syms(contextp(), _vcname__, this)}
     , clock{vlSymsp->TOP.clock}
+    , io_debug_Valid{vlSymsp->TOP.io_debug_Valid}
+    , io_debug_wen{vlSymsp->TOP.io_debug_wen}
     , reset{vlSymsp->TOP.reset}
     , io_ebreak{vlSymsp->TOP.io_ebreak}
     , io_debug_PCSel{vlSymsp->TOP.io_debug_PCSel}
     , io_debug_alu_op{vlSymsp->TOP.io_debug_alu_op}
     , io_debug_imm_sel{vlSymsp->TOP.io_debug_imm_sel}
-    , io_debug_Valid{vlSymsp->TOP.io_debug_Valid}
-    , io_debug_wen{vlSymsp->TOP.io_debug_wen}
     , io_debug_CSRCmd{vlSymsp->TOP.io_debug_CSRCmd}
+    , io_debug_WbSel{vlSymsp->TOP.io_debug_WbSel}
     , io_debug_csr_id{vlSymsp->TOP.io_debug_csr_id}
     , io_debug_pc{vlSymsp->TOP.io_debug_pc}
     , io_debug_alu_out{vlSymsp->TOP.io_debug_alu_out}
@@ -34,6 +35,7 @@ VTop::VTop(VerilatedContext* _vcontextp__, const char* _vcname__)
     , io_debug_rdata{vlSymsp->TOP.io_debug_rdata}
     , io_debug_CSRWdata{vlSymsp->TOP.io_debug_CSRWdata}
     , io_debug_next_pc{vlSymsp->TOP.io_debug_next_pc}
+    , io_debug_reg_wdata{vlSymsp->TOP.io_debug_reg_wdata}
     , __PVT____024unit{vlSymsp->TOP.__PVT____024unit}
     , rootp{&(vlSymsp->TOP)}
 {

@@ -1,4 +1,5 @@
 
+#include <cstdint>
 #include <dlfcn.h>
 
 #include <common.h>
@@ -7,6 +8,7 @@
 #include <verilator-sim.h>
 
 rtl_CPU_State cpu;
+extern uint32_t cur_pc;
 
 void (*ref_difftest_memcpy)(word_t addr, void *buf, word_t n,
                             bool direction) = NULL;
@@ -95,7 +97,7 @@ bool difftest_check_reg() {
     if (cpu.gpr[i] != ref.gpr[i]) {
       Log("[difftest] ERROR: GPR[%d] is different at PC 0x%x, ref is 0x%x, "
              "dut is 0x%x",
-             i, top->io_debug_pc, ref.gpr[i], cpu.gpr[i]);
+             i, cur_pc, ref.gpr[i], cpu.gpr[i]);
       success = false;
     }
   }

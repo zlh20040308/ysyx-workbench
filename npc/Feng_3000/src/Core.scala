@@ -66,20 +66,19 @@ class Core extends Module {
 
   RegFileInstance.io.wen := CUInstance.io.WbEn
 
-  switch(CUInstance.io.WbSel) {
-    is(WbSelEnum.WB_ALU) {
-      RegFileInstance.io.wdata := AluInstance.io.out
-    }
-    is(WbSelEnum.WB_MEM) {
-      RegFileInstance.io.wdata := LdDataInstance.io.wb_data
-    }
-    is(WbSelEnum.WB_PC4) {
-      RegFileInstance.io.wdata := pc_plus4
-    }
-    is(WbSelEnum.WB_CSR) {
-      RegFileInstance.io.wdata := CSRInstance.io.rdata
-    }
-  }
+  val reg_wdata = MuxCase(
+    0.U,
+    Array(
+      (CUInstance.io.WbSel === WbSelEnum.WB_ALU) -> AluInstance.io.out,
+      (CUInstance.io.WbSel === WbSelEnum.WB_MEM) -> LdDataInstance.io.wb_data,
+      (CUInstance.io.WbSel === WbSelEnum.WB_PC4) -> pc_plus4,
+      (CUInstance.io.WbSel === WbSelEnum.WB_CSR) -> CSRInstance.io.rdata,
+
+    ).toIndexedSeq
+  )
+
+  RegFileInstance.io.wdata := reg_wdata
+
 
   /* ---------- ALU ---------- */
   AluInstance.io.alu_op := CUInstance.io.ALUSel
@@ -171,4 +170,6 @@ class Core extends Module {
   io.debug.alu_out  := AluInstance.io.out
   io.debug.imm_sel  := CUInstance.io.ImmSel
   io.debug.next_pc  := next_pc
+  io.debug.reg_wdata  := reg_wdata
+  io.debug.WbSel   :=CUInstance.io.WbSel
 }

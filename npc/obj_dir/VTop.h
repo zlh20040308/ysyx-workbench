@@ -29,14 +29,15 @@ class VTop VL_NOT_FINAL : public VerilatedModel {
     // The application code writes and reads these signals to
     // propagate new values into/out from the Verilated model.
     VL_IN8(&clock,0,0);
+    VL_OUT8(&io_debug_Valid,0,0);
+    VL_OUT8(&io_debug_wen,0,0);
     VL_IN8(&reset,0,0);
     VL_OUT8(&io_ebreak,0,0);
     VL_OUT8(&io_debug_PCSel,1,0);
     VL_OUT8(&io_debug_alu_op,3,0);
     VL_OUT8(&io_debug_imm_sel,2,0);
-    VL_OUT8(&io_debug_Valid,0,0);
-    VL_OUT8(&io_debug_wen,0,0);
     VL_OUT8(&io_debug_CSRCmd,2,0);
+    VL_OUT8(&io_debug_WbSel,1,0);
     VL_OUT16(&io_debug_csr_id,11,0);
     VL_OUT(&io_debug_pc,31,0);
     VL_OUT(&io_debug_alu_out,31,0);
@@ -50,6 +51,7 @@ class VTop VL_NOT_FINAL : public VerilatedModel {
     VL_OUT(&io_debug_rdata,31,0);
     VL_OUT(&io_debug_CSRWdata,31,0);
     VL_OUT(&io_debug_next_pc,31,0);
+    VL_OUT(&io_debug_reg_wdata,31,0);
 
     // CELLS
     // Public to allow access to /* verilator public */ items.

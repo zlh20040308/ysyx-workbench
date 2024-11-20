@@ -1,4 +1,5 @@
 
+#include <stdint.h>
 #include <verilator-sim.h>
 
 // CSR list: mstatus mtvec mepc macuse

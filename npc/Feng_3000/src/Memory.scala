@@ -23,6 +23,7 @@ class DmemPort extends Bundle {
 class ram_2r1w extends BlackBox with HasBlackBoxResource {
   val io = IO(new Bundle {
     val clk = Input(Clock())
+    val pc = Input(UInt(WORD_LEN.W))
     val valid = Input(Bool())
 
     val imem_addr = Input(UInt(WORD_LEN.W))
@@ -41,12 +42,14 @@ class ram_2r1w extends BlackBox with HasBlackBoxResource {
 
 class Memory extends Module {
   val io = IO(new Bundle {
+    val pc   = Input(UInt(WORD_LEN.W))
     val imem = new ImemPort()
     val dmem = new DmemPort()
   })
 
   val mem = Module(new ram_2r1w())
   mem.io.clk       := clock
+  mem.io.pc        := io.pc
   mem.io.imem_addr := io.imem.addr
   io.imem.inst     := mem.io.imem_inst
 

@@ -10,6 +10,7 @@ import "DPI-C" function int ram_read_helper(
 
 module ram_2r1w (
     input         clk,
+    input  [31:0] pc,
     input  [31:0] imem_addr,
     output [31:0] imem_inst,
 
@@ -22,14 +23,20 @@ module ram_2r1w (
 );
 
 // 读取指令内存
-assign  imem_inst = ram_read_helper(imem_addr);
+reg [31:0] imem;
+assign imem_inst = imem;
+// assign  imem_inst = ram_read_helper(imem_addr);
+
+always @(imem_addr) begin
+    imem = ram_read_helper(imem_addr);
+end
 
 reg [31:0] rdata;
 assign dmem_rdata = rdata;
 // assign dmem_rdata = rdata;
 // assign dmem_rdata = valid ? ram_read_helper(dmem_addr) : 32'b0;
 
-always @(*) begin
+always @(pc, valid, dmem_addr) begin
   if (valid) begin // 有读写请求时
     rdata = ram_read_helper(dmem_addr);
   end
@@ -40,7 +47,7 @@ end
 
 
 
-always @(posedge clk) begin
+always @(pc, valid, dmem_wen, dmem_addr, dmem_wdata) begin
   int full_mask = 32'b0; // 预先给 full_mask 一个默认值，以防止 latch 推断
   if (valid) begin // 有读写请求时
     // rdata = ram_read_helper(dmem_addr);

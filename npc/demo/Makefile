@@ -38,4 +38,4 @@ $(BIN): $(VSRCS) $(CSRCS)
 
 run: $(BIN)
 	# $(BIN) $(NEMU_HOME)/../am-kernels/tests/cpu-tests/build/wanshu-riscv32e-npc.bin
-	$(BIN) /home/feng/code/riscv-tests/rv32ui-p-add.bin
+	$(BIN) /home/feng/code/riscv-tests/save/rv32ui-p-beq.bin

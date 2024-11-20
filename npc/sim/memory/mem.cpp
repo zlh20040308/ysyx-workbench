@@ -66,6 +66,12 @@ extern "C" void ram_write_helper(uint32_t addr, uint32_t wdata,
   if (top->reset == 1) {
     return;
   }
+  // if (cpu.pc == top->io_debug_next_pc) {
+  //   Log("top->pc = %x", top->io_debug_pc);
+  //   return;
+  // }
+  // Log("paddr is 0x%8x, wdata = %x, wmask = %x, cpu.pc = %x, pc = %x,next_pc = %x, clock = %d, cycle = %d",
+  //         addr, wdata, wmask, cpu.pc, top->io_debug_pc, top->io_debug_next_pc, top->clock, cycle);
   int len = 1;
   switch (wmask) {
   case 0x000000FF:
@@ -81,11 +87,21 @@ extern "C" void ram_write_helper(uint32_t addr, uint32_t wdata,
     printf("[memory] invalid wmask = 0x%x\n", wmask);
   }
   pmem_write(addr, len, wdata & wmask);
+  // Log("Data = %x has been written into Addr = %x", pmem_read(addr, len), addr);
 }
 
 extern "C" uint32_t ram_read_helper(uint32_t addr) {
   if (top->reset == 1) {
     return 0;
   }
-  return pmem_read(addr, 4);
+  // if (cpu.pc == top->io_debug_next_pc) {
+  //   Log("top->pc = %x", top->io_debug_pc);
+  //   return 0;
+  // }
+
+  uint32_t rdata = pmem_read(addr, 4);
+  // Log("paddr is 0x%8x, rdata = %x, cpu.pc = %x, pc = %x,next_pc = %x, clock = %d, cycle = "
+  //     "%d",
+  //     addr, rdata, cpu.pc, top->io_debug_pc, top->io_debug_next_pc, top->clock, cycle);
+  return rdata;
 }
