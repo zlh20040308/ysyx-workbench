@@ -9,6 +9,7 @@
 
 rtl_CPU_State cpu;
 extern uint32_t cur_pc;
+uint32_t ld_delay = 0;
 
 void (*ref_difftest_memcpy)(word_t addr, void *buf, word_t n,
                             bool direction) = NULL;
@@ -25,8 +26,8 @@ void init_difftest(char *ref_so_file, word_t img_size) {
   assert(ref_so_file != NULL);
   assert(img_size >= 0);
   Log("[difftest] initializing diifferential testing, the ref-so-file is "
-         "%s, img-size is %d",
-         ref_so_file, img_size);
+      "%s, img-size is %d",
+      ref_so_file, img_size);
   mem_img_size = img_size;
   assert(mem_img_size >= 0);
   assert(mem_img_size == img_size);
@@ -66,11 +67,17 @@ void init_difftest(char *ref_so_file, word_t img_size) {
 
 void difftest_skip_ref() {
   is_skip_ref = true;
+  ld_delay = 2;
   assert(is_skip_ref);
   return;
 }
 
 void difftest_one_exec() {
+  if (ld_delay == 2) {
+    ld_delay--;
+    ref_difftest_exec(1);
+    return;
+  }
   if (is_skip_ref) {
     Log("is_skip_ref cpu.pc = %x, clock = %d", cpu.pc, top->clock);
     ref_difftest_regcpy(&cpu, DIFFTEST_TO_REF);
@@ -96,8 +103,8 @@ bool difftest_check_reg() {
   for (int i = 0; i < 16; ++i) {
     if (cpu.gpr[i] != ref.gpr[i]) {
       Log("[difftest] ERROR: GPR[%d] is different at PC 0x%x, ref is 0x%x, "
-             "dut is 0x%x",
-             i, cur_pc, ref.gpr[i], cpu.gpr[i]);
+          "dut is 0x%x",
+          i, top->io_debug_pc, ref.gpr[i], cpu.gpr[i]);
       success = false;
     }
   }

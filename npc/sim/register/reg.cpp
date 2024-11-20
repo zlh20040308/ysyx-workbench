@@ -7,7 +7,9 @@
 void get_regs() {
   assert(top);
 
-  cpu.pc = top->io_debug_next_pc;
+  cpu.pc = top->io_debug_pc;
+  // cpu.pc = top->io_debug_next_pc;
+
 
   if (NR_GPRs == 16 || NR_GPRs == 32) {
     cpu.gpr[0] = top->io_debug_gpr[0];
@@ -37,13 +39,10 @@ void get_regs() {
 void display_regs() {
   assert(top);
   assert(&cpu);
-
-  printf("PC = 0x%x\n", cpu.pc);
-
+  // printf("PC = 0x%x\n", cpu.pc);
   for (int i = 0; i < NR_GPRs; i = i + 1) {
     printf("GPR[%2d] = 0x%x\n", i, cpu.gpr[i]);
   }
-
   printf("\n");
 
   return;

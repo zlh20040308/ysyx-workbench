@@ -22,6 +22,7 @@ VTop::VTop(VerilatedContext* _vcontextp__, const char* _vcname__)
     , io_debug_imm_sel{vlSymsp->TOP.io_debug_imm_sel}
     , io_debug_CSRCmd{vlSymsp->TOP.io_debug_CSRCmd}
     , io_debug_WbSel{vlSymsp->TOP.io_debug_WbSel}
+    , io_debug_WbEn{vlSymsp->TOP.io_debug_WbEn}
     , io_debug_csr_id{vlSymsp->TOP.io_debug_csr_id}
     , io_debug_pc{vlSymsp->TOP.io_debug_pc}
     , io_debug_alu_out{vlSymsp->TOP.io_debug_alu_out}

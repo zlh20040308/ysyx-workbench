@@ -92,6 +92,8 @@ void sim_exit() {
 
 void sim_one_cycle() {
   assert(top);
+  cycle = cycle + 1;
+
   cur_pc = top->io_debug_pc;
 
   // cycle = cycle + 1;
@@ -106,19 +108,23 @@ void sim_one_cycle() {
   step_and_dump_wave();
   // Log("HAHA2, cpu.pc = %x, top->pc = %x, top->next_pc = %x", cpu.pc,
   //     top->io_debug_pc, top->io_debug_next_pc);
-  Log("a0 = %x", top->io_debug_gpr[10]);
-
 
   top->clock ^= 1;
   step_and_dump_wave();
+  // Log("a0 = %x, cycle = %d", top->io_debug_gpr[10], cycle);
+
   // Log("HAHA3, cpu.pc = %x, top->pc = %x, top->next_pc = %x", cpu.pc,
   //     top->io_debug_pc, top->io_debug_next_pc);
-  // Log("reg_wdata = %x, WbSel = %d", top->io_debug_reg_wdata,
-  // top->io_debug_WbSel);
-  
+  // Log("WbEn = %d, reg_wdata = %x, WbSel = %d, a0 = %x", top->io_debug_WbEn,
+  //     top->io_debug_reg_wdata, top->io_debug_WbSel, top->io_debug_gpr[10]);
+  // if (top->io_debug_gpr[10] == 0x4f) {
+  //   Log("cpu.pc = %x, top->pc = %x, top->next_pc = %x", cpu.pc,
+  //       top->io_debug_pc, top->io_debug_next_pc);
+  //   Log("cycle = %d", cycle);
+  //   exit(0);
+  // }
 
   get_regs(); // used as print registers or difftest
-  cycle = cycle + 1;
 
   // Log("top->io_debug_pc = %x", top->io_debug_pc);
   // Log("cpu.pc = %x", cpu.pc);

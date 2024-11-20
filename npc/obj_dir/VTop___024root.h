@@ -29,6 +29,7 @@ class VTop___024root final : public VerilatedModule {
         VL_OUT8(io_debug_imm_sel,2,0);
         VL_OUT8(io_debug_CSRCmd,2,0);
         VL_OUT8(io_debug_WbSel,1,0);
+        VL_OUT8(io_debug_WbEn,0,0);
         CData/*3:0*/ Top__DOT___core_io_dmem_wmask;
         CData/*1:0*/ Top__DOT__core__DOT___CUInstance_io_StType;
         CData/*0:0*/ Top__DOT__core__DOT__CompareInstance__DOT___GEN;
@@ -81,7 +82,6 @@ class VTop___024root final : public VerilatedModule {
         CData/*3:0*/ Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_orMatrixOutputs_hi_hi_hi_3;
         CData/*0:0*/ Top__DOT__core__DOT__CUInstance__DOT__decode__DOT____VdfgTmp_h8c6fa575__0;
         CData/*0:0*/ Top__DOT__core__DOT__CUInstance__DOT__decode__DOT____VdfgTmp_h3b7b4b58__0;
-        CData/*0:0*/ Top__DOT__core__DOT__RegFileInstance__DOT__io_wen_0;
         CData/*0:0*/ Top__DOT__core__DOT__CSRInstance__DOT___GEN_1;
     };
     struct {
@@ -135,7 +135,7 @@ class VTop___024root final : public VerilatedModule {
         IData/*31:0*/ __Vtrigrprev__TOP__io_debug_alu_out;
         IData/*31:0*/ __Vtrigrprev__TOP__io_debug_wdata;
         IData/*31:0*/ __VactIterCount;
-        VlUnpacked<IData/*31:0*/, 32> Top__DOT__core__DOT__RegFileInstance__DOT__regs_ext__DOT__Memory;
+        VlUnpacked<IData/*31:0*/, 16> Top__DOT__core__DOT__RegFileInstance__DOT__regs_ext__DOT__Memory;
         VlUnpacked<IData/*31:0*/, 4096> Top__DOT__core__DOT__CSRInstance__DOT__csrs_ext__DOT__Memory;
         VlUnpacked<CData/*0:0*/, 4> __Vm_traceActivity;
     };

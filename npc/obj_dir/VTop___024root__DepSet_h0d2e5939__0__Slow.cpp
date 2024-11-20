@@ -156,14 +156,14 @@ VL_ATTR_COLD void VTop___024root___stl_sequent__TOP__0(VTop___024root* vlSelf) {
     vlSelf->io_debug_wdata = ((0U != (0x1fU & (vlSelf->Top__DOT__memory__DOT__mem__DOT__imem 
                                                >> 0x14U)))
                                ? vlSelf->Top__DOT__core__DOT__RegFileInstance__DOT__regs_ext__DOT__Memory
-                              [(0x1fU & (vlSelf->Top__DOT__memory__DOT__mem__DOT__imem 
-                                         >> 0x14U))]
+                              [(0xfU & (vlSelf->Top__DOT__memory__DOT__mem__DOT__imem 
+                                        >> 0x14U))]
                                : 0U);
     vlSelf->Top__DOT__core__DOT__RegFileInstance__DOT__io_rs1_0 
         = ((0U != (0x1fU & (vlSelf->Top__DOT__memory__DOT__mem__DOT__imem 
                             >> 0xfU))) ? vlSelf->Top__DOT__core__DOT__RegFileInstance__DOT__regs_ext__DOT__Memory
-           [(0x1fU & (vlSelf->Top__DOT__memory__DOT__mem__DOT__imem 
-                      >> 0xfU))] : 0U);
+           [(0xfU & (vlSelf->Top__DOT__memory__DOT__mem__DOT__imem 
+                     >> 0xfU))] : 0U);
     vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_andMatrixOutputs_lo_12 
         = ((2U & (vlSelf->Top__DOT__memory__DOT__mem__DOT__imem 
                   >> 0xbU)) | (1U & (~ (vlSelf->Top__DOT__memory__DOT__mem__DOT__imem 
@@ -350,12 +350,11 @@ VL_ATTR_COLD void VTop___024root___stl_sequent__TOP__0(VTop___024root* vlSelf) {
                                           | (IData)(vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_andMatrixOutputs_2_2)) 
                                          | ((IData)(vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_andMatrixOutputs_1_2) 
                                             | (IData)(vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_andMatrixOutputs_27_2))));
-    vlSelf->Top__DOT__core__DOT__RegFileInstance__DOT__io_wen_0 
-        = (((0U != (IData)(vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT___GEN_2)) 
-            | (0U != (IData)(vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT___GEN_1))) 
-           | ((IData)(vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_andMatrixOutputs_0_2) 
-              | ((IData)(vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_andMatrixOutputs_4_2) 
-                 | (0U != (IData)(vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT___GEN)))));
+    vlSelf->io_debug_WbEn = (((0U != (IData)(vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT___GEN_2)) 
+                              | (0U != (IData)(vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT___GEN_1))) 
+                             | ((IData)(vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_andMatrixOutputs_0_2) 
+                                | ((IData)(vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_andMatrixOutputs_4_2) 
+                                   | (0U != (IData)(vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT___GEN)))));
     vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT____VdfgTmp_h3b7b4b58__0 
         = ((((IData)(vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_andMatrixOutputs_17_2) 
              | ((IData)(vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_andMatrixOutputs_13_2) 
@@ -397,8 +396,8 @@ VL_ATTR_COLD void VTop___024root___stl_sequent__TOP__0(VTop___024root* vlSelf) {
     vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_orMatrixOutputs_hi_hi_hi_3 
         = ((((IData)(vlSelf->io_ebreak) << 3U) | ((IData)(vlSelf->io_debug_Valid) 
                                                   << 2U)) 
-           | (((IData)(vlSelf->Top__DOT__core__DOT__RegFileInstance__DOT__io_wen_0) 
-               << 1U) | (IData)(vlSelf->io_debug_wen)));
+           | (((IData)(vlSelf->io_debug_WbEn) << 1U) 
+              | (IData)(vlSelf->io_debug_wen)));
     vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_PCSel 
         = (((IData)(vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT____VdfgTmp_h8c6fa575__0) 
             << 1U) | (IData)(vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT____VdfgTmp_h3b7b4b58__0));
@@ -959,6 +958,7 @@ VL_ATTR_COLD void VTop___024root___ctor_var_reset(VTop___024root* vlSelf) {
     vlSelf->io_debug_next_pc = VL_RAND_RESET_I(32);
     vlSelf->io_debug_reg_wdata = VL_RAND_RESET_I(32);
     vlSelf->io_debug_WbSel = VL_RAND_RESET_I(2);
+    vlSelf->io_debug_WbEn = VL_RAND_RESET_I(1);
     vlSelf->Top__DOT___core_io_dmem_wmask = VL_RAND_RESET_I(4);
     vlSelf->Top__DOT__core__DOT___CSRInstance_io_rdata = VL_RAND_RESET_I(32);
     vlSelf->Top__DOT__core__DOT___CUInstance_io_StType = VL_RAND_RESET_I(2);
@@ -1020,9 +1020,8 @@ VL_ATTR_COLD void VTop___024root___ctor_var_reset(VTop___024root* vlSelf) {
     vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_orMatrixOutputs_hi_17 = VL_RAND_RESET_I(15);
     vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT____VdfgTmp_h8c6fa575__0 = 0;
     vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT____VdfgTmp_h3b7b4b58__0 = 0;
-    vlSelf->Top__DOT__core__DOT__RegFileInstance__DOT__io_wen_0 = VL_RAND_RESET_I(1);
     vlSelf->Top__DOT__core__DOT__RegFileInstance__DOT__io_rs1_0 = VL_RAND_RESET_I(32);
-    for (int __Vi0 = 0; __Vi0 < 32; ++__Vi0) {
+    for (int __Vi0 = 0; __Vi0 < 16; ++__Vi0) {
         vlSelf->Top__DOT__core__DOT__RegFileInstance__DOT__regs_ext__DOT__Memory[__Vi0] = VL_RAND_RESET_I(32);
     }
     vlSelf->Top__DOT__core__DOT__CSRInstance__DOT__mret_mstatus = VL_RAND_RESET_I(32);

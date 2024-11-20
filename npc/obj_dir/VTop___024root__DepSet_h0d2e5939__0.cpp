@@ -25,7 +25,7 @@ VL_INLINE_OPT void VTop___024root___nba_sequent__TOP__0(VTop___024root* vlSelf) 
     VTop__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     VL_DEBUG_IF(VL_DBG_MSGF("+    VTop___024root___nba_sequent__TOP__0\n"); );
     // Init
-    CData/*4:0*/ __Vdlyvdim0__Top__DOT__core__DOT__RegFileInstance__DOT__regs_ext__DOT__Memory__v0;
+    CData/*3:0*/ __Vdlyvdim0__Top__DOT__core__DOT__RegFileInstance__DOT__regs_ext__DOT__Memory__v0;
     __Vdlyvdim0__Top__DOT__core__DOT__RegFileInstance__DOT__regs_ext__DOT__Memory__v0 = 0;
     IData/*31:0*/ __Vdlyvval__Top__DOT__core__DOT__RegFileInstance__DOT__regs_ext__DOT__Memory__v0;
     __Vdlyvval__Top__DOT__core__DOT__RegFileInstance__DOT__regs_ext__DOT__Memory__v0 = 0;
@@ -100,15 +100,15 @@ VL_INLINE_OPT void VTop___024root___nba_sequent__TOP__0(VTop___024root* vlSelf) 
     __Vdlyvset__Top__DOT__core__DOT__CSRInstance__DOT__csrs_ext__DOT__Memory__v8 = 0U;
     __Vdlyvset__Top__DOT__core__DOT__CSRInstance__DOT__csrs_ext__DOT__Memory__v9 = 0U;
     __Vdlyvset__Top__DOT__core__DOT__CSRInstance__DOT__csrs_ext__DOT__Memory__v10 = 0U;
-    if (((IData)(vlSelf->Top__DOT__core__DOT__RegFileInstance__DOT__io_wen_0) 
-         & (0U != (0x1fU & (vlSelf->Top__DOT__memory__DOT__mem__DOT__imem 
-                            >> 7U))))) {
+    if (((IData)(vlSelf->io_debug_WbEn) & (0U != (0x1fU 
+                                                  & (vlSelf->Top__DOT__memory__DOT__mem__DOT__imem 
+                                                     >> 7U))))) {
         __Vdlyvval__Top__DOT__core__DOT__RegFileInstance__DOT__regs_ext__DOT__Memory__v0 
             = vlSelf->io_debug_reg_wdata;
         __Vdlyvset__Top__DOT__core__DOT__RegFileInstance__DOT__regs_ext__DOT__Memory__v0 = 1U;
         __Vdlyvdim0__Top__DOT__core__DOT__RegFileInstance__DOT__regs_ext__DOT__Memory__v0 
-            = (0x1fU & (vlSelf->Top__DOT__memory__DOT__mem__DOT__imem 
-                        >> 7U));
+            = (0xfU & (vlSelf->Top__DOT__memory__DOT__mem__DOT__imem 
+                       >> 7U));
     }
     if (vlSelf->Top__DOT__core__DOT__CSRInstance__DOT___GEN_7) {
         __Vdlyvval__Top__DOT__core__DOT__CSRInstance__DOT__csrs_ext__DOT__Memory__v0 
@@ -284,8 +284,8 @@ VL_INLINE_OPT void VTop___024root___nba_sequent__TOP__0(VTop___024root* vlSelf) 
     vlSelf->Top__DOT__core__DOT__RegFileInstance__DOT__io_rs1_0 
         = ((0U != (0x1fU & (vlSelf->Top__DOT__memory__DOT__mem__DOT__imem 
                             >> 0xfU))) ? vlSelf->Top__DOT__core__DOT__RegFileInstance__DOT__regs_ext__DOT__Memory
-           [(0x1fU & (vlSelf->Top__DOT__memory__DOT__mem__DOT__imem 
-                      >> 0xfU))] : 0U);
+           [(0xfU & (vlSelf->Top__DOT__memory__DOT__mem__DOT__imem 
+                     >> 0xfU))] : 0U);
     vlSelf->io_debug_mtvec = vlSelf->Top__DOT__core__DOT__CSRInstance__DOT__csrs_ext__DOT__Memory
         [0x305U];
     vlSelf->io_debug_mepc = vlSelf->Top__DOT__core__DOT__CSRInstance__DOT__csrs_ext__DOT__Memory
@@ -325,8 +325,8 @@ VL_INLINE_OPT void VTop___024root___nba_sequent__TOP__3(VTop___024root* vlSelf) 
     vlSelf->io_debug_wdata = ((0U != (0x1fU & (vlSelf->Top__DOT__memory__DOT__mem__DOT__imem 
                                                >> 0x14U)))
                                ? vlSelf->Top__DOT__core__DOT__RegFileInstance__DOT__regs_ext__DOT__Memory
-                              [(0x1fU & (vlSelf->Top__DOT__memory__DOT__mem__DOT__imem 
-                                         >> 0x14U))]
+                              [(0xfU & (vlSelf->Top__DOT__memory__DOT__mem__DOT__imem 
+                                        >> 0x14U))]
                                : 0U);
     vlSelf->Top__DOT__core__DOT__CompareInstance__DOT____VdfgTmp_hf84125da__0 
         = VL_LTS_III(32, vlSelf->Top__DOT__core__DOT__RegFileInstance__DOT__io_rs1_0, vlSelf->io_debug_wdata);

@@ -29,6 +29,7 @@ class DebugPort extends Bundle {
   val next_pc = Output(UInt(WORD_LEN.W))
   val reg_wdata = Output(UInt(WORD_LEN.W))
   val WbSel    = Output(WbSelEnum())
+  val WbEn    = Output(Bool())
 }
 
 class Top extends Module {

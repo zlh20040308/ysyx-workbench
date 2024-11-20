@@ -38,6 +38,7 @@ class VTop VL_NOT_FINAL : public VerilatedModel {
     VL_OUT8(&io_debug_imm_sel,2,0);
     VL_OUT8(&io_debug_CSRCmd,2,0);
     VL_OUT8(&io_debug_WbSel,1,0);
+    VL_OUT8(&io_debug_WbEn,0,0);
     VL_OUT16(&io_debug_csr_id,11,0);
     VL_OUT(&io_debug_pc,31,0);
     VL_OUT(&io_debug_alu_out,31,0);

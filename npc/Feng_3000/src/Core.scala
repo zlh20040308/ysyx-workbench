@@ -171,5 +171,7 @@ class Core extends Module {
   io.debug.imm_sel  := CUInstance.io.ImmSel
   io.debug.next_pc  := next_pc
   io.debug.reg_wdata  := reg_wdata
-  io.debug.WbSel   :=CUInstance.io.WbSel
+  io.debug.WbSel   := CUInstance.io.WbSel
+  io.debug.WbEn   := CUInstance.io.WbEn
+
 }
