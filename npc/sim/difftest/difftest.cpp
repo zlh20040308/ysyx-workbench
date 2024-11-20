@@ -4,12 +4,14 @@
 
 #include <common.h>
 #include <difftest.h>
+#include <list>
 #include <mem.h>
 #include <verilator-sim.h>
 
 rtl_CPU_State cpu;
 extern uint32_t cur_pc;
-uint32_t ld_delay = 0;
+std::list<int> delay;
+
 
 void (*ref_difftest_memcpy)(word_t addr, void *buf, word_t n,
                             bool direction) = NULL;
@@ -66,27 +68,29 @@ void init_difftest(char *ref_so_file, word_t img_size) {
 }
 
 void difftest_skip_ref() {
-  is_skip_ref = true;
-  ld_delay = 2;
-  assert(is_skip_ref);
+  // is_skip_ref = true;
+  // assert(is_skip_ref);
+  if (delay.empty()) {
+    delay.push_back(1);
+    delay.push_back(0);
+  } else {
+    delay.push_back(0);
+  }
   return;
 }
 
 void difftest_one_exec() {
-  if (ld_delay == 2) {
-    ld_delay--;
+  if (delay.empty()) {
     ref_difftest_exec(1);
-    return;
+  } else {
+    if (delay.front() == 1) {
+      ref_difftest_exec(1);
+      delay.pop_front();
+    } else {
+      ref_difftest_regcpy(&cpu, DIFFTEST_TO_REF);
+      delay.pop_front();
+    }
   }
-  if (is_skip_ref) {
-    Log("is_skip_ref cpu.pc = %x, clock = %d", cpu.pc, top->clock);
-    ref_difftest_regcpy(&cpu, DIFFTEST_TO_REF);
-    is_skip_ref = false;
-    assert(!is_skip_ref);
-    return;
-  }
-
-  ref_difftest_exec(1);
   return;
 }
 

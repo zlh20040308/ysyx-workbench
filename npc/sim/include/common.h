@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <list>
 
 typedef int32_t sword_t;
 typedef uint32_t word_t;
