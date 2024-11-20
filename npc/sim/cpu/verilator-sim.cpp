@@ -1,20 +1,7 @@
-/***************************************************************************************
- * Copyright (c) 2023 Yusong Yan, Beijing 101 High School
- * Copyright (c) 2023 Yusong Yan, University of Washington - Seattle
- *
- * YSYX-NPC-SIM is licensed under Mulan PSL v2.
- * You can use this software according to the terms and conditions of the Mulan
- *PSL v2. You may obtain a copy of Mulan PSL v2 at:
- *          http://license.coscl.org.cn/MulanPSL2
- *
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY
- *KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
- *NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
- *
- * See the Mulan PSL v2 for more details.
- ***************************************************************************************/
 
+#include <cassert>
 #include <common.h>
+#include <cstdio>
 #include <device.h>
 #include <difftest.h>
 #include <math.h>
@@ -28,7 +15,12 @@ word_t last_diff_pc = 0;
 #define NPC_RUNNING 0
 #define NPC_STOPPED 1
 
-//#define CONFIG_RUNTIME_MESSAGE
+bool top_prev_clock = 1;
+int prev_t1 = 0;
+int prev_a5 = 0;
+uint32_t cur_pc = 0;
+
+// #define CONFIG_RUNTIME_MESSAGE
 
 int memory_delay = 0;
 
@@ -46,18 +38,16 @@ word_t time_of_exec;
 void reset() {
   top->reset = 1;
   top->eval();
-  int loop = 20;
-  while (loop) {
-    top->clock ^= 1;
-    top->eval();
-    loop--;
-  }
+  top->clock ^= 1;
+  top->eval();
+  top->clock ^= 1;
+  top->eval();
   top->reset = 0;
   top->eval();
 }
 
 void sim_init() {
-  printf("[simulation] initializing simulation\n");
+  Log("[simulation] initializing simulation");
 
 #ifdef CONFIG_VCD_OUTPUT
   contextp = new VerilatedContext;
@@ -76,12 +66,14 @@ void sim_init() {
   instruction = 0;
   time_of_exec = 0;
 
-  printf("[simulation] simulation initialized, now reset NPC\n");
+  Log("[simulation] simulation initialized, now reset NPC");
 
   reset();
-  top->eval();
+  assert(top->io_debug_gpr[0] == 0);
+  assert(top->io_debug_mstatus == 0x1800);
+  assert(top->io_debug_pc == 0x80000000);
 
-  printf("[simulation] NPC has been resetted\n");
+  Log("[simulation] NPC has been resetted");
   return;
 }
 
@@ -100,19 +92,42 @@ void sim_exit() {
 
 void sim_one_cycle() {
   assert(top);
-
   cycle = cycle + 1;
 
-  top->clock ^= 1;
-  top->eval();
-  step_and_dump_wave();
+  cur_pc = top->io_debug_pc;
+
+  // cycle = cycle + 1;
+  // Log("before top->io_debug_pc = %x", top->io_debug_pc);
+  // Log("cpu.pc = %x", cpu.pc);
+  // Log("top->clock = %x", top->clock);
+  // exit(0);
+  // Log("HAHA1, cpu.pc = %x, top->pc = %x, top->next_pc = %x", cpu.pc,
+  //     top->io_debug_pc, top->io_debug_next_pc);
 
   top->clock ^= 1;
-  top->eval();
   step_and_dump_wave();
+  // Log("HAHA2, cpu.pc = %x, top->pc = %x, top->next_pc = %x", cpu.pc,
+  //     top->io_debug_pc, top->io_debug_next_pc);
 
+  top->clock ^= 1;
+  step_and_dump_wave();
+  // Log("a0 = %x, cycle = %d", top->io_debug_gpr[10], cycle);
+
+  // Log("HAHA3, cpu.pc = %x, top->pc = %x, top->next_pc = %x", cpu.pc,
+  //     top->io_debug_pc, top->io_debug_next_pc);
+  // Log("WbEn = %d, reg_wdata = %x, WbSel = %d, a0 = %x", top->io_debug_WbEn,
+  //     top->io_debug_reg_wdata, top->io_debug_WbSel, top->io_debug_gpr[10]);
+  // if (top->io_debug_gpr[10] == 0x4f) {
+  //   Log("cpu.pc = %x, top->pc = %x, top->next_pc = %x", cpu.pc,
+  //       top->io_debug_pc, top->io_debug_next_pc);
+  //   Log("cycle = %d", cycle);
+  //   exit(0);
+  // }
 
   get_regs(); // used as print registers or difftest
+
+  // Log("top->io_debug_pc = %x", top->io_debug_pc);
+  // Log("cpu.pc = %x", cpu.pc);
   // display_regs();
 
   if (top->io_ebreak == 1) {
@@ -124,10 +139,6 @@ void sim_one_cycle() {
       printf("HIT BAD  TRAP\n");
     }
     npc_state.state = NPC_END;
-
-#ifdef CONFIG_DIFFTEST
-    difftest_one_exec();
-#endif
   }
 
   return;

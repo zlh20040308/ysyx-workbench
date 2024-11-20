@@ -35,14 +35,24 @@ class Core extends Module {
 
   /* ---------- PC ---------- */
   val pc_plus4 = pc + 4.U
-  switch(CUInstance.io.PCSel) {
-    is(PCSelEnum.PC_4) {
-      pc := pc_plus4
-    }
-    is(PCSelEnum.PC_ALU) {
-      pc := JPCGenInstance.io.pc_alu
-    }
-  }
+
+  val pc_csr = MuxCase(
+    0.U,
+    Array(
+      (CUInstance.io.CSRCmd === CSRCmdEnum.CSR_Ecall) -> CSRInstance.io.mtvec,
+      (CUInstance.io.CSRCmd === CSRCmdEnum.CSR_Mret)  -> CSRInstance.io.mepc
+    ).toIndexedSeq
+  )
+  val next_pc = MuxCase(
+    pc_plus4,
+    Array(
+      (CUInstance.io.PCSel === PCSelEnum.PC_4) -> pc_plus4,
+      (CUInstance.io.PCSel === PCSelEnum.PC_ALU) -> JPCGenInstance.io.pc_alu,
+      (CUInstance.io.PCSel === PCSelEnum.PC_CSR) -> pc_csr,
+    ).toIndexedSeq
+  )
+
+  pc := next_pc
 
   /* ---------- IMEM ---------- */
   io.imem.addr := pc
@@ -56,20 +66,19 @@ class Core extends Module {
 
   RegFileInstance.io.wen := CUInstance.io.WbEn
 
-  switch(CUInstance.io.WbSel) {
-    is(WbSelEnum.WB_ALU) {
-      RegFileInstance.io.wdata := AluInstance.io.out
-    }
-    is(WbSelEnum.WB_MEM) {
-      RegFileInstance.io.wdata := LdDataInstance.io.wb_data
-    }
-    is(WbSelEnum.WB_PC4) {
-      RegFileInstance.io.wdata := pc_plus4
-    }
-    is(WbSelEnum.WB_CSR) {
-      RegFileInstance.io.wdata := CSRInstance.io.rdata
-    }
-  }
+  val reg_wdata = MuxCase(
+    0.U,
+    Array(
+      (CUInstance.io.WbSel === WbSelEnum.WB_ALU) -> AluInstance.io.out,
+      (CUInstance.io.WbSel === WbSelEnum.WB_MEM) -> LdDataInstance.io.wb_data,
+      (CUInstance.io.WbSel === WbSelEnum.WB_PC4) -> pc_plus4,
+      (CUInstance.io.WbSel === WbSelEnum.WB_CSR) -> CSRInstance.io.rdata,
+
+    ).toIndexedSeq
+  )
+
+  RegFileInstance.io.wdata := reg_wdata
+
 
   /* ---------- ALU ---------- */
   AluInstance.io.alu_op := CUInstance.io.ALUSel
@@ -113,11 +122,14 @@ class Core extends Module {
   CSRInstance.io.CSRCmd := CUInstance.io.CSRCmd
   CSRInstance.io.addr   := io.imem.inst(31, 20)
 
-  when(CUInstance.io.ImmSel === ImmSelEnum.IMM_Z) {
-    CSRInstance.io.wdata := ImmGenInstance.io.out
-  }.otherwise {
-    CSRInstance.io.wdata := AluInstance.io.out
-  }
+  val csr_wdata = MuxCase(
+    AluInstance.io.out,
+    Array(
+      (CUInstance.io.ImmSel === ImmSelEnum.IMM_Z) -> ImmGenInstance.io.out,
+    ).toIndexedSeq
+  )
+
+  CSRInstance.io.wdata := csr_wdata
 
   /* ---------- JPCGen ---------- */
   JPCGenInstance.io.alu_data := AluInstance.io.out
@@ -139,9 +151,27 @@ class Core extends Module {
   io.ebreak := CUInstance.io.Ebreak
 
   /* ---------- DebugPort ---------- */
-  io.debug.pc    := pc
-  io.debug.PCSel := CUInstance.io.PCSel
-  io.debug.gpr   := RegFileInstance.io.gpr
-  io.debug.alu_op   := CUInstance.io.ALUSel
+  io.debug.pc      := pc
+  io.debug.PCSel   := CUInstance.io.PCSel
+  io.debug.gpr     := RegFileInstance.io.gpr
+  io.debug.alu_op  := CUInstance.io.ALUSel
+  io.debug.mtvec   := CSRInstance.io.mtvec
+  io.debug.mepc    := CSRInstance.io.mepc
+  io.debug.mcause  := CSRInstance.io.mcause
+  io.debug.mstatus := CSRInstance.io.mstatus
+  io.debug.Valid   := CUInstance.io.Valid
+  io.debug.addr    := io.dmem.addr  
+  io.debug.wdata   := io.dmem.wdata 
+  io.debug.wen     := io.dmem.wen   
+  io.debug.rdata   := io.dmem.rdata 
+  io.debug.csr_id  := io.imem.inst(31, 20)
+  io.debug.CSRCmd  := CUInstance.io.CSRCmd
+  io.debug.CSRWdata := csr_wdata
+  io.debug.alu_out  := AluInstance.io.out
+  io.debug.imm_sel  := CUInstance.io.ImmSel
+  io.debug.next_pc  := next_pc
+  io.debug.reg_wdata  := reg_wdata
+  io.debug.WbSel   := CUInstance.io.WbSel
+  io.debug.WbEn   := CUInstance.io.WbEn
 
 }

@@ -1,30 +1,15 @@
-/***************************************************************************************
- * Copyright (c) 2023 Yusong Yan, Beijing 101 High School
- * Copyright (c) 2023 Yusong Yan, University of Washington - Seattle
- *
- * YSYX-NPC-SIM is licensed under Mulan PSL v2.
- * You can use this software according to the terms and conditions of the Mulan
- *PSL v2. You may obtain a copy of Mulan PSL v2 at:
- *          http://license.coscl.org.cn/MulanPSL2
- *
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY
- *KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
- *NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
- *
- * See the Mulan PSL v2 for more details.
- ***************************************************************************************/
 
 #include <common.h>
+#include <cstdint>
 #include <device.h>
 #include <mem.h>
-
 static uint8_t *pmem = NULL;
 
 void init_mem() {
-  printf("Initializing Memory\n");
+  Log("Initializing Memory");
   pmem = (uint8_t *)malloc(MEM_END - MEM_START + 1);
   assert(pmem);
-  printf("Memory [0x%x, 0x%x]\n", MEM_START, MEM_END);
+  Log("Memory [0x%x, 0x%x]", MEM_START, MEM_END);
   return;
 }
 
@@ -46,6 +31,7 @@ word_t pmem_read(word_t addr, int len) {
     word_t pmem_ret = host_read(guest_to_host(addr), len);
     return pmem_ret;
   } else {
+    // Log("addr = %x\n", addr);
     // this is outside pmem, call device mmio read
     word_t mmio_ret = mmio_read(addr, len);
     return mmio_ret;
@@ -63,6 +49,7 @@ void pmem_write(word_t addr, int len, word_t data) {
     host_write(guest_to_host(addr), len, data);
     return;
   } else {
+    // Log("addr = %x\n", addr);
     // this is outside pmem, call device mmio read
     mmio_write(addr, len, data);
     return;
@@ -76,6 +63,15 @@ void pmem_write(word_t addr, int len, word_t data) {
 
 extern "C" void ram_write_helper(uint32_t addr, uint32_t wdata,
                                  uint32_t wmask) {
+  if (top->reset == 1) {
+    return;
+  }
+  // if (cpu.pc == top->io_debug_next_pc) {
+  //   Log("top->pc = %x", top->io_debug_pc);
+  //   return;
+  // }
+  // Log("paddr is 0x%8x, wdata = %x, wmask = %x, cpu.pc = %x, pc = %x,next_pc = %x, clock = %d, cycle = %d",
+  //         addr, wdata, wmask, cpu.pc, top->io_debug_pc, top->io_debug_next_pc, top->clock, cycle);
   int len = 1;
   switch (wmask) {
   case 0x000000FF:
@@ -91,11 +87,21 @@ extern "C" void ram_write_helper(uint32_t addr, uint32_t wdata,
     printf("[memory] invalid wmask = 0x%x\n", wmask);
   }
   pmem_write(addr, len, wdata & wmask);
+  // Log("Data = %x has been written into Addr = %x", pmem_read(addr, len), addr);
 }
 
 extern "C" uint32_t ram_read_helper(uint32_t addr) {
   if (top->reset == 1) {
     return 0;
   }
-  return pmem_read(addr, 4);
+  // if (cpu.pc == top->io_debug_next_pc) {
+  //   Log("top->pc = %x", top->io_debug_pc);
+  //   return 0;
+  // }
+
+  uint32_t rdata = pmem_read(addr, 4);
+  // Log("paddr is 0x%8x, rdata = %x, cpu.pc = %x, pc = %x,next_pc = %x, clock = %d, cycle = "
+  //     "%d",
+  //     addr, rdata, cpu.pc, top->io_debug_pc, top->io_debug_next_pc, top->clock, cycle);
+  return rdata;
 }

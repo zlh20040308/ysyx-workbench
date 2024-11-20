@@ -27,9 +27,11 @@ object PCSel extends DecodeField[Insn, PCSelEnum.Type] {
     val dontCareStr     = "b" + ("?" * PCSelEnum.getWidth)
     val dontCarePattern = BitPat(dontCareStr)
 
-    val otherInstructions = Set("beq", "bne", "blt", "bge", "bltu", "bgeu", "ecall", "ebreak")
+    val otherInstructions = Set("beq", "bne", "blt", "bge", "bltu", "bgeu", "ebreak")
     if (Utils.isJ(i.inst) || i.inst.name == "jalr") {
       BitPat(PCSelEnum.PC_ALU.litValue.U(PCSelEnum.getWidth.W))
+    } else if (i.inst.name == "ecall" || i.inst.name == "mret") {
+      BitPat(PCSelEnum.PC_CSR.litValue.U(PCSelEnum.getWidth.W))
     } else if (otherInstructions.contains(i.inst.name)) {
       dontCarePattern
     } else {
@@ -48,7 +50,7 @@ object ASel extends DecodeField[Insn, ASelEnum.Type] {
     val dontCareStr       = "b" + ("?" * ASelEnum.getWidth)
     val dontCarePattern   = BitPat(dontCareStr)
 
-    if (i.inst.name == "auipc" || Utils.isB(i.inst) || Utils.isJ(i.inst)) {
+    if (i.inst.name == "ecall" || i.inst.name == "auipc" || Utils.isB(i.inst) || Utils.isJ(i.inst)) {
       BitPat(ASelEnum.A_PC.litValue.U(ASelEnum.getWidth.W))
     } else if (Utils.isI(i.inst) || Utils.isS(i.inst) || Utils.isR(i.inst) || otherInstructions.contains(i.inst.name)) {
       BitPat(ASelEnum.A_RS1.litValue.U(ASelEnum.getWidth.W))
@@ -105,7 +107,7 @@ object ImmSel extends DecodeField[Insn, ImmSelEnum.Type] {
     } else if (immzInstructions.contains(i.inst.name)) {
       BitPat(ImmSelEnum.IMM_Z.litValue.U(ImmSelEnum.getWidth.W))
     } else {
-      dontCarePattern
+      BitPat(ImmSelEnum.IMM_X.litValue.U(ImmSelEnum.getWidth.W))
     }
   }
 }
@@ -123,18 +125,18 @@ object ALUSel extends DecodeField[Insn, AluEnum.Type] {
       BitPat(AluEnum.ALU_ADD.litValue.U((AluEnum.getWidth).W))
     } else {
       i.inst.name match {
-        case "lui"                       => BitPat(AluEnum.ALU_COPY_B.litValue.U(AluEnum.getWidth.W))
-        case "slt" | "slti"              => BitPat(AluEnum.ALU_SLT.litValue.U(AluEnum.getWidth.W))
-        case "sltiu" | "sltu"            => BitPat(AluEnum.ALU_SLTU.litValue.U(AluEnum.getWidth.W))
-        case "xor" | "xori"              => BitPat(AluEnum.ALU_XOR.litValue.U(AluEnum.getWidth.W))
-        case "or" | "ori"                => BitPat(AluEnum.ALU_OR.litValue.U(AluEnum.getWidth.W))
-        case "and" | "andi"              => BitPat(AluEnum.ALU_AND.litValue.U(AluEnum.getWidth.W))
-        case "sll" | "slli"              => BitPat(AluEnum.ALU_SLL.litValue.U(AluEnum.getWidth.W))
-        case "srl" | "srli"              => BitPat(AluEnum.ALU_SRL.litValue.U(AluEnum.getWidth.W))
-        case "sra" | "srai"              => BitPat(AluEnum.ALU_SRA.litValue.U(AluEnum.getWidth.W))
-        case "sub"                       => BitPat(AluEnum.ALU_SUB.litValue.U(AluEnum.getWidth.W))
-        case "csrrw" | "csrrs" | "csrrc" => BitPat(AluEnum.ALU_COPY_A.litValue.U(AluEnum.getWidth.W))
-        case _                           => dontCarePattern
+        case "lui"                                 => BitPat(AluEnum.ALU_COPY_B.litValue.U(AluEnum.getWidth.W))
+        case "slt" | "slti"                        => BitPat(AluEnum.ALU_SLT.litValue.U(AluEnum.getWidth.W))
+        case "sltiu" | "sltu"                      => BitPat(AluEnum.ALU_SLTU.litValue.U(AluEnum.getWidth.W))
+        case "xor" | "xori"                        => BitPat(AluEnum.ALU_XOR.litValue.U(AluEnum.getWidth.W))
+        case "or" | "ori"                          => BitPat(AluEnum.ALU_OR.litValue.U(AluEnum.getWidth.W))
+        case "and" | "andi"                        => BitPat(AluEnum.ALU_AND.litValue.U(AluEnum.getWidth.W))
+        case "sll" | "slli"                        => BitPat(AluEnum.ALU_SLL.litValue.U(AluEnum.getWidth.W))
+        case "srl" | "srli"                        => BitPat(AluEnum.ALU_SRL.litValue.U(AluEnum.getWidth.W))
+        case "sra" | "srai"                        => BitPat(AluEnum.ALU_SRA.litValue.U(AluEnum.getWidth.W))
+        case "sub"                                 => BitPat(AluEnum.ALU_SUB.litValue.U(AluEnum.getWidth.W))
+        case "csrrw" | "csrrs" | "csrrc" | "ecall" => BitPat(AluEnum.ALU_COPY_A.litValue.U(AluEnum.getWidth.W))
+        case _                                     => dontCarePattern
       }
     }
   }
@@ -227,8 +229,10 @@ object CSRCmd extends DecodeField[Insn, CSRCmdEnum.Type] {
       BitPat(CSRCmdEnum.CSR_S.litValue.U(CSRCmdEnum.getWidth.W))
     } else if (i.inst.name == "csrrc" || i.inst.name == "csrrci") {
       BitPat(CSRCmdEnum.CSR_C.litValue.U(CSRCmdEnum.getWidth.W))
-    } else if (i.inst.name == "ecall" || i.inst.name == "ebreak") {
-      BitPat(CSRCmdEnum.CSR_P.litValue.U(CSRCmdEnum.getWidth.W))
+    } else if (i.inst.name == "ecall") {
+      BitPat(CSRCmdEnum.CSR_Ecall.litValue.U(CSRCmdEnum.getWidth.W))
+    } else if (i.inst.name == "mret") {
+      BitPat(CSRCmdEnum.CSR_Mret.litValue.U(CSRCmdEnum.getWidth.W))
     } else {
       BitPat(CSRCmdEnum.CSR_N.litValue.U(CSRCmdEnum.getWidth.W))
     }
@@ -281,20 +285,21 @@ class Decode(val xlen: Int) extends Module {
   val io   = IO(new DecodeIO(xlen))
   val inst = io.inst
 
-  val rviExceptInstructions =
-    Set("fence")
+  val rviExceptInstructions = Set("fence")
 
-  val rv32iExceptInstructions =
-    Set("slli_rv32", "srli_rv32", "srai_rv32")
+  val rv32iExceptInstructions = Set("slli_rv32", "srli_rv32", "srai_rv32")
+
+  val rvsystemExceptInstructions = Set("wfi")
 
   val instTable =
     rvdecoderdb.fromFile.instructions(os.pwd / "rvdecoderdb" / "rvdecoderdbtest" / "jvm" / "riscv-opcodes")
-  val rviTargetSets   = Set("rv_i")
-  val rv32iTargetSets   = Set("rv32_i")
-  val rvzicsrTargetSets = Set("rv_zicsr")
+  val rviTargetSets      = Set("rv_i")
+  val rv32iTargetSets    = Set("rv32_i")
+  val rvzicsrTargetSets  = Set("rv_zicsr")
+  val rvsystemTargetSets = Set("rv_system")
 
   // add implemented instructions here
-    val rviInstList = instTable
+  val rviInstList = instTable
     .filter(instr => rviTargetSets.contains(instr.instructionSet.name))
     .filter(instr => !rviExceptInstructions.contains(instr.name))
     .filter(_.pseudoFrom.isEmpty)
@@ -313,13 +318,22 @@ class Decode(val xlen: Int) extends Module {
     .map(Insn(_))
     .toSeq
 
-  val instList = rviInstList ++ rv32iInstList ++ rvzicsrInstList
+  val rvsystemInstList = instTable
+    .filter(_.pseudoFrom.isEmpty)
+    .filter(instr => rvsystemTargetSets.contains(instr.instructionSet.name))
+    .filter(instr => !rvsystemExceptInstructions.contains(instr.name))
+    .map(Insn(_))
+    .toSeq
+
+  val instList = rviInstList ++ rv32iInstList ++ rvzicsrInstList ++ rvsystemInstList
 
   println(s"The length of rviInstList is: ${rviInstList.length}")
 
   println(s"The length of rv32iInstList is: ${rv32iInstList.length}")
 
   println(s"The length of rvzicsrInstList is: ${rvzicsrInstList.length}")
+
+  println(s"The length of rvsystemInstList is: ${rvsystemInstList.length}")
 
   println(s"The length of instList is: ${instList.length}")
   val decodeTable = new DecodeTable(

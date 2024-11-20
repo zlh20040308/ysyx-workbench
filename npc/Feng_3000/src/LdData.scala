@@ -23,7 +23,7 @@ class LdData(val xlen: Int) extends Module {
       io.wb_data := Cat(Fill(16, io.rdata(15)), io.rdata(15, 0))
     }
     is(LdTypeEnum.LD_LW) {
-      io.wb_data := io.rdata(31, 0)
+      io.wb_data := io.rdata
     }
     is(LdTypeEnum.LD_LBU) {
       io.wb_data := Cat(Fill(24, 0.U), io.rdata(7, 0))

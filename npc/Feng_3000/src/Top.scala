@@ -8,7 +8,28 @@ class DebugPort extends Bundle {
   val pc = Output(UInt(WORD_LEN.W))
   val PCSel = Output(PCSelEnum())
   val alu_op = Output(AluEnum())
+  val alu_out = Output(UInt(WORD_LEN.W))
+  val imm_sel = Output(ImmSelEnum())
+
+
   val gpr = Output(Vec(16, UInt(WORD_LEN.W)))
+  val mtvec   = Output(UInt(WORD_LEN.W))
+  val mepc    = Output(UInt(WORD_LEN.W))
+  val mcause  = Output(UInt(WORD_LEN.W))
+  val mstatus = Output(UInt(WORD_LEN.W))
+  val Valid = Output(Bool())
+
+  val addr  = Output(UInt(WORD_LEN.W))
+  val wdata = Output(UInt(WORD_LEN.W))
+  val wen   = Output(Bool())
+  val rdata = Output(UInt(WORD_LEN.W))
+  val csr_id = Output(UInt(12.W))
+  val CSRCmd = Output(CSRCmdEnum())
+  val CSRWdata = Output(UInt(WORD_LEN.W))
+  val next_pc = Output(UInt(WORD_LEN.W))
+  val reg_wdata = Output(UInt(WORD_LEN.W))
+  val WbSel    = Output(WbSelEnum())
+  val WbEn    = Output(Bool())
 }
 
 class Top extends Module {
@@ -22,6 +43,7 @@ class Top extends Module {
 
   core.io.imem <> memory.io.imem
   core.io.dmem <> memory.io.dmem
+  memory.io.pc := core.io.debug.pc
   io.ebreak := core.io.ebreak
 
 

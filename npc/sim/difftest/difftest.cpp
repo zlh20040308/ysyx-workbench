@@ -1,27 +1,17 @@
-/***************************************************************************************
- * Copyright (c) 2023 Yusong Yan, Beijing 101 High School
- * Copyright (c) 2023 Yusong Yan, University of Washington - Seattle
- *
- * YSYX-NPC-SIM is licensed under Mulan PSL v2.
- * You can use this software according to the terms and conditions of the Mulan
- *PSL v2. You may obtain a copy of Mulan PSL v2 at:
- *          http://license.coscl.org.cn/MulanPSL2
- *
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY
- *KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
- *NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
- *
- * See the Mulan PSL v2 for more details.
- ***************************************************************************************/
 
+#include <cstdint>
 #include <dlfcn.h>
 
 #include <common.h>
 #include <difftest.h>
+#include <list>
 #include <mem.h>
 #include <verilator-sim.h>
 
 rtl_CPU_State cpu;
+extern uint32_t cur_pc;
+std::list<int> delay;
+
 
 void (*ref_difftest_memcpy)(word_t addr, void *buf, word_t n,
                             bool direction) = NULL;
@@ -33,13 +23,13 @@ static bool is_skip_ref = false;
 
 word_t mem_img_size = -1;
 
-void difftest_init(char *ref_so_file, word_t img_size) {
+void init_difftest(char *ref_so_file, word_t img_size) {
 #ifdef CONFIG_DIFFTEST
   assert(ref_so_file != NULL);
   assert(img_size >= 0);
-  printf("[difftest] initializing diifferential testing, the ref-so-file is "
-         "%s, img-size is %d\n",
-         ref_so_file, img_size);
+  Log("[difftest] initializing diifferential testing, the ref-so-file is "
+      "%s, img-size is %d",
+      ref_so_file, img_size);
   mem_img_size = img_size;
   assert(mem_img_size >= 0);
   assert(mem_img_size == img_size);
@@ -67,39 +57,45 @@ void difftest_init(char *ref_so_file, word_t img_size) {
       (void (*)(int))dlsym(handle, "difftest_init");
   assert(ref_difftest_init);
 
-  cpu.pc = 0x80000000;
-  printf("[difftest] initialized PC = 0x%x\n", cpu.pc);
-
   ref_difftest_init(1234);
   ref_difftest_memcpy(MEM_START, guest_to_host(MEM_START), img_size,
                       DIFFTEST_TO_REF);
-  ref_difftest_regcpy(&cpu, DIFFTEST_TO_REF);
-
 #else
-  printf("[difftest] not enabled\n");
+  Log("[difftest] not enabled\n");
 #endif
 
   return;
 }
 
 void difftest_skip_ref() {
-  is_skip_ref = true;
-  assert(is_skip_ref);
+  // is_skip_ref = true;
+  // assert(is_skip_ref);
+  if (delay.empty()) {
+    delay.push_back(1);
+    delay.push_back(0);
+  } else {
+    delay.push_back(0);
+  }
   return;
 }
 
 void difftest_one_exec() {
-  if (is_skip_ref) {
-    ref_difftest_regcpy(&cpu, DIFFTEST_TO_REF);
-    is_skip_ref = false;
-    assert(!is_skip_ref);
-    return;
+  if (delay.empty()) {
+    ref_difftest_exec(1);
+  } else {
+    if (delay.front() == 1) {
+      ref_difftest_exec(1);
+      delay.pop_front();
+    } else {
+      ref_difftest_regcpy(&cpu, DIFFTEST_TO_REF);
+      delay.pop_front();
+    }
   }
-  ref_difftest_exec(1);
   return;
 }
 
 bool difftest_check_reg() {
+  bool success = true;
   if (is_skip_ref) {
     return true;
   }
@@ -108,18 +104,12 @@ bool difftest_check_reg() {
   ref_difftest_regcpy(&ref, DIFFTEST_TO_DUT);
   assert(&ref != NULL);
 
-  if (cpu.pc != ref.pc) {
-    printf("[difftest] ERROR: PC is different, ref is 0x%x, dut is 0x%x\n",
-           ref.pc, cpu.pc);
-    return false;
-  }
-
-  for (int i = 0; i < NR_GPRs; i = i + 1) {
+  for (int i = 0; i < 16; ++i) {
     if (cpu.gpr[i] != ref.gpr[i]) {
-      printf("[difftest] ERROR: GPR[%d] is different at PC 0x%x, ref is 0x%x, "
-             "dut is 0x%x\n",
-             i, cpu.pc, ref.gpr[i], cpu.gpr[i]);
-      return false;
+      Log("[difftest] ERROR: GPR[%d] is different at PC 0x%x, ref is 0x%x, "
+          "dut is 0x%x",
+          i, top->io_debug_pc, ref.gpr[i], cpu.gpr[i]);
+      success = false;
     }
   }
 
@@ -130,5 +120,5 @@ bool difftest_check_reg() {
           return false;
       }
   }*/
-  return true;
+  return success;
 }

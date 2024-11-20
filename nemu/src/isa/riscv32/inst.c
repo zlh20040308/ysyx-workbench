@@ -108,8 +108,10 @@ enum {
 
 #define update_mstatus()                                                       \
   do {                                                                         \
-    CSRs(MSTATUS) = CSRs(MSTATUS) | ((CSRs(MSTATUS) & 0x80) >> 4);             \
-    CSRs(MSTATUS) = CSRs(MSTATUS) | 0x0080;                                    \
+    csr_mstatus_t mstatus = {.packed = CSRs(MSTATUS)};                         \
+    mstatus.mie = mstatus.mpie;                                                \
+    mstatus.mpie = 1;                                                          \
+    CSRs(MSTATUS) = mstatus.packed;                                            \
   } while (0)
 
 static word_t _ecall(word_t a7, vaddr_t epc) {
@@ -128,7 +130,7 @@ static word_t _ecall(word_t a7, vaddr_t epc) {
 static void write_to_csr(word_t csr_id, word_t data) {
   switch (csr_id) {
   case MSTATUS:
-    CSRs(csr_id) = data & 0x80207888;
+    CSRs(csr_id) = (data & 0x80207888) | CSRs(csr_id);
     break;
   case MTVEC:
   case MCAUSE:
@@ -319,8 +321,6 @@ static int decode_exec(Decode *s) {
   INSTPAT_END();
 
   R(0) = 0; // reset $zero to 0
-
-  CSRs(MSTATUS) = CSRs(MSTATUS) | 0x1800;
 
 #ifdef CONFIG_FTRACE_COND
   const char *funct_name = "???";

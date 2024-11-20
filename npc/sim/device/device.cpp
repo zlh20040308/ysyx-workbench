@@ -1,18 +1,3 @@
-/***************************************************************************************
- * Copyright (c) 2023 Yusong Yan, Beijing 101 High School
- * Copyright (c) 2023 Yusong Yan, University of Washington - Seattle
- *
- * YSYX-NPC-SIM is licensed under Mulan PSL v2.
- * You can use this software according to the terms and conditions of the Mulan
- *PSL v2. You may obtain a copy of Mulan PSL v2 at:
- *          http://license.coscl.org.cn/MulanPSL2
- *
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY
- *KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
- *NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
- *
- * See the Mulan PSL v2 for more details.
- ***************************************************************************************/
 
 #include <SDL2/SDL.h>
 #include <device.h>
@@ -68,7 +53,7 @@ void device_update() {
 }
 
 void init_device() {
-  printf("[device] initializing devices\n");
+  Log("[device] initializing devices");
 
   init_map();
 
@@ -88,7 +73,7 @@ void init_device() {
   init_vga();
 #endif
 
-  printf("[device] device initialize finished\n");
+  Log("[device] device initialize finished");
 
   return;
 }

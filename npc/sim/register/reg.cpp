@@ -1,19 +1,5 @@
-/***************************************************************************************
- * Copyright (c) 2023 Yusong Yan, Beijing 101 High School
- * Copyright (c) 2023 Yusong Yan, University of Washington - Seattle
- *
- * YSYX-NPC-SIM is licensed under Mulan PSL v2.
- * You can use this software according to the terms and conditions of the Mulan
- *PSL v2. You may obtain a copy of Mulan PSL v2 at:
- *          http://license.coscl.org.cn/MulanPSL2
- *
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY
- *KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
- *NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
- *
- * See the Mulan PSL v2 for more details.
- ***************************************************************************************/
 
+#include <stdint.h>
 #include <verilator-sim.h>
 
 // CSR list: mstatus mtvec mepc macuse
@@ -22,6 +8,8 @@ void get_regs() {
   assert(top);
 
   cpu.pc = top->io_debug_pc;
+  // cpu.pc = top->io_debug_next_pc;
+
 
   if (NR_GPRs == 16 || NR_GPRs == 32) {
     cpu.gpr[0] = top->io_debug_gpr[0];
@@ -51,13 +39,10 @@ void get_regs() {
 void display_regs() {
   assert(top);
   assert(&cpu);
-
-  printf("PC = 0x%x\n", cpu.pc);
-
+  // printf("PC = 0x%x\n", cpu.pc);
   for (int i = 0; i < NR_GPRs; i = i + 1) {
     printf("GPR[%2d] = 0x%x\n", i, cpu.gpr[i]);
   }
-
   printf("\n");
 
   return;

@@ -1,21 +1,7 @@
-/***************************************************************************************
- * Copyright (c) 2023 Yusong Yan, Beijing 101 High School
- * Copyright (c) 2023 Yusong Yan, University of Washington - Seattle
- *
- * YSYX-NPC-SIM is licensed under Mulan PSL v2.
- * You can use this software according to the terms and conditions of the Mulan
- *PSL v2. You may obtain a copy of Mulan PSL v2 at:
- *          http://license.coscl.org.cn/MulanPSL2
- *
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY
- *KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
- *NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
- *
- * See the Mulan PSL v2 for more details.
- ***************************************************************************************/
 #pragma once
 #include <common.h>
-//#include<difftest.h>
+#include <difftest.h>
+#include <verilator-sim.h>
 
 #define COFIG_DEVICES
 
@@ -32,6 +18,7 @@
 
 typedef void (*io_callback_t)(uint32_t, int, bool);
 uint8_t *new_space(int size);
+extern uint64_t cycle;
 
 typedef struct {
   const char *name;
@@ -50,10 +37,13 @@ static bool map_inside(IOMap *map, word_t addr) {
 
 static inline int find_mapid_by_addr(IOMap *maps, int size, word_t addr) {
   int i;
-  // printf("[find_mapid_by_addr] paddr is 0x%8x\n", addr);
+  // Log("paddr is 0x%8x, cpu.pc = %x, top->pc = %x", addr, cpu.pc,
+  //     top->io_debug_pc);
   for (i = 0; i < size; i++) {
     if (map_inside(maps + i, addr)) {
-      // difftest_skip_ref();
+      // Log("paddr is 0x%8x, cpu.pc = %x, pc = %x,next_pc = %x, clock = %d, cycle = %d",
+      //     addr, cpu.pc, top->io_debug_pc, top->io_debug_next_pc, top->clock, cycle);
+      difftest_skip_ref();
       return i;
     }
   }

@@ -1,25 +1,13 @@
-/***************************************************************************************
- * Copyright (c) 2023 Yusong Yan, Beijing 101 High School
- * Copyright (c) 2023 Yusong Yan, University of Washington - Seattle
- *
- * YSYX-NPC-SIM is licensed under Mulan PSL v2.
- * You can use this software according to the terms and conditions of the Mulan
- *PSL v2. You may obtain a copy of Mulan PSL v2 at:
- *          http://license.coscl.org.cn/MulanPSL2
- *
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY
- *KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
- *NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
- *
- * See the Mulan PSL v2 for more details.
- ***************************************************************************************/
 
+#include <cstdio>
 #include <device.h>
 #include <mem.h>
 #include <monitor.h>
 #include <verilator-sim.h>
 
 bool is_batch_mode = false;
+extern int prev_t1;
+extern int prev_a5;
 
 static struct {
   const char *name;
@@ -55,13 +43,39 @@ static char *rl_gets() {
 
 int cmd_c(char *args) {
   while (npc_state.state == NPC_RUNNING || npc_state.state == NPC_STOP) {
+    // Log("HAHA1");
     sim_one_cycle();
+    // static int step = 1;
+    // if (step-- == 0) {
+    //   display_regs();
+    //   exit(0);
+    // }
+    // if (cpu.pc == 0x80036798) {
+    //   display_regs();
+    //   exit(0);
+    // }
+    // Log("ggggggg cpu.pc = %x", cpu.pc);
+
 #ifdef COFIG_DEVICES
-  device_update();
-#endif   
+    device_update();
+#endif
+    // Log("HAHA2");
+
+#ifdef CONFIG_DIFFTEST
+    difftest_one_exec();
+    // Log("HAHA3");
+
+    if (difftest_check_reg() == false) {
+      npc_state.state = NPC_ABORT;
+      display_regs();
+      return -1;
+    }
+#endif
   }
-  printf(
-      "[sdb] NPC's state is not NPC_RUNNING or NPC_STOP, can not continue\n");
+  Log("[sdb] NPC's state is not NPC_RUNNING or NPC_STOP, can not continue");
+  display_regs();
+  Log("prev_t1 = %x\n", prev_t1);
+  Log("prev_a5 = %x\n", prev_a5);
   return 0;
 }
 
@@ -104,6 +118,9 @@ int cmd_s(char *args) {
     } else {
       printf("[sdb] NPC's state is not NPC_RUNNING or NPC_STOP, can not "
              "continue\n");
+      display_regs();
+      Log("prev_t1 = %x\n", prev_t1);
+      Log("prev_a5 = %x\n", prev_a5);
     }
     return 0;
   } else {
@@ -115,6 +132,9 @@ int cmd_s(char *args) {
       } else {
         printf("[sdb] NPC's state is not NPC_RUNNING or NPC_STOP, can not "
                "continue\n");
+        display_regs();
+        Log("prev_t1 = %x\n", prev_t1);
+        Log("prev_a5 = %x\n", prev_a5);
       }
     }
     return 0;

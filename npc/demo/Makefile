@@ -3,9 +3,10 @@ INC_PATH ?=
 
 
 VERILATOR = verilator
-VERILATOR_CFLAGS += -MMD --build -cc  \
-				 -O3 --x-assign fast --x-initial fast
-				# -O3 --x-assign fast --x-initial fast --noassert
+VERILATOR_FLAGS += -MMD --trace --debug --cc --exe --build
+VERILATOR_FLAGS += -Wno-lint
+VERILATOR_FLAGS += -Wno-style
+VERILATOR_FLAGS += -Wno-UNUSED
 
 BUILD_DIR = ./build
 OBJ_DIR = $(BUILD_DIR)/obj_dir
@@ -30,10 +31,11 @@ CXXFLAGS += -MMD -O3
 
 $(BIN): $(VSRCS) $(CSRCS)
 	@rm -rf $(OBJ_DIR)
-	$(VERILATOR) $(VERILATOR_CFLAGS) \
+	$(VERILATOR) $(VERILATOR_FLAGS) \
 		--top-module $(TOPNAME) $^ \
 		$(addprefix -CFLAGS , $(CXXFLAGS)) $(addprefix -LDFLAGS , $(LDFLAGS)) \
 		--Mdir $(OBJ_DIR) --exe -o $(abspath $(BIN))
 
 run: $(BIN)
-	$(BIN) $(NEMU_HOME)/../am-kernels/tests/cpu-tests/build/wanshu-riscv32e-npc.bin
+	# $(BIN) $(NEMU_HOME)/../am-kernels/tests/cpu-tests/build/wanshu-riscv32e-npc.bin
+	$(BIN) /home/feng/code/riscv-tests/save/rv32ui-p-beq.bin

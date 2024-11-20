@@ -1,18 +1,3 @@
-/***************************************************************************************
- * Copyright (c) 2023 Yusong Yan, Beijing 101 High School
- * Copyright (c) 2023 Yusong Yan, University of Washington - Seattle
- *
- * YSYX-NPC-SIM is licensed under Mulan PSL v2.
- * You can use this software according to the terms and conditions of the Mulan
- *PSL v2. You may obtain a copy of Mulan PSL v2 at:
- *          http://license.coscl.org.cn/MulanPSL2
- *
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY
- *KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
- *NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
- *
- * See the Mulan PSL v2 for more details.
- ***************************************************************************************/
 
 #include <common.h>
 #include <device.h>
@@ -58,14 +43,16 @@ void init_map() {
 
 static bool check_bound(IOMap *map, word_t addr) {
   if (map == NULL) {
-    printf("[device] address = 0x%x is out of bound\n", addr);
+    Log("[device] address = 0x%x is out of bound, pc = %x", addr,
+        top->io_debug_pc);
+    Log("valid = %d", top->io_debug_Valid);
     npc_state.state = NPC_ABORT;
     return false;
   } else {
     if (addr <= map->high && addr >= map->low) {
       return true;
     } else {
-      printf("[device] address = 0x%x is out of bound %s@[0x%x, 0x%x]\n", addr,
+      Log("[device] address = 0x%x is out of bound %s@[0x%x, 0x%x]\n", addr,
              map->name, map->low, map->high);
       npc_state.state = NPC_ABORT;
       return false;
@@ -77,8 +64,8 @@ word_t map_read(word_t addr, int len, IOMap *map) {
   assert(len >= 1 && len <= 8);
 
   if (!check_bound(map, addr)) {
-    // return -1;
-    return 0;
+    return -1;
+    // return 0;
   }
 
   check_bound(map, addr);

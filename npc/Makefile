@@ -25,10 +25,11 @@ BIN				:= $(OBJ_DIR)/V$(TOP_NAME)
 
 IMG				?= ../am-kernels/tests/cpu-tests/build/wanshu-riscv32e-npc.bin
 
-#RUN_FLAGS		:= --diff=${DIFFTEST}
+ARGS ?=
+
 RUN_FLAGS		+= --img=${IMG} --diff=${DIFFTEST}
-RUN_FLAGS		+= -b
-NPC_EXEC		:= ${BIN} ${RUN_FLAGS}
+NPC_EXEC		:= ${BIN} $(ARGS) ${RUN_FLAGS}
+NPC_EXEC        += -e$(ELF)
 
 .PHONY:run gdb wave clean
 
@@ -41,7 +42,9 @@ run:com
 
 gdb:com ${DIFFTEST}
 	$(call git_commit, "gdb NPC")
-	@gdb --silent -s ${BIN} --args ${NPC_EXEC}
+	# @gdb --silent -s ${BIN} --args ${NPC_EXEC}
+	@gdb ${BIN} --args ${NPC_EXEC}
+
 
 wave:
 	@gtkwave $(OBJ_DIR)/dump.vcd

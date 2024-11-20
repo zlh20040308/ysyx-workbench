@@ -4,16 +4,28 @@ import chisel3._
 import chisel3.util._
 
 object Consts {
-  val WORD_LEN   = 32
-  val START_ADDR = "h80000000".U(WORD_LEN.W)
+  val WORD_LEN         = 32
+  val START_ADDR       = "h80000000".U(WORD_LEN.W)
+  val MEPC             = "h341".U(WORD_LEN.W)
+  val MSTATUS          = "h300".U(WORD_LEN.W)
+  val MTVEC            = "h305".U(WORD_LEN.W)
+  val MCAUSE           = "h342".U(WORD_LEN.W)
+  val NO               = "hb".U(WORD_LEN.W)
+  val M_MODE_MASK      = "h80207888".U(WORD_LEN.W)
+  val MSTATUS_MPIE_BIT = "h80".U(WORD_LEN.W)
+  val MSTATUS_MIE_BIT  = "h8".U(WORD_LEN.W)
+  val M_MODE_MSTATUS   = "h1800".U(WORD_LEN.W)
+
+  
+
 
   object AluEnum extends ChiselEnum {
-    val ALU_XXX, ALU_ADD, ALU_SUB, ALU_COPY_A,ALU_COPY_B, ALU_SLL, ALU_SLT, ALU_SLTU, ALU_XOR, ALU_SRL, ALU_SRA, ALU_OR, ALU_AND =
-      Value
+    val ALU_XXX, ALU_ADD, ALU_SUB, ALU_COPY_A, ALU_COPY_B, ALU_SLL, ALU_SLT, ALU_SLTU, ALU_XOR, ALU_SRL, ALU_SRA,
+        ALU_OR, ALU_AND = Value
   }
 
   object PCSelEnum extends ChiselEnum {
-    val PC_XXX, PC_4, PC_ALU = Value
+    val PC_XXX, PC_4, PC_ALU, PC_CSR = Value
 
   }
 
@@ -28,7 +40,7 @@ object Consts {
   }
 
   object ImmSelEnum extends ChiselEnum {
-    val IMM_X, IMM_I, IMM_S, IMM_U, IMM_J, IMM_B,IMM_Z = Value
+    val IMM_X, IMM_I, IMM_S, IMM_U, IMM_J, IMM_B, IMM_Z = Value
 
   }
 
@@ -49,6 +61,6 @@ object Consts {
   }
 
   object CSRCmdEnum extends ChiselEnum {
-    val CSR_N, CSR_P, CSR_S, CSR_C, CSR_W = Value
+    val CSR_N, CSR_S, CSR_C, CSR_W, CSR_Ecall, CSR_Mret = Value
   }
 }

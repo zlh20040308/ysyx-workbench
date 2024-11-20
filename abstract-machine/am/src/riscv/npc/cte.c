@@ -2,13 +2,20 @@
 #include <riscv/riscv.h>
 #include <klib.h>
 
-static Context* (*user_handler)(Event, Context*) = NULL;
+static Context *(*user_handler)(Event, Context *) = NULL;
 
-Context* __am_irq_handle(Context *c) {
+Context *__am_irq_handle(Context *c) {
   if (user_handler) {
     Event ev = {0};
-    switch (c->mcause) {
-      default: ev.event = EVENT_ERROR; break;
+    if (c->gpr[15] == -1) {
+      c->mepc += 4;
+      ev.event = EVENT_YIELD;
+    } else if (c->gpr[15] >= 0 && c->gpr[15] <= 19) {
+      c->mepc += 4;
+      ev.event = EVENT_SYSCALL;
+    } else {
+      printf("Invalid event type = %d\n", c->gpr[15]);
+      ev.event = EVENT_ERROR;
     }
 
     c = user_handler(ev, c);
@@ -31,7 +38,12 @@ bool cte_init(Context*(*handler)(Event, Context*)) {
 }
 
 Context *kcontext(Area kstack, void (*entry)(void *), void *arg) {
-  return NULL;
+  Context *ctx = (Context *)(kstack.end - sizeof(Context));
+  ctx->gpr[10] = (uintptr_t)arg;
+  ctx->mepc = (uintptr_t)entry;
+  printf("entry = %p\n", entry);
+  printf("ctx->mepc = %p\n", ctx->mepc);
+  return ctx;
 }
 
 void yield() {
