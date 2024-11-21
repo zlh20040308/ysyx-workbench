@@ -1,5 +1,7 @@
 #include "syscall.h"
+#include <stdint.h>
 #include <stdio.h>
+extern char _end;
 
 const char *_syscall_names[] = {
     "SYS_exit",  "SYS_yield",  "SYS_open",   "SYS_read",   "SYS_write",
@@ -96,6 +98,7 @@ void print_syscall_info(Context *c) {
 #endif
 
 void do_syscall(Context *c) {
+  static void *program_break = &_end;
   uintptr_t a[4];
   a[0] = c->GPR1;
 
@@ -122,6 +125,10 @@ void do_syscall(Context *c) {
     }
     break;
   case SYS_brk:
+    uint32_t increment = c->GPR2;
+    void *new_program_break = program_break + increment;
+    program_break = new_program_break;
+    c->GPR2 = (uintptr_t)program_break;
     break;
   default:
     panic("Unhandled syscall ID = %d", a[0]);
