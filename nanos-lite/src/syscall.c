@@ -12,7 +12,7 @@ void do_syscall(Context *c) {
 
 #ifdef STRACE
   // 打印系统调用信息
-  printf("[STRACE] Syscall ID: %x, Arg1: %x, Arg2: %x, Arg3: %x\n", a[0], a[1],
+  printf("[STRACE] Syscall ID: %d, Arg1: %d, Arg2: %d, Arg3: %d\n", a[0], a[1],
       a[2], a[3]);
 #endif
 
