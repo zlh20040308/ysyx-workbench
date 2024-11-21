@@ -19,20 +19,20 @@ class Compare(width: Int) extends Module {
     is(BrTypeEnum.BR_EQ) {
       io.result := io.rs1 === io.rs2
     }
-    is(BrTypeEnum.BR_GE) {
-      io.result := io.rs1.asSInt >= io.rs2.asSInt
-    }
-    is(BrTypeEnum.BR_GEU) {
-      io.result := io.rs1 >= io.rs2
+    is(BrTypeEnum.BR_NE) {
+      io.result := !(io.rs1 === io.rs2)
     }
     is(BrTypeEnum.BR_LT) {
       io.result := io.rs1.asSInt < io.rs2.asSInt
     }
-    is(BrTypeEnum.BR_LTU) {
-      io.result := io.rs1.asSInt < io.rs2.asSInt
+    is(BrTypeEnum.BR_GE) {
+      io.result := !(io.rs1.asSInt < io.rs2.asSInt)
     }
-    is(BrTypeEnum.BR_NE) {
-      io.result := io.rs1 =/= io.rs2
+    is(BrTypeEnum.BR_LTU) {
+      io.result := io.rs1 < io.rs2
+    }
+    is(BrTypeEnum.BR_GEU) {
+      io.result := !(io.rs1 < io.rs2)
     }
   }
 }

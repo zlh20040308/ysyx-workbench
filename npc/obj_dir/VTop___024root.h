@@ -34,7 +34,6 @@ class VTop___024root final : public VerilatedModule {
         CData/*1:0*/ Top__DOT__core__DOT___CUInstance_io_StType;
         CData/*0:0*/ Top__DOT__core__DOT__CompareInstance__DOT___GEN;
         CData/*7:0*/ Top__DOT__core__DOT__CompareInstance__DOT___GEN_0;
-        CData/*0:0*/ Top__DOT__core__DOT__CompareInstance__DOT____VdfgTmp_hf84125da__0;
         CData/*1:0*/ Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_PCSel;
         CData/*0:0*/ Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_andMatrixOutputs_17_2;
         CData/*1:0*/ Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_andMatrixOutputs_hi;
@@ -83,9 +82,9 @@ class VTop___024root final : public VerilatedModule {
         CData/*0:0*/ Top__DOT__core__DOT__CUInstance__DOT__decode__DOT____VdfgTmp_h8c6fa575__0;
         CData/*0:0*/ Top__DOT__core__DOT__CUInstance__DOT__decode__DOT____VdfgTmp_h3b7b4b58__0;
         CData/*0:0*/ Top__DOT__core__DOT__CSRInstance__DOT___GEN_1;
+        CData/*0:0*/ Top__DOT__core__DOT__CSRInstance__DOT___GEN_2;
     };
     struct {
-        CData/*0:0*/ Top__DOT__core__DOT__CSRInstance__DOT___GEN_2;
         CData/*0:0*/ Top__DOT__core__DOT__CSRInstance__DOT___GEN_5;
         CData/*0:0*/ Top__DOT__core__DOT__CSRInstance__DOT___GEN_6;
         CData/*0:0*/ Top__DOT__core__DOT__CSRInstance__DOT___GEN_7;
