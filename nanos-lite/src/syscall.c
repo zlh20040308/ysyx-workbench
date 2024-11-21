@@ -1,7 +1,7 @@
 #include "syscall.h"
 #include <stdio.h>
 
-// #define STRACE
+#define STRACE
 
 void do_syscall(Context *c) {
   uintptr_t a[4];
@@ -38,9 +38,4 @@ void do_syscall(Context *c) {
   default:
     panic("Unhandled syscall ID = %d", a[0]);
   }
-
-#ifdef STRACE
-  // 打印系统调用完成后的结果值
-  printf("[STRACE] Syscall ID: %x completed, Result: %x\n", a[0], c->GPR2);
-#endif
 }
