@@ -25,6 +25,8 @@ enum {
   SYS_gettimeofday
 };
 
+extern const char *syscall_names[];
+
 void do_syscall(Context *c);
 
 #endif
