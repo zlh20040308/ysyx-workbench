@@ -12,7 +12,7 @@ void do_syscall(Context *c) {
 
 #ifdef STRACE
   // 打印系统调用信息
-  Log("[STRACE] Syscall ID: %x, Arg1: %x, Arg2: %x, Arg3: %x", a[0], a[1],
+  Log("[STRACE] Syscall ID: %x, Arg1: %x, Arg2: %x, Arg3: %x\n", a[0], a[1],
       a[2], a[3]);
 #endif
 
@@ -41,6 +41,6 @@ void do_syscall(Context *c) {
 
 #ifdef STRACE
   // 打印系统调用完成后的结果值
-  Log("[STRACE] Syscall ID: %x completed, Result: %x", a[0], c->GPR2);
+  Log("[STRACE] Syscall ID: %x completed, Result: %x\n", a[0], c->GPR2);
 #endif
 }
