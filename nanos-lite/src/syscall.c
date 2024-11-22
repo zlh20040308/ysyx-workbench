@@ -124,6 +124,7 @@ void do_syscall(Context *c) {
         putch(*str_ptr++);
       }
     }
+    c->GPR2 = 0;
     break;
   case SYS_brk:
     c->GPR2 = 0;
