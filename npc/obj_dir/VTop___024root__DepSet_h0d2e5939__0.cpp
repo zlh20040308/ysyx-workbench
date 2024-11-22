@@ -330,7 +330,7 @@ VL_INLINE_OPT void VTop___024root___nba_sequent__TOP__3(VTop___024root* vlSelf) 
                                : 0U);
     vlSelf->Top__DOT__core__DOT____Vcellinp__AluInstance__io_B 
         = ((1U == (3U & ((IData)(vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_orMatrixOutputs_lo_lo_hi_1) 
-                         >> 1U))) ? vlSelf->Top__DOT__core__DOT__ImmGenInstance__DOT__io_out_0
+                         >> 1U))) ? vlSelf->Top__DOT__core__DOT___ImmGenInstance_io_out
             : ((2U == (3U & ((IData)(vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_orMatrixOutputs_lo_lo_hi_1) 
                              >> 1U))) ? vlSelf->io_debug_wdata
                 : 0U));
@@ -398,7 +398,7 @@ VL_INLINE_OPT void VTop___024root___nba_sequent__TOP__3(VTop___024root* vlSelf) 
                                                      | (IData)(vlSelf->Top__DOT__core__DOT__CompareInstance__DOT___GEN))))))));
     vlSelf->io_debug_addr = vlSelf->io_debug_alu_out;
     vlSelf->io_debug_CSRWdata = ((6U == (IData)(vlSelf->io_debug_imm_sel))
-                                  ? vlSelf->Top__DOT__core__DOT__ImmGenInstance__DOT__io_out_0
+                                  ? vlSelf->Top__DOT__core__DOT___ImmGenInstance_io_out
                                   : vlSelf->io_debug_alu_out);
     vlSelf->Top__DOT__core__DOT___GEN[0U] = (IData)(
                                                     (((QData)((IData)(
@@ -454,7 +454,7 @@ VL_INLINE_OPT void VTop___024root___nba_sequent__TOP__3(VTop___024root* vlSelf) 
                                                                         (0xfffffffeU 
                                                                          & vlSelf->io_debug_alu_out)))) 
                                                      >> 0x20U));
-    vlSelf->io_debug_PCSel = (3U & ((((IData)(vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_PCSel) 
+    vlSelf->io_debug_PCSel = (3U & ((((IData)(vlSelf->Top__DOT__core__DOT__CUInstance__DOT___decode_io_PCSel) 
                                       << 0xeU) | ((
                                                    ((1U 
                                                      & ((IData)(vlSelf->Top__DOT__core__DOT__CompareInstance__DOT___GEN_0) 
@@ -510,7 +510,7 @@ VL_INLINE_OPT void VTop___024root___nba_sequent__TOP__3(VTop___024root* vlSelf) 
                                                                     ? 2U
                                                                     : 1U) 
                                                                   << 2U) 
-                                                                 | (IData)(vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_PCSel)))))))) 
+                                                                 | (IData)(vlSelf->Top__DOT__core__DOT__CUInstance__DOT___decode_io_PCSel)))))))) 
                                     >> (0xeU & (vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_invMatrixOutputs 
                                                 >> 0xcU))));
     vlSelf->io_debug_next_pc = (((0U == (0x1fU & ((IData)(vlSelf->io_debug_PCSel) 
@@ -648,7 +648,7 @@ void VTop___024root___eval(VTop___024root* vlSelf) {
 #ifdef VL_DEBUG
                     VTop___024root___dump_triggers__act(vlSelf);
 #endif
-                    VL_FATAL_MT("/home/feng/code/ysyx-workbench/npc/build/Top.sv", 2, "", "Active region did not converge.");
+                    VL_FATAL_MT("/home/feng/OS/ysyx-workbench/npc/build/Top.sv", 2, "", "Active region did not converge.");
                 }
                 vlSelf->__VactIterCount = ((IData)(1U) 
                                            + vlSelf->__VactIterCount);
@@ -663,7 +663,7 @@ void VTop___024root___eval(VTop___024root* vlSelf) {
 #ifdef VL_DEBUG
                 VTop___024root___dump_triggers__nba(vlSelf);
 #endif
-                VL_FATAL_MT("/home/feng/code/ysyx-workbench/npc/build/Top.sv", 2, "", "NBA region did not converge.");
+                VL_FATAL_MT("/home/feng/OS/ysyx-workbench/npc/build/Top.sv", 2, "", "NBA region did not converge.");
             }
             __VnbaIterCount = ((IData)(1U) + __VnbaIterCount);
             VTop___024root___eval_nba(vlSelf);

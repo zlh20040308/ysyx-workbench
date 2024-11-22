@@ -115,6 +115,12 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
         format = 0;
         break;
       }
+      case 'x': { // Handle %x
+        unsigned int num = va_arg(ap, unsigned int);
+        write_hex(out, &pos, n, num, &count);
+        format = 0;
+        break;
+      }
       case 'p': { // Handle %p
         uintptr_t ptr_val = (uintptr_t)va_arg(ap, void *);
         if (pos < n)

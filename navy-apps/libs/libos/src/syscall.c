@@ -45,6 +45,8 @@
 #error _syscall_ is not implemented
 #endif
 
+extern char _end;
+
 intptr_t _syscall_(intptr_t type, intptr_t a0, intptr_t a1, intptr_t a2) {
   register intptr_t _gpr1 asm(GPR1) = type;
   register intptr_t _gpr2 asm(GPR2) = a0;
@@ -74,7 +76,27 @@ int _write(int fd, void *buf, size_t count) {
   return _syscall_(SYS_write, fd, (intptr_t)buf, count);
 }
 
-void *_sbrk(intptr_t increment) { return (void *)-1; }
+void *_sbrk(intptr_t increment) {
+  static char *current_break = NULL;
+  // 如果是第一次调用，初始化 program break 为 _end 的地址。
+  if (current_break == NULL) {
+    current_break = &_end;
+  }
+
+  // 计算新的 program break。
+  char *new_break = current_break + increment;
+
+  // 调用 SYS_brk 尝试设置新的 program break。
+  if (_syscall_(SYS_brk, (intptr_t)new_break, 0, 0) == 0) {
+    // 系统调用成功，返回旧的 program break，并更新记录。
+    char *old_break = current_break;
+    current_break = new_break;
+    return old_break;
+  } else {
+    // 系统调用失败，设置 errno 并返回 (void *)-1。
+    return (void *)-1;
+  }
+}
 
 int _read(int fd, void *buf, size_t count) {
   _exit(SYS_read);

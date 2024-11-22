@@ -36,8 +36,8 @@ VM_MODPREFIX = VTop
 # User CFLAGS (from -CFLAGS on Verilator command line)
 VM_USER_CFLAGS = \
 	-g \
-	-I/home/feng/code/ysyx-workbench/npc/sim/include \
-	-I/home/feng/code/ysyx-workbench/npc/sim/include \
+	-I/home/feng/OS/ysyx-workbench/npc/sim/include \
+	-I/home/feng/OS/ysyx-workbench/npc/sim/include \
 
 # User LDLIBS (from -LDFLAGS on Verilator command line)
 VM_USER_LDLIBS = \
@@ -71,16 +71,16 @@ VM_USER_CLASSES = \
 
 # User .cpp directories (from .cpp's on Verilator command line)
 VM_USER_DIR = \
-	/home/feng/code/ysyx-workbench/npc/sim \
-	/home/feng/code/ysyx-workbench/npc/sim/cpu \
-	/home/feng/code/ysyx-workbench/npc/sim/device \
-	/home/feng/code/ysyx-workbench/npc/sim/device/map \
-	/home/feng/code/ysyx-workbench/npc/sim/difftest \
-	/home/feng/code/ysyx-workbench/npc/sim/helper \
-	/home/feng/code/ysyx-workbench/npc/sim/memory \
-	/home/feng/code/ysyx-workbench/npc/sim/monitor \
-	/home/feng/code/ysyx-workbench/npc/sim/register \
-	/home/feng/code/ysyx-workbench/npc/sim/trace \
+	/home/feng/OS/ysyx-workbench/npc/sim \
+	/home/feng/OS/ysyx-workbench/npc/sim/cpu \
+	/home/feng/OS/ysyx-workbench/npc/sim/device \
+	/home/feng/OS/ysyx-workbench/npc/sim/device/map \
+	/home/feng/OS/ysyx-workbench/npc/sim/difftest \
+	/home/feng/OS/ysyx-workbench/npc/sim/helper \
+	/home/feng/OS/ysyx-workbench/npc/sim/memory \
+	/home/feng/OS/ysyx-workbench/npc/sim/monitor \
+	/home/feng/OS/ysyx-workbench/npc/sim/register \
+	/home/feng/OS/ysyx-workbench/npc/sim/trace \
 
 
 ### Default rules...
@@ -92,49 +92,49 @@ include $(VERILATOR_ROOT)/include/verilated.mk
 ### Executable rules... (from --exe)
 VPATH += $(VM_USER_DIR)
 
-verilator-sim.o: /home/feng/code/ysyx-workbench/npc/sim/cpu/verilator-sim.cpp
+verilator-sim.o: /home/feng/OS/ysyx-workbench/npc/sim/cpu/verilator-sim.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
-device.o: /home/feng/code/ysyx-workbench/npc/sim/device/device.cpp
+device.o: /home/feng/OS/ysyx-workbench/npc/sim/device/device.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
-keyboard.o: /home/feng/code/ysyx-workbench/npc/sim/device/keyboard.cpp
+keyboard.o: /home/feng/OS/ysyx-workbench/npc/sim/device/keyboard.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
-map.o: /home/feng/code/ysyx-workbench/npc/sim/device/map/map.cpp
+map.o: /home/feng/OS/ysyx-workbench/npc/sim/device/map/map.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
-mmio.o: /home/feng/code/ysyx-workbench/npc/sim/device/map/mmio.cpp
+mmio.o: /home/feng/OS/ysyx-workbench/npc/sim/device/map/mmio.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
-serial.o: /home/feng/code/ysyx-workbench/npc/sim/device/serial.cpp
+serial.o: /home/feng/OS/ysyx-workbench/npc/sim/device/serial.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
-timer.o: /home/feng/code/ysyx-workbench/npc/sim/device/timer.cpp
+timer.o: /home/feng/OS/ysyx-workbench/npc/sim/device/timer.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
-vga.o: /home/feng/code/ysyx-workbench/npc/sim/device/vga.cpp
+vga.o: /home/feng/OS/ysyx-workbench/npc/sim/device/vga.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
-difftest.o: /home/feng/code/ysyx-workbench/npc/sim/difftest/difftest.cpp
+difftest.o: /home/feng/OS/ysyx-workbench/npc/sim/difftest/difftest.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
-time.o: /home/feng/code/ysyx-workbench/npc/sim/helper/time.cpp
+time.o: /home/feng/OS/ysyx-workbench/npc/sim/helper/time.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
-mem.o: /home/feng/code/ysyx-workbench/npc/sim/memory/mem.cpp
+mem.o: /home/feng/OS/ysyx-workbench/npc/sim/memory/mem.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
-monitor.o: /home/feng/code/ysyx-workbench/npc/sim/monitor/monitor.cpp
+monitor.o: /home/feng/OS/ysyx-workbench/npc/sim/monitor/monitor.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
-sdb.o: /home/feng/code/ysyx-workbench/npc/sim/monitor/sdb.cpp
+sdb.o: /home/feng/OS/ysyx-workbench/npc/sim/monitor/sdb.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
-reg.o: /home/feng/code/ysyx-workbench/npc/sim/register/reg.cpp
+reg.o: /home/feng/OS/ysyx-workbench/npc/sim/register/reg.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
-sim-main.o: /home/feng/code/ysyx-workbench/npc/sim/sim-main.cpp
+sim-main.o: /home/feng/OS/ysyx-workbench/npc/sim/sim-main.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
-dtrace.o: /home/feng/code/ysyx-workbench/npc/sim/trace/dtrace.cpp
+dtrace.o: /home/feng/OS/ysyx-workbench/npc/sim/trace/dtrace.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
-etrace.o: /home/feng/code/ysyx-workbench/npc/sim/trace/etrace.cpp
+etrace.o: /home/feng/OS/ysyx-workbench/npc/sim/trace/etrace.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
-ftrace.o: /home/feng/code/ysyx-workbench/npc/sim/trace/ftrace.cpp
+ftrace.o: /home/feng/OS/ysyx-workbench/npc/sim/trace/ftrace.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
-itrace.o: /home/feng/code/ysyx-workbench/npc/sim/trace/itrace.cpp
+itrace.o: /home/feng/OS/ysyx-workbench/npc/sim/trace/itrace.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
-mtrace.o: /home/feng/code/ysyx-workbench/npc/sim/trace/mtrace.cpp
+mtrace.o: /home/feng/OS/ysyx-workbench/npc/sim/trace/mtrace.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
-ptrace.o: /home/feng/code/ysyx-workbench/npc/sim/trace/ptrace.cpp
+ptrace.o: /home/feng/OS/ysyx-workbench/npc/sim/trace/ptrace.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
-rtrace.o: /home/feng/code/ysyx-workbench/npc/sim/trace/rtrace.cpp
+rtrace.o: /home/feng/OS/ysyx-workbench/npc/sim/trace/rtrace.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 
 ### Link rules... (from --exe)

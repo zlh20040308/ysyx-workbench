@@ -2,6 +2,8 @@
 #define __SYSCALL_H__
 #include <common.h>
 
+#define STRACE
+
 enum {
   SYS_exit,
   SYS_yield,
@@ -24,6 +26,8 @@ enum {
   SYS_times,
   SYS_gettimeofday
 };
+
+extern const char *syscall_names[];
 
 void do_syscall(Context *c);
 
