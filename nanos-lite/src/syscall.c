@@ -1,8 +1,6 @@
 #include "syscall.h"
 #include <stdint.h>
 #include <stdio.h>
-extern char _end;
-extern char _heap_start;
 
 const char *_syscall_names[] = {
     "SYS_exit",  "SYS_yield",  "SYS_open",   "SYS_read",   "SYS_write",
@@ -99,7 +97,6 @@ void print_syscall_info(Context *c) {
 #endif
 
 void do_syscall(Context *c) {
-  // static void *program_break = &_end;
   uintptr_t a[4];
   a[0] = c->GPR1; // 系统调用号
   a[1] = c->GPR2; // 第一个参数
@@ -129,24 +126,7 @@ void do_syscall(Context *c) {
     }
     break;
   case SYS_brk:
-    // // 新的 program break 地址
-    // void *new_brk = (void *)a[1];
-
-    // // 判断新地址是否有效（可以加入更多限制条件）
-    // if (new_brk == NULL || new_brk < &_end) {
-    //   c->GPR2 = -1; // 返回失败
-    // } else {
-    //   // 更新 program break
-    //   program_break = new_brk;
-    //   c->GPR2 = 0; // 返回成功
-    // }
-    // break;
-    void *new_brk = (void *)a[1];
-    if (new_brk == NULL || new_brk < (void *)&_end) {
-      c->GPR2 = -1; // 返回失败
-    } else {
-      c->GPR2 = 0;  // 返回成功
-    }
+    c->GPR2 = 0;
     break;
   default:
     panic("Unhandled syscall ID = %d", a[0]);
