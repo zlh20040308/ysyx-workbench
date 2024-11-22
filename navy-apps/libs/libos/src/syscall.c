@@ -94,7 +94,6 @@ void *_sbrk(intptr_t increment) {
     return old_break;
   } else {
     // 系统调用失败，设置 errno 并返回 (void *)-1。
-    errno = ENOMEM;
     return (void *)-1;
   }
 }
