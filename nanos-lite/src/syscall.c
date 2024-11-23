@@ -1,8 +1,8 @@
 #include "syscall.h"
+#include <common.h>
 #include <fs.h>
 #include <stdint.h>
 #include <stdio.h>
-#include <common.h>
 
 const char *_syscall_names[] = {
     "SYS_exit",  "SYS_yield",  "SYS_open",   "SYS_read",   "SYS_write",
@@ -126,16 +126,7 @@ void do_syscall(Context *c) {
     c->GPR2 = fs_read(a[1], (void *)a[2], a[3]);
     break;
   case SYS_write:
-    if (c->GPR2 == 1) {
-      char *str_ptr = (char *)(c->GPR3);
-      int len = c->GPR4;
-      while (len--) {
-        putch(*str_ptr++);
-      }
-      c->GPR2 = 0;
-    } else {
-      c->GPR2 = fs_write(a[1], (const void *)a[2], a[3]);
-    }
+    c->GPR2 = fs_write(a[1], (const void *)a[2], a[3]);
     break;
   case SYS_lseek:
     c->GPR2 = fs_lseek(a[1], a[2], a[3]);

@@ -5,11 +5,9 @@
 #ifdef __LP64__
 #define Elf_Ehdr Elf64_Ehdr
 #define Elf_Phdr Elf64_Phdr
-#define HAHAHA 10000
 #else
 #define Elf_Ehdr Elf32_Ehdr
 #define Elf_Phdr Elf32_Phdr
-#define HAHAHA 0
 #endif
 
 extern uint8_t *ramdisk_start;
@@ -50,7 +48,6 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   }
   printf("ELF loaded, entry point at: %x\n", elf_header.e_entry);
   fs_close(elf_fd);
-  Log("=====================================");
   return (uintptr_t)elf_header.e_entry;
 }
 
