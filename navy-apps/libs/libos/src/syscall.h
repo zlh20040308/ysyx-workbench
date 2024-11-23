@@ -2,6 +2,8 @@
 #define __SYSCALL_H__
 #include <common.h>
 
+#define STRACE
+
 enum {
   SYS_exit,
   SYS_yield,
