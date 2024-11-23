@@ -13,6 +13,9 @@ int main() {
   int i, n;
   for (i = 500; i < 1000; i ++) {
     printf("i + 1 = %d\n", i + 1);
+    printf("i + 1 = %d\n", i + 1);
+    printf("i + 1 = %d\n", i + 1);
+    printf("i + 1 = %d\n", i + 1);
     fscanf(fp, "%d", &n);
     printf("n = %d\n", n);
     printf("i + 1 = %d\n", i + 1);
