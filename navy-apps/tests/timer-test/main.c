@@ -18,8 +18,6 @@ void print_time_interval() {
       printf("0.5 seconds passed...\n");
       start = now; // 更新开始时间，重新计时
     }
-
-    usleep(10000); // 稍微休眠一下，避免过于频繁的 CPU 占用
   }
 }
 
