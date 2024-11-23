@@ -140,8 +140,8 @@ void do_syscall(Context *c) {
   case SYS_gettimeofday:
     AM_TIMER_UPTIME_T upt = io_read(AM_TIMER_UPTIME);
     struct timeval *tv = (struct timeval *)(c->GPR2);
-    tv->tv_sec = upt.us / 1000000;  // 秒部分
-    tv->tv_usec = upt.us % 1000000; // 微秒部分
+    tv->tv_sec = upt.us / 1000000;
+    tv->tv_usec = upt.us % 1000000;
     break;
   default:
     panic("Unhandled syscall ID = %d", a[0]);
