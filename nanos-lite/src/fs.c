@@ -122,8 +122,8 @@ size_t fs_lseek(int fd, size_t offset, int whence) {
     new_offset = file_table[fd].open_offset + offset;
     break;
   case SEEK_END:
-    Log("file_table[fd].size + offset - 1 = %x", file_table[fd].size + offset - 1);
-    Log("file_table[fd].size = %x", file_table[fd].size);
+    Log("file_table[fd].size + offset - 1 = %d", file_table[fd].size + offset - 1);
+    Log("file_table[fd].size = %d", file_table[fd].size);
     if (file_table[fd].size + offset - 1 >= file_table[fd].size) {
       return -1; // 溢出或超出文件范围
     }
