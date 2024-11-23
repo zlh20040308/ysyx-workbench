@@ -135,10 +135,10 @@ void do_syscall(Context *c) {
       c->GPR2 = fs_write(a[1], (const void *)a[2], a[3]);
     }
     break;
-  case SYS_close:
+  case SYS_lseek:
     c->GPR2 = fs_lseek(a[1], a[2], a[3]);
     break;
-  case SYS_lseek:
+  case SYS_close:
     c->GPR2 = fs_close(a[1]);
     break;
   case SYS_brk:
