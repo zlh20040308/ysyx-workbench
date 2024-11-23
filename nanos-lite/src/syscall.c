@@ -148,6 +148,6 @@ void do_syscall(Context *c) {
     panic("Unhandled syscall ID = %d", a[0]);
   }
 #ifdef STRACE
-  printf("Syscall ret = %x\n", c->GPR2);
+  printf("Syscall ret = 0x%8x\n", c->GPR2);
 #endif
 }
