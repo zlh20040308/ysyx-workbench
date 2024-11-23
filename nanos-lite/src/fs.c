@@ -102,6 +102,7 @@ size_t fs_write(int fd, const void *buf, size_t len) {
 }
 
 size_t fs_lseek(int fd, size_t offset, int whence) {
+  Log("fd = %d, offset = %ld, whence = %d", fd, offset, whence);
   if (fd < 0 || fd >= ARRAY_SIZE(file_table)) {
     return -1; // 无效的文件描述符
   }
