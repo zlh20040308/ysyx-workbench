@@ -1,8 +1,6 @@
 #ifndef __SYSCALL_H__
 #define __SYSCALL_H__
-#include <common.h>
 
-#define STRACE
 
 enum {
   SYS_exit,
@@ -27,5 +25,4 @@ enum {
   SYS_gettimeofday
 };
 
-void do_syscall(Context *c);
 #endif
