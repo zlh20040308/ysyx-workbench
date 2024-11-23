@@ -1,4 +1,5 @@
 #include "syscall.h"
+#include <fs.h>
 #include <stdint.h>
 #include <stdio.h>
 
@@ -116,6 +117,12 @@ void do_syscall(Context *c) {
     yield();
     c->GPR2 = 0;
     break;
+  case SYS_open:
+    c->GPR2 = fs_open((const char *)a[1], a[2], a[3]);
+    break;
+  case SYS_read:
+    c->GPR2 = fs_read(a[1], (void *)a[2], a[3]);
+    break;
   case SYS_write:
     if (c->GPR2 == 1) {
       char *str_ptr = (char *)(c->GPR3);
@@ -123,11 +130,16 @@ void do_syscall(Context *c) {
       while (len--) {
         putch(*str_ptr++);
       }
+      c->GPR2 = 0;
+    } else {
+      c->GPR2 = fs_write(a[1], (const void *)a[2], a[3]);
     }
-    c->GPR2 = 0;
     break;
-  case SYS_brk:
-    c->GPR2 = 0;
+  case SYS_close:
+    c->GPR2 = fs_lseek(a[1], a[2], a[3]);
+    break;
+  case SYS_lseek:
+    c->GPR2 = fs_close(a[1]);
     break;
   default:
     panic("Unhandled syscall ID = %d", a[0]);

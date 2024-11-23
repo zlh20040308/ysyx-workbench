@@ -12,4 +12,6 @@
 #include <klib-macros.h>
 #include <debug.h>
 
+#define ARRAY_SIZE(arr)		(sizeof(arr) / sizeof((arr)[0]))
+
 #endif
