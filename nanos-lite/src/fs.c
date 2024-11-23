@@ -56,7 +56,6 @@ size_t fs_read(int fd, void *buf, size_t len) {
   if (fd <= 2) {
     return 0;
   }
-  Log("fd = %x", fd);
   if (fd < 0 || fd >= ARRAY_SIZE(file_table)) {
     return -1;
   }
@@ -80,7 +79,6 @@ size_t fs_write(int fd, const void *buf, size_t len) {
   if (fd <= 2) {
     return 0;
   }
-  Log("fd = %x", fd);
   if (fd < 0 || fd >= ARRAY_SIZE(file_table)) {
     return 0;
   }
@@ -102,7 +100,6 @@ size_t fs_write(int fd, const void *buf, size_t len) {
 }
 
 size_t fs_lseek(int fd, size_t offset, int whence) {
-  Log("fd = %d, offset = %ld, whence = %d", fd, offset, whence);
   if (fd < 0 || fd >= ARRAY_SIZE(file_table)) {
     return -1; // 无效的文件描述符
   }
@@ -122,8 +119,6 @@ size_t fs_lseek(int fd, size_t offset, int whence) {
     new_offset = file_table[fd].open_offset + offset;
     break;
   case SEEK_END:
-    Log("file_table[fd].size + offset - 1 = %d", file_table[fd].size + offset - 1);
-    Log("file_table[fd].size = %d", file_table[fd].size);
     if (file_table[fd].size + offset > file_table[fd].size) {
       return -1; // 溢出或超出文件范围
     }
@@ -133,7 +128,6 @@ size_t fs_lseek(int fd, size_t offset, int whence) {
     return -1; // 无效的 whence 参数
   }
   file_table[fd].open_offset = new_offset;
-  Log("new_offset = %d", new_offset);
   return file_table[fd].open_offset; // 返回新的文件指针位置
 }
 
