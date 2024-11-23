@@ -133,7 +133,7 @@ size_t fs_lseek(int fd, size_t offset, int whence) {
     return -1; // 无效的 whence 参数
   }
   file_table[fd].open_offset = new_offset;
-  Log("new_offset = %x", new_offset);
+  Log("new_offset = %d", new_offset);
   return file_table[fd].open_offset; // 返回新的文件指针位置
 }
 
