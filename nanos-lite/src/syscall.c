@@ -1,8 +1,8 @@
 #include "syscall.h"
+#include <common.h>
 #include <fs.h>
 #include <stdint.h>
 #include <stdio.h>
-#include <common.h>
 
 const char *_syscall_names[] = {
     "SYS_exit",  "SYS_yield",  "SYS_open",   "SYS_read",   "SYS_write",
@@ -126,16 +126,7 @@ void do_syscall(Context *c) {
     c->GPR2 = fs_read(a[1], (void *)a[2], a[3]);
     break;
   case SYS_write:
-    if (c->GPR2 == 1) {
-      char *str_ptr = (char *)(c->GPR3);
-      int len = c->GPR4;
-      while (len--) {
-        putch(*str_ptr++);
-      }
-      c->GPR2 = 0;
-    } else {
-      c->GPR2 = fs_write(a[1], (const void *)a[2], a[3]);
-    }
+    c->GPR2 = fs_write(a[1], (const void *)a[2], a[3]);
     break;
   case SYS_lseek:
     c->GPR2 = fs_lseek(a[1], a[2], a[3]);
@@ -146,6 +137,12 @@ void do_syscall(Context *c) {
   case SYS_brk:
     c->GPR2 = 0;
     break;
+  case SYS_gettimeofday:
+    AM_TIMER_UPTIME_T upt = io_read(AM_TIMER_UPTIME);
+    struct timeval *tv = (struct timeval *)(c->GPR2);
+    tv->tv_sec = upt.us / 1000000;
+    tv->tv_usec = upt.us % 1000000;
+    break;
   default:
     panic("Unhandled syscall ID = %d", a[0]);
   }
@@ -153,3 +150,14 @@ void do_syscall(Context *c) {
   printf("Syscall ret = 0x%8x\n", c->GPR2);
 #endif
 }
+// while (1) {
+//   while(io_read(AM_TIMER_UPTIME).us / 1000000 < sec) ;
+//   rtc = io_read(AM_TIMER_RTC);
+//   printf("%d-%d-%d %02d:%02d:%02d GMT (", rtc.year, rtc.month, rtc.day,
+//   rtc.hour, rtc.minute, rtc.second); if (sec == 1) {
+//     printf("%d second).\n", sec);
+//   } else {
+//     printf("%d seconds).\n", sec);
+//   }
+//   sec ++;
+// }
