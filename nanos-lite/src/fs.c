@@ -56,6 +56,7 @@ size_t fs_read(int fd, void *buf, size_t len) {
   if (fd <= 2) {
     return 0;
   }
+  Log("fd = %x", fd);
   if (fd < 0 || fd >= ARRAY_SIZE(file_table)) {
     return -1;
   }
