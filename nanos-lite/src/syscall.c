@@ -137,6 +137,12 @@ void do_syscall(Context *c) {
   case SYS_brk:
     c->GPR2 = 0;
     break;
+  case SYS_gettimeofday:
+    AM_TIMER_UPTIME_T upt = io_read(AM_TIMER_UPTIME);
+    struct timeval *tv = (struct timeval *)(c->GPR2);
+    tv->tv_sec = upt.us / 1000000;  // 秒部分
+    tv->tv_usec = upt.us % 1000000; // 微秒部分
+    break;
   default:
     panic("Unhandled syscall ID = %d", a[0]);
   }
@@ -144,3 +150,14 @@ void do_syscall(Context *c) {
   printf("Syscall ret = 0x%8x\n", c->GPR2);
 #endif
 }
+// while (1) {
+//   while(io_read(AM_TIMER_UPTIME).us / 1000000 < sec) ;
+//   rtc = io_read(AM_TIMER_RTC);
+//   printf("%d-%d-%d %02d:%02d:%02d GMT (", rtc.year, rtc.month, rtc.day,
+//   rtc.hour, rtc.minute, rtc.second); if (sec == 1) {
+//     printf("%d second).\n", sec);
+//   } else {
+//     printf("%d seconds).\n", sec);
+//   }
+//   sec ++;
+// }
