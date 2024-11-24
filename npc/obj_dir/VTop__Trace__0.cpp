@@ -26,7 +26,7 @@ void VTop___024root__trace_chg_sub_0(VTop___024root* vlSelf, VerilatedVcd::Buffe
     // Body
     if (VL_UNLIKELY(vlSelf->__Vm_traceActivity[1U])) {
         bufp->chgIData(oldp+0,(vlSelf->Top__DOT__memory__DOT__mem__DOT__imem),32);
-        bufp->chgCData(oldp+1,(vlSelf->Top__DOT__memory__DOT__io_dmem_wmask_0),4);
+        bufp->chgCData(oldp+1,(vlSelf->Top__DOT___core_io_dmem_wmask),4);
         bufp->chgBit(oldp+2,(vlSelf->Top__DOT__core__DOT__CSRInstance__DOT___GEN_6));
         bufp->chgBit(oldp+3,(vlSelf->Top__DOT__core__DOT__CSRInstance__DOT___GEN_2));
         bufp->chgBit(oldp+4,(vlSelf->Top__DOT__core__DOT__CSRInstance__DOT___GEN_1));
@@ -39,10 +39,10 @@ void VTop___024root__trace_chg_sub_0(VTop___024root* vlSelf, VerilatedVcd::Buffe
                                       >> 1U))),2);
         bufp->chgCData(oldp+10,((7U & (vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_invMatrixOutputs 
                                        >> 0xdU))),3);
-        bufp->chgCData(oldp+11,(vlSelf->Top__DOT__core__DOT__CUInstance__DOT__io_StType_0),2);
+        bufp->chgCData(oldp+11,(vlSelf->Top__DOT__core__DOT___CUInstance_io_StType),2);
         bufp->chgCData(oldp+12,((((IData)(vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_andMatrixOutputs_27_2) 
                                   << 2U) | (IData)(vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_orMatrixOutputs_hi_lo_hi_lo))),3);
-        bufp->chgCData(oldp+13,(vlSelf->Top__DOT__core__DOT__CUInstance__DOT___decode_io_PCSel),2);
+        bufp->chgCData(oldp+13,(vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_PCSel),2);
         bufp->chgIData(oldp+14,((~ vlSelf->Top__DOT__memory__DOT__mem__DOT__imem)),32);
         bufp->chgIData(oldp+15,(vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_invMatrixOutputs),30);
         bufp->chgBit(oldp+16,((1U & (~ (vlSelf->Top__DOT__memory__DOT__mem__DOT__imem 
@@ -700,7 +700,7 @@ void VTop___024root__trace_chg_sub_0(VTop___024root* vlSelf, VerilatedVcd::Buffe
                                                     & vlSelf->Top__DOT__memory__DOT__mem__DOT__imem)))))),4);
         bufp->chgCData(oldp+186,(vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_orMatrixOutputs_lo_hi_8),8);
         bufp->chgSData(oldp+187,(vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_orMatrixOutputs_lo_14),15);
-        bufp->chgCData(oldp+188,((((IData)(vlSelf->Top__DOT__core__DOT__CUInstance__DOT__io_StType_0) 
+        bufp->chgCData(oldp+188,((((IData)(vlSelf->Top__DOT__core__DOT___CUInstance_io_StType) 
                                    << 1U) | (IData)(vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_andMatrixOutputs_7_2))),3);
         bufp->chgCData(oldp+189,(vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_orMatrixOutputs_hi_lo_hi_lo),2);
         bufp->chgCData(oldp+190,(((((((3U == (IData)(vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_andMatrixOutputs_hi_hi_2)) 
@@ -735,11 +735,11 @@ void VTop___024root__trace_chg_sub_0(VTop___024root* vlSelf, VerilatedVcd::Buffe
                                                << 5U) 
                                               | ((IData)(vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_orMatrixOutputs_hi_lo_hi_lo) 
                                                  << 3U))) 
-                                  | (((IData)(vlSelf->Top__DOT__core__DOT__CUInstance__DOT__io_StType_0) 
+                                  | (((IData)(vlSelf->Top__DOT__core__DOT___CUInstance_io_StType) 
                                       << 1U) | (IData)(vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_andMatrixOutputs_7_2)))),7);
         bufp->chgCData(oldp+193,(vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_orMatrixOutputs_hi_hi_hi_3),4);
         bufp->chgSData(oldp+194,(vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_orMatrixOutputs_hi_17),15);
-        bufp->chgIData(oldp+195,(vlSelf->Top__DOT__core__DOT___ImmGenInstance_io_out),32);
+        bufp->chgIData(oldp+195,(vlSelf->Top__DOT__core__DOT__ImmGenInstance__DOT__io_out_0),32);
         bufp->chgIData(oldp+196,((((- (IData)((vlSelf->Top__DOT__memory__DOT__mem__DOT__imem 
                                                >> 0x1fU))) 
                                    << 0xbU) | (0x7ffU 

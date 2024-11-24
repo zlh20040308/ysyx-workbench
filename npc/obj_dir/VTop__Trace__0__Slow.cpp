@@ -931,7 +931,7 @@ VL_ATTR_COLD void VTop___024root__trace_full_sub_0(VTop___024root* vlSelf, Veril
     VlWide<8>/*255:0*/ __Vtemp_h7720a331__0;
     // Body
     bufp->fullIData(oldp+1,(vlSelf->Top__DOT__memory__DOT__mem__DOT__imem),32);
-    bufp->fullCData(oldp+2,(vlSelf->Top__DOT__memory__DOT__io_dmem_wmask_0),4);
+    bufp->fullCData(oldp+2,(vlSelf->Top__DOT___core_io_dmem_wmask),4);
     bufp->fullBit(oldp+3,(vlSelf->Top__DOT__core__DOT__CSRInstance__DOT___GEN_6));
     bufp->fullBit(oldp+4,(vlSelf->Top__DOT__core__DOT__CSRInstance__DOT___GEN_2));
     bufp->fullBit(oldp+5,(vlSelf->Top__DOT__core__DOT__CSRInstance__DOT___GEN_1));
@@ -944,10 +944,10 @@ VL_ATTR_COLD void VTop___024root__trace_full_sub_0(VTop___024root* vlSelf, Veril
                                     >> 1U))),2);
     bufp->fullCData(oldp+11,((7U & (vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_invMatrixOutputs 
                                     >> 0xdU))),3);
-    bufp->fullCData(oldp+12,(vlSelf->Top__DOT__core__DOT__CUInstance__DOT__io_StType_0),2);
+    bufp->fullCData(oldp+12,(vlSelf->Top__DOT__core__DOT___CUInstance_io_StType),2);
     bufp->fullCData(oldp+13,((((IData)(vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_andMatrixOutputs_27_2) 
                                << 2U) | (IData)(vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_orMatrixOutputs_hi_lo_hi_lo))),3);
-    bufp->fullCData(oldp+14,(vlSelf->Top__DOT__core__DOT__CUInstance__DOT___decode_io_PCSel),2);
+    bufp->fullCData(oldp+14,(vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_PCSel),2);
     bufp->fullIData(oldp+15,((~ vlSelf->Top__DOT__memory__DOT__mem__DOT__imem)),32);
     bufp->fullIData(oldp+16,(vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_invMatrixOutputs),30);
     bufp->fullBit(oldp+17,((1U & (~ (vlSelf->Top__DOT__memory__DOT__mem__DOT__imem 
@@ -1565,7 +1565,7 @@ VL_ATTR_COLD void VTop___024root__trace_full_sub_0(VTop___024root* vlSelf, Veril
                                         (0x3044U & vlSelf->Top__DOT__memory__DOT__mem__DOT__imem)))))),4);
     bufp->fullCData(oldp+187,(vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_orMatrixOutputs_lo_hi_8),8);
     bufp->fullSData(oldp+188,(vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_orMatrixOutputs_lo_14),15);
-    bufp->fullCData(oldp+189,((((IData)(vlSelf->Top__DOT__core__DOT__CUInstance__DOT__io_StType_0) 
+    bufp->fullCData(oldp+189,((((IData)(vlSelf->Top__DOT__core__DOT___CUInstance_io_StType) 
                                 << 1U) | (IData)(vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_andMatrixOutputs_7_2))),3);
     bufp->fullCData(oldp+190,(vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_orMatrixOutputs_hi_lo_hi_lo),2);
     bufp->fullCData(oldp+191,(((((((3U == (IData)(vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_andMatrixOutputs_hi_hi_2)) 
@@ -1597,11 +1597,11 @@ VL_ATTR_COLD void VTop___024root__trace_full_sub_0(VTop___024root* vlSelf, Veril
                                             << 5U) 
                                            | ((IData)(vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_orMatrixOutputs_hi_lo_hi_lo) 
                                               << 3U))) 
-                               | (((IData)(vlSelf->Top__DOT__core__DOT__CUInstance__DOT__io_StType_0) 
+                               | (((IData)(vlSelf->Top__DOT__core__DOT___CUInstance_io_StType) 
                                    << 1U) | (IData)(vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_andMatrixOutputs_7_2)))),7);
     bufp->fullCData(oldp+194,(vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_orMatrixOutputs_hi_hi_hi_3),4);
     bufp->fullSData(oldp+195,(vlSelf->Top__DOT__core__DOT__CUInstance__DOT__decode__DOT__decodedBundle_orMatrixOutputs_hi_17),15);
-    bufp->fullIData(oldp+196,(vlSelf->Top__DOT__core__DOT___ImmGenInstance_io_out),32);
+    bufp->fullIData(oldp+196,(vlSelf->Top__DOT__core__DOT__ImmGenInstance__DOT__io_out_0),32);
     bufp->fullIData(oldp+197,((((- (IData)((vlSelf->Top__DOT__memory__DOT__mem__DOT__imem 
                                             >> 0x1fU))) 
                                 << 0xbU) | (0x7ffU 
