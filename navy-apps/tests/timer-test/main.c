@@ -16,6 +16,7 @@ void print_time_interval() {
     // 如果时间间隔大于等于 500 毫秒（即 0.5 秒）
     if (elapsed_time >= 500) {
       printf("0.5 seconds passed...\n");
+      printf("HH\n");
       start = now; // 更新开始时间，重新计时
     }
   }
