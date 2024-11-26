@@ -2,19 +2,19 @@
 #include <stdlib.h>
 #include <sys/time.h>
 #include <unistd.h>
+#include <NDL.h>
+
 
 void print_time_interval() {
-  struct timeval start, now;
-  gettimeofday(&start, NULL); // 获取初始时间
+  uint32_t start = NDL_GetTicks(); // 获取初始时间
 
   while (1) {
-    gettimeofday(&now, NULL); // 获取当前时间
-    // 计算时间间隔（微秒）
-    long elapsed_time =
-        (now.tv_sec - start.tv_sec) * 1000000 + (now.tv_usec - start.tv_usec);
+    uint32_t now = NDL_GetTicks(); // 获取当前时间
+    // 计算时间间隔（毫秒）
+    uint32_t elapsed_time = now - start;
 
-    // 如果时间间隔大于等于 500,000 微秒（即 0.5 秒）
-    if (elapsed_time >= 500000) {
+    // 如果时间间隔大于等于 500 毫秒（即 0.5 秒）
+    if (elapsed_time >= 500) {
       printf("0.5 seconds passed...\n");
       start = now; // 更新开始时间，重新计时
     }
@@ -22,7 +22,9 @@ void print_time_interval() {
 }
 
 int main() {
+  NDL_Init(1);
   printf("Starting timer test...\n");
   print_time_interval();
+  NDL_Quit();
   return 0;
 }
