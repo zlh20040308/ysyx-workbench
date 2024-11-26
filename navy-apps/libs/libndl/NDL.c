@@ -16,7 +16,10 @@ uint32_t NDL_GetTicks() {
   return milliseconds;
 }
 
-int NDL_PollEvent(char *buf, int len) { return 0; }
+int NDL_PollEvent(char *buf, int len) {
+  
+  return 0;
+}
 
 void NDL_OpenCanvas(int *w, int *h) {
   if (getenv("NWM_APP")) {
