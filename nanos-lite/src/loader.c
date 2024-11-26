@@ -46,7 +46,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
       }
     }
   }
-  Log("ELF loaded, entry point at: %x\n", elf_header.e_entry);
+  Log("ELF loaded, entry point at: %x", elf_header.e_entry);
   fs_close(elf_fd);
   return (uintptr_t)elf_header.e_entry;
 }
