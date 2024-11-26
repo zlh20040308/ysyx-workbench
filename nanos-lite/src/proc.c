@@ -30,6 +30,7 @@ void init_proc() {
   // naive_uload(NULL, "/bin/file-test");
   // naive_uload(NULL, "/bin/timer-test");
   naive_uload(NULL, "/bin/event-test");
+  Log("ahah");
 }
 
 Context *schedule(Context *prev) { return NULL; }
