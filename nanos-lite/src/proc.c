@@ -26,13 +26,10 @@ void init_proc() {
   Log("Initializing processes...");
 
   // load program here
-  naive_uload(NULL, "/bin/hello");
+  // naive_uload(NULL, "/bin/hello");
   // naive_uload(NULL, "/bin/file-test");
   // naive_uload(NULL, "/bin/timer-test");
-  Log("ahah");
-
-  // naive_uload(NULL, "/bin/event-test");
-  Log("ahah");
+  naive_uload(NULL, "/bin/event-test");
 }
 
 Context *schedule(Context *prev) { return NULL; }
