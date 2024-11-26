@@ -19,7 +19,7 @@ extern size_t get_ramdisk_size();
 
 static uintptr_t loader(PCB *pcb, const char *filename) {
   Elf_Ehdr elf_header;
-  Log("haha");
+  Log("haha, filename = %s", filename);
 
   int elf_fd = fs_open(filename, 0, 0);
   Log("haha");
