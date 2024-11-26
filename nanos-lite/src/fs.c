@@ -52,9 +52,12 @@ void init_fs() {
 int fs_open(const char *pathname, int flags, int mode) {
   Log("pathname = %s", pathname);
   for (int i = 0; i < ARRAY_SIZE(file_table); i++) {
+
     if (strcmp(file_table[i].name, pathname) == 0) {
       return i;
     }
+  Log("pathname = %s", pathname);
+
   }
   assert(0);
 }
