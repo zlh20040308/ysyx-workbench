@@ -20,7 +20,7 @@ typedef struct {
   size_t open_offset;
 } Finfo;
 
-enum { FD_STDIN, FD_STDOUT, FD_STDERR, FD_FB , FD_EVENTS};
+enum { FD_STDIN, FD_STDOUT, FD_STDERR, FD_FB, FD_EVENTS };
 
 size_t invalid_read(void *buf, size_t offset, size_t len) {
   panic("should not reach here");
@@ -46,7 +46,6 @@ void init_fs() {
   for (int i = 0; i < ARRAY_SIZE(file_table); i++) {
     file_table[i].open_offset = 0;
   }
-
 }
 
 int fs_open(const char *pathname, int flags, int mode) {
@@ -56,8 +55,7 @@ int fs_open(const char *pathname, int flags, int mode) {
     if (strcmp(file_table[i].name, pathname) == 0) {
       return i;
     }
-  Log("pathname = %s", pathname);
-
+    Log("file_table[i].name = %s, pathname = %s", file_table[i].name, pathname);
   }
   assert(0);
 }
