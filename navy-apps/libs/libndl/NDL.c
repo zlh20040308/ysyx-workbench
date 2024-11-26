@@ -2,12 +2,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
 #include <sys/time.h>
+#include <unistd.h>
+#include <fcntl.h>
 
 static int evtdev = -1;
 static int fbdev = -1;
 static int screen_w = 0, screen_h = 0;
+static int fd_events = -1;
 
 uint32_t NDL_GetTicks() {
   struct timeval tv;
@@ -16,7 +18,12 @@ uint32_t NDL_GetTicks() {
   return milliseconds;
 }
 
-int NDL_PollEvent(char *buf, int len) { return 0; }
+int NDL_PollEvent(char *buf, int len) {
+  if (fd_events == -1) {
+    fd_events = open("/dev/events", 0, 0);
+  }
+  return read(fd_events, buf, len);
+}
 
 void NDL_OpenCanvas(int *w, int *h) {
   if (getenv("NWM_APP")) {
@@ -58,4 +65,8 @@ int NDL_Init(uint32_t flags) {
   return 0;
 }
 
-void NDL_Quit() {}
+void NDL_Quit() {
+  if (fd_events != -1) {
+    close(fd_events);
+  }
+}
