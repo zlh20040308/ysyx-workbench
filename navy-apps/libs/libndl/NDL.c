@@ -49,7 +49,7 @@ void NDL_OpenCanvas(int *w, int *h) {
     }
     close(fbctl);
   } else {
-    if (!*w && !*h) {
+    if (*w == 0 && *h == 0) {
       // 定义缓冲区
       char dispinfo_buf[50] = {0};
 
