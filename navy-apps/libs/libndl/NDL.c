@@ -49,13 +49,13 @@ void NDL_OpenCanvas(int *w, int *h) {
     }
     close(fbctl);
   } else {
+    printf("w = %d, h = %d\n", *w, *h);
     if (*w == 0 && *h == 0) {
       // 定义缓冲区
       char dispinfo_buf[50] = {0};
 
       // 打开 /proc/dispinfo 文件
       int dispinfo_fd = open("/proc/dispinfo", O_RDONLY);
-      printf("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n");
 
       // 读取文件内容
       size_t bytes_read = read(dispinfo_fd, dispinfo_buf, sizeof(dispinfo_buf));
