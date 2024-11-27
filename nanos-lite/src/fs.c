@@ -20,6 +20,9 @@ typedef struct {
   size_t open_offset;
 } Finfo;
 
+size_t screen_w = 0;
+size_t screen_h = 0;
+
 enum { FD_STDIN, FD_STDOUT, FD_STDERR, FD_EVENTS, FD_FB, FD_DISPINFO };
 
 size_t invalid_read(void *buf, size_t offset, size_t len) {
@@ -45,10 +48,12 @@ static Finfo file_table[] __attribute__((used)) = {
 
 void init_fs() {
   // TODO: initialize the size of /dev/fb
+  AM_GPU_CONFIG_T gpu_config = io_read(AM_GPU_CONFIG);
+  screen_w = gpu_config.width;
+  screen_h = gpu_config.height;
   for (int i = 0; i < ARRAY_SIZE(file_table); i++) {
     file_table[i].open_offset = 0;
   }
-  
 }
 
 int fs_open(const char *pathname, int flags, int mode) {

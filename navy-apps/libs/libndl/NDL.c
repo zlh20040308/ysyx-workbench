@@ -20,7 +20,7 @@ uint32_t NDL_GetTicks() {
 
 int NDL_PollEvent(char *buf, int len) {
   if (fd_events == -1) {
-    fd_events = open("/dev/events", 0, 0);
+    fd_events = open("/dev/events", 0);
   }
   return read(fd_events, buf, len);
 }
@@ -47,8 +47,24 @@ void NDL_OpenCanvas(int *w, int *h) {
     close(fbctl);
   } else {
     if (!*w && !*h) {
-    }
+      // 定义缓冲区
+      char dispinfo_buf[50] = {0};
 
+      // 打开 /proc/dispinfo 文件
+      int dispinfo_fd = open("/proc/dispinfo", O_RDONLY);
+
+      // 读取文件内容
+      size_t bytes_read = read(dispinfo_fd, dispinfo_buf, sizeof(dispinfo_buf));
+
+      // 关闭文件描述符
+      close(dispinfo_fd);
+
+      // 解析字符串
+      if (sscanf(dispinfo_buf, "WIDTH :%d\nHEIGHT:%d\n", w, h) != 2) {
+        fprintf(stderr, "Failed to parse dispinfo buffer: %s\n", dispinfo_buf);
+        return;
+      }
+    }
   }
 }
 
