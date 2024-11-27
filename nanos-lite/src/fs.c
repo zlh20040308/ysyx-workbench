@@ -51,6 +51,7 @@ void init_fs() {
   AM_GPU_CONFIG_T gpu_config = io_read(AM_GPU_CONFIG);
   screen_w = gpu_config.width;
   screen_h = gpu_config.height;
+  Log("screen_w = %d, screen_h = %d", screen_w, screen_h);
   for (int i = 0; i < ARRAY_SIZE(file_table); i++) {
     file_table[i].open_offset = 0;
   }
