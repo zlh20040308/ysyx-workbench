@@ -52,6 +52,7 @@ void NDL_OpenCanvas(int *w, int *h) {
 
       // 打开 /proc/dispinfo 文件
       int dispinfo_fd = open("/proc/dispinfo", O_RDONLY);
+      printf("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n");
 
       // 读取文件内容
       size_t bytes_read = read(dispinfo_fd, dispinfo_buf, sizeof(dispinfo_buf));
