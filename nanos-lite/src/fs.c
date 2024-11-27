@@ -52,6 +52,7 @@ void init_fs() {
   screen_w = gpu_config.width;
   screen_h = gpu_config.height;
   file_table[FD_FB].size = screen_w * screen_h * sizeof(uint32_t);
+  Log("fb size = %d", file_table[FD_FB].size);
 
   // Log("screen_w = %d, screen_h = %d", screen_w, screen_h);
   for (int i = 0; i < ARRAY_SIZE(file_table); i++) {
