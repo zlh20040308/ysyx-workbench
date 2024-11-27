@@ -20,7 +20,10 @@ typedef struct {
   size_t open_offset;
 } Finfo;
 
-enum { FD_STDIN, FD_STDOUT, FD_STDERR, FD_EVENTS, FD_FB};
+size_t screen_w = 0;
+size_t screen_h = 0;
+
+enum { FD_STDIN, FD_STDOUT, FD_STDERR, FD_EVENTS, FD_FB, FD_DISPINFO };
 
 size_t invalid_read(void *buf, size_t offset, size_t len) {
   panic("should not reach here");
@@ -38,11 +41,20 @@ static Finfo file_table[] __attribute__((used)) = {
     [FD_STDOUT] = {"stdout", 0, 0, invalid_read, serial_write},
     [FD_STDERR] = {"stderr", 0, 0, invalid_read, serial_write},
     [FD_EVENTS] = {"/dev/events", 0, 0, events_read, invalid_write},
+    [FD_FB] = {"/dev/fb", 0, 0, invalid_read, fb_write},
+    [FD_DISPINFO] = {"/proc/dispinfo", 0, 0, dispinfo_read, invalid_write},
 #include "files.h"
 };
 
 void init_fs() {
   // TODO: initialize the size of /dev/fb
+  AM_GPU_CONFIG_T gpu_config = io_read(AM_GPU_CONFIG);
+  screen_w = gpu_config.width;
+  screen_h = gpu_config.height;
+  file_table[FD_FB].size = screen_w * screen_h * sizeof(uint32_t);
+  Log("fb size = %d", file_table[FD_FB].size);
+
+  // Log("screen_w = %d, screen_h = %d", screen_w, screen_h);
   for (int i = 0; i < ARRAY_SIZE(file_table); i++) {
     file_table[i].open_offset = 0;
   }
@@ -51,7 +63,8 @@ void init_fs() {
 int fs_open(const char *pathname, int flags, int mode) {
   Log("pathname = %s", pathname);
   for (int i = 0; i < ARRAY_SIZE(file_table); i++) {
-    Log("file_table[i].name = %s, pathname = %s", file_table[i].name, pathname);
+    // Log("file_table[i].name = %s, pathname = %s", file_table[i].name,
+    // pathname);
 
     if (strcmp(file_table[i].name, pathname) == 0) {
       return i;
@@ -76,7 +89,10 @@ size_t fs_read(int fd, void *buf, size_t len) {
       return 0;
     }
   } else {
-    return file_table[fd].read(buf, file_table[fd].open_offset, len);
+    size_t read_byte =
+        file_table[fd].read(buf, file_table[fd].open_offset, len);
+    file_table[fd].open_offset += read_byte;
+    return read_byte;
   }
 }
 
@@ -97,7 +113,10 @@ size_t fs_write(int fd, const void *buf, size_t len) {
       return 0;
     }
   } else {
-    return file_table[fd].write(buf, file_table[fd].open_offset, len);
+    size_t write_byte =
+        file_table[fd].write(buf, file_table[fd].open_offset, len);
+    file_table[fd].open_offset += write_byte;
+    return write_byte;
   }
 }
 
