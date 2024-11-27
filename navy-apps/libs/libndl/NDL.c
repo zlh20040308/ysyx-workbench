@@ -1,10 +1,10 @@
+#include <fcntl.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/time.h>
 #include <unistd.h>
-#include <fcntl.h>
 
 static int evtdev = -1;
 static int fbdev = -1;
@@ -45,6 +45,10 @@ void NDL_OpenCanvas(int *w, int *h) {
         break;
     }
     close(fbctl);
+  } else {
+    if (!*w && !*h) {
+    }
+
   }
 }
 
