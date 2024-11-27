@@ -10,6 +10,7 @@ static int evtdev = -1;
 static int fbdev = -1;
 static int screen_w = 0, screen_h = 0;
 static int canvas_w = 0, canvas_h = 0;
+static int canvas_x, canvas_y;
 static int fd_events = -1;
 
 uint32_t NDL_GetTicks() {
@@ -47,30 +48,49 @@ void NDL_OpenCanvas(int *w, int *h) {
     }
     close(fbctl);
   } else {
-    if (*w == 0 && *h == 0) {
-      // 定义缓冲区
-      char dispinfo_buf[50] = {0};
+    // 定义缓冲区
+    char dispinfo_buf[50] = {0};
 
-      // 打开 /proc/dispinfo 文件
-      int dispinfo_fd = open("/proc/dispinfo", O_RDONLY);
+    // 打开 /proc/dispinfo 文件
+    int dispinfo_fd = open("/proc/dispinfo", O_RDONLY);
 
-      // 读取文件内容
-      size_t bytes_read = read(dispinfo_fd, dispinfo_buf, sizeof(dispinfo_buf));
+    // 读取文件内容
+    size_t bytes_read = read(dispinfo_fd, dispinfo_buf, sizeof(dispinfo_buf));
 
-      // 关闭文件描述符
-      close(dispinfo_fd);
+    // 关闭文件描述符
+    close(dispinfo_fd);
 
-      // 解析字符串
-      if (sscanf(dispinfo_buf, "WIDTH :%d\nHEIGHT:%d\n", w, h) != 2) {
-        fprintf(stderr, "Failed to parse dispinfo buffer: %s\n", dispinfo_buf);
-        return;
-      }
-      
+    // 解析字符串
+    if (sscanf(dispinfo_buf, "WIDTH :%d\nHEIGHT:%d\n", &screen_w, &screen_h) !=
+        2) {
+      fprintf(stderr, "Failed to parse dispinfo buffer: %s\n", dispinfo_buf);
+      return;
     }
+    if (*w == 0 && *h == 0) {
+      *w = screen_w;
+      *h = screen_h;
+    }
+    canvas_w = *w;
+    canvas_h = *h;
+    canvas_x = (screen_w - canvas_w) / 2;
+    canvas_y = (screen_h - canvas_h) / 2;
   }
 }
 
-void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {}
+void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
+  // 打开 /dev/fb 文件
+  int fbdev = open("/dev/fb", O_WRONLY);
+
+  for (int i = 0; i < h; ++i) {
+    size_t offset =
+        ((x + canvas_x) + (y + canvas_y + i) * screen_w) * sizeof(uint32_t);
+    lseek(fbdev, offset, SEEK_SET);
+    write(fbdev, pixels + i * w, w * sizeof(uint32_t));
+  }
+
+  // 关闭文件描述符
+  close(fbdev);
+}
 
 void NDL_OpenAudio(int freq, int channels, int samples) {}
 

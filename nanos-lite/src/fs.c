@@ -51,7 +51,9 @@ void init_fs() {
   AM_GPU_CONFIG_T gpu_config = io_read(AM_GPU_CONFIG);
   screen_w = gpu_config.width;
   screen_h = gpu_config.height;
-  Log("screen_w = %d, screen_h = %d", screen_w, screen_h);
+  file_table[FD_FB].size = screen_w * screen_h * sizeof(uint32_t);
+
+  // Log("screen_w = %d, screen_h = %d", screen_w, screen_h);
   for (int i = 0; i < ARRAY_SIZE(file_table); i++) {
     file_table[i].open_offset = 0;
   }
@@ -60,7 +62,8 @@ void init_fs() {
 int fs_open(const char *pathname, int flags, int mode) {
   Log("pathname = %s", pathname);
   for (int i = 0; i < ARRAY_SIZE(file_table); i++) {
-    // Log("file_table[i].name = %s, pathname = %s", file_table[i].name, pathname);
+    // Log("file_table[i].name = %s, pathname = %s", file_table[i].name,
+    // pathname);
 
     if (strcmp(file_table[i].name, pathname) == 0) {
       return i;
@@ -85,7 +88,10 @@ size_t fs_read(int fd, void *buf, size_t len) {
       return 0;
     }
   } else {
-    return file_table[fd].read(buf, file_table[fd].open_offset, len);
+    size_t read_byte =
+        file_table[fd].read(buf, file_table[fd].open_offset, len);
+    file_table[fd].open_offset += read_byte;
+    return read_byte;
   }
 }
 
@@ -106,7 +112,10 @@ size_t fs_write(int fd, const void *buf, size_t len) {
       return 0;
     }
   } else {
-    return file_table[fd].write(buf, file_table[fd].open_offset, len);
+    size_t write_byte =
+        file_table[fd].write(buf, file_table[fd].open_offset, len);
+    file_table[fd].open_offset += write_byte;
+    return write_byte;
   }
 }
 
