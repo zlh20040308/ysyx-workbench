@@ -80,23 +80,23 @@ size_t fb_write(const void *buf, size_t offset, size_t len) {
   if (len <= first_row_len) {
     // If len is less than or equal to screen_w - x1, only write the first
     // segment
-    io_write(AM_GPU_FBDRAW, x1, y1, buf, len, 1, true);
+    io_write(AM_GPU_FBDRAW, x1, y1, buf, len / sizeof(uint32_t), 1, true);
   } else {
     // Write the first segment
-    io_write(AM_GPU_FBDRAW, x1, y1, buf, first_row_len, 1, false);
+    io_write(AM_GPU_FBDRAW, x1, y1, buf, first_row_len / sizeof(uint32_t), 1, false);
 
     // Middle segment: from (0, y1 + 1) to (screen_w - 1, y2 - 1)
     Log("mid_rows_num = %d", mid_rows_num);
     if (mid_rows_num > 0) {
       io_write(AM_GPU_FBDRAW, 0, y1 + 1, (const char *)buf + first_row_len,
-               screen_w_real, mid_rows_num, false);
+               screen_w_real, mid_rows_num / sizeof(uint32_t), false);
     }
 
     // Last segment: from (0, y2) to (x2, y2)
     size_t last_row_len = x2 + 1; // Length including x2
     io_write(AM_GPU_FBDRAW, 0, y2,
              (const char *)buf + first_row_len + screen_w_real * mid_rows_num,
-             last_row_len, 1, true);
+             last_row_len / sizeof(uint32_t), 1, true);
   }
 
   while (1) {
