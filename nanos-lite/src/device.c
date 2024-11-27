@@ -99,6 +99,9 @@ size_t fb_write(const void *buf, size_t offset, size_t len) {
              last_row_len, 1, true);
   }
 
+  while (1) {
+  
+  }
   return len;
 }
 
