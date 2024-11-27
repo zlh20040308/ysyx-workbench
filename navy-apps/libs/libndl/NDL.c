@@ -9,6 +9,7 @@
 static int evtdev = -1;
 static int fbdev = -1;
 static int screen_w = 0, screen_h = 0;
+static int canvas_w = 0, canvas_h = 0;
 static int fd_events = -1;
 
 uint32_t NDL_GetTicks() {
@@ -26,10 +27,7 @@ int NDL_PollEvent(char *buf, int len) {
 }
 
 void NDL_OpenCanvas(int *w, int *h) {
-  printf("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n");
-
   if (getenv("NWM_APP")) {
-    printf("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n");
     int fbctl = 4;
     fbdev = 5;
     screen_w = *w;
@@ -49,7 +47,6 @@ void NDL_OpenCanvas(int *w, int *h) {
     }
     close(fbctl);
   } else {
-    printf("w = %d, h = %d\n", *w, *h);
     if (*w == 0 && *h == 0) {
       // 定义缓冲区
       char dispinfo_buf[50] = {0};
@@ -68,6 +65,7 @@ void NDL_OpenCanvas(int *w, int *h) {
         fprintf(stderr, "Failed to parse dispinfo buffer: %s\n", dispinfo_buf);
         return;
       }
+      
     }
   }
 }
