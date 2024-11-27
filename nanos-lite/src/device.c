@@ -83,12 +83,12 @@ size_t fb_write(const void *buf, size_t offset, size_t len) {
     io_write(AM_GPU_FBDRAW, x1, y1, buf, len, 1, true);
   } else {
     // Write the first segment
-    io_write(AM_GPU_FBDRAW, x1, y1, buf, first_row_len, 1, true);
+    io_write(AM_GPU_FBDRAW, x1, y1, buf, first_row_len, 1, false);
 
     // Middle segment: from (0, y1 + 1) to (screen_w - 1, y2 - 1)
     if (mid_rows_num > 0) {
       io_write(AM_GPU_FBDRAW, 0, y1 + 1, (const char *)buf + first_row_len,
-               screen_w_real, mid_rows_num, true);
+               screen_w_real, mid_rows_num, false);
     }
 
     // Last segment: from (0, y2) to (x2, y2)
