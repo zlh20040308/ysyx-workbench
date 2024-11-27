@@ -80,6 +80,7 @@ void NDL_OpenCanvas(int *w, int *h) {
 void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
   // 打开 /dev/fb 文件
   int fbdev = open("/dev/fb", O_WRONLY);
+  Log("x = %d, y = %d, w = %d, h = %d", x, y, w, h);
 
   for (int i = 0; i < h; ++i) {
     size_t offset =
