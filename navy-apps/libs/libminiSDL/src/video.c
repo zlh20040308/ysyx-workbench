@@ -40,24 +40,48 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
   assert(dst);
   printf("SDL_FillRect\n");
 
-  // // 计算目标区域
-  // int x = dstrect ? dstrect->x : 0;
-  // int y = dstrect ? dstrect->y : 0;
-  // int width = dstrect ? dstrect->w : dst->w;
-  // int height = dstrect ? dstrect->h : dst->h;
+  // 计算目标区域
+  int x = dstrect ? dstrect->x : 0;
+  int y = dstrect ? dstrect->y : 0;
+  int width = dstrect ? dstrect->w : dst->w;
+  int height = dstrect ? dstrect->h : dst->h;
 
-  // // 确保目标区域在有效范围内
-  // if (x + width > dst->w || y + height > dst->h) {
-  //   fprintf(stderr, "Fill out of bounds\n");
-  //   return;
-  // }
+  // 确保目标区域在有效范围内
+  if (x + width > dst->w || y + height > dst->h) {
+    fprintf(stderr, "Fill out of bounds\n");
+    return;
+  }
 
-  // // 填充矩形区域
-  // for (int i = 0; i < height; ++i) {
-  //   for (int j = 0; j < width; ++j) {
-  //     dst->pixels[(y + i) * dst->w + (x + j)] = color;
-  //   }
-  // }
+  // 填充矩形区域
+  for (int i = 0; i < height; ++i) {
+    for (int j = 0; j < width; ++j) {
+      switch (dst->format->BytesPerPixel) {
+      case 1: // 8-bit paletted mode
+        ((uint8_t *)dst->pixels)[(y + i) * dst->pitch + (x + j)] =
+            (uint8_t)color;
+        break;
+      case 2: // 16-bit mode
+        ((uint16_t *)dst->pixels)[(y + i) * (dst->pitch / 2) + (x + j)] =
+            (uint16_t)color;
+        break;
+      case 3: // 24-bit mode
+        // 24-bit mode is not directly supported by SDL, but we can handle it
+        // manually
+        uint8_t *pixel =
+            (uint8_t *)dst->pixels + (y + i) * dst->pitch + (x + j) * 3;
+        pixel[0] = (color & 0x0000FF);       // Blue
+        pixel[1] = (color & 0x00FF00) >> 8;  // Green
+        pixel[2] = (color & 0xFF0000) >> 16; // Red
+        break;
+      case 4: // 32-bit mode
+        ((uint32_t *)dst->pixels)[(y + i) * (dst->pitch / 4) + (x + j)] = color;
+        break;
+      default:
+        fprintf(stderr, "Unsupported pixel format: %d bytes per pixel\n",
+                dst->format->BytesPerPixel);
+      }
+    }
+  }
 }
 
 // SDL_UpdateRect 函数
