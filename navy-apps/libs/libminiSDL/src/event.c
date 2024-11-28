@@ -33,7 +33,7 @@ int SDL_WaitEvent(SDL_Event *event) {
   bool success = false;
   size_t index;
   for (index = 0; index < ARRAY_SIZE(keyname); ++index) {
-    if (strcmp(key, keyname[index])) {
+    if (strcmp(key, keyname[index]) == 0) {
       success = true;
       break;
     }
