@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <fcntl.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -80,16 +81,12 @@ void NDL_OpenCanvas(int *w, int *h) {
 void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
   // 打开 /dev/fb 文件
   int fbdev = open("/dev/fb", O_WRONLY);
-  printf("x = %d, y = %d, w = %d, h = %d\n", x, y, w, h);
-  printf("canvas_x = %d, canvas_y = %d\n", canvas_x, canvas_y);
 
   for (int i = 0; i < h; ++i) {
     size_t offset =
         ((x + canvas_x) + (y + canvas_y + i) * screen_w) * sizeof(uint32_t);
-    printf("offset = %d\n", offset);
 
     lseek(fbdev, offset, SEEK_SET);
-    printf("offset = %d\n", offset);
 
     write(fbdev, pixels + i * w, w * sizeof(uint32_t));
   }
@@ -98,13 +95,19 @@ void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
   close(fbdev);
 }
 
-void NDL_OpenAudio(int freq, int channels, int samples) {}
+void NDL_OpenAudio(int freq, int channels, int samples) { assert(0); }
 
-void NDL_CloseAudio() {}
+void NDL_CloseAudio() { assert(0); }
 
-int NDL_PlayAudio(void *buf, int len) { return 0; }
+int NDL_PlayAudio(void *buf, int len) {
+  assert(0);
+  return 0;
+}
 
-int NDL_QueryAudio() { return 0; }
+int NDL_QueryAudio() {
+  assert(0);
+  return 0;
+}
 
 int NDL_Init(uint32_t flags) {
   if (getenv("NWM_APP")) {
