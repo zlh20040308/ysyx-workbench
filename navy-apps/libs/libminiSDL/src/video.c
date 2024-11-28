@@ -9,8 +9,8 @@ extern int screen_h;
 
 void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst,
                      SDL_Rect *dstrect) {
-  assert(dst && src);
-  assert(dst->format->BitsPerPixel == src->format->BitsPerPixel);
+  assert(src && dst);
+  assert(src->format->BitsPerPixel == dst->format->BitsPerPixel);
 
   // 计算源和目标区域
   int src_x = srcrect ? srcrect->x : 0;
@@ -27,11 +27,44 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst,
     return;
   }
 
+
   // 复制像素数据
   for (int y = 0; y < height; ++y) {
-    memcpy(dst->pixels + (dst_y + y) * dst->w + dst_x,
-           src->pixels + (src_y + y) * src->w + src_x,
-           width * sizeof(uint32_t));
+    switch (src->format->BytesPerPixel) {
+    case 1: // 8-bit paletted mode
+      memcpy((uint8_t *)dst->pixels + (dst_y + y) * dst->pitch + dst_x,
+             (uint8_t *)src->pixels + (src_y + y) * src->pitch + src_x,
+             width * sizeof(uint8_t));
+      break;
+    case 2: // 16-bit mode
+      memcpy((uint16_t *)dst->pixels + (dst_y + y) * (dst->pitch / 2) + dst_x,
+             (uint16_t *)src->pixels + (src_y + y) * (src->pitch / 2) + src_x,
+             width * sizeof(uint16_t));
+      break;
+    case 3: // 24-bit mode
+      // 24-bit mode is not directly supported by SDL, but we can handle it
+      // manually
+      uint8_t *src_pixel =
+          (uint8_t *)src->pixels + (src_y + y) * src->pitch + src_x * 3;
+      uint8_t *dst_pixel =
+          (uint8_t *)dst->pixels + (dst_y + y) * dst->pitch + dst_x * 3;
+      for (int x = 0; x < width; ++x) {
+        dst_pixel[0] = src_pixel[0]; // Blue
+        dst_pixel[1] = src_pixel[1]; // Green
+        dst_pixel[2] = src_pixel[2]; // Red
+        src_pixel += 3;
+        dst_pixel += 3;
+      }
+      break;
+    case 4: // 32-bit mode
+      memcpy((uint32_t *)dst->pixels + (dst_y + y) * (dst->pitch / 4) + dst_x,
+             (uint32_t *)src->pixels + (src_y + y) * (src->pitch / 4) + src_x,
+             width * sizeof(uint32_t));
+      break;
+    default:
+      fprintf(stderr, "Unsupported pixel format: %d bytes per pixel\n",
+              src->format->BytesPerPixel);
+    }
   }
 }
 
