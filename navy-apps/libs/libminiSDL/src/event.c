@@ -1,9 +1,9 @@
 #include <NDL.h>
 #include <SDL.h>
 #include <assert.h>
-#include <cstddef>
 #include <stdio.h>
 #include <string.h>
+#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
 #define keyname(k) #k,
 
 static const char *keyname[] = {
@@ -31,7 +31,7 @@ int SDL_WaitEvent(SDL_Event *event) {
   char *key = buf + 3;
   bool success = false;
   size_t index;
-  for (index = 0; i < ARRAY_LEN(keyname); ++i) {
+  for (index = 0; index < ARRAY_SIZE(keyname); ++index) {
     if (strcmp(key, keyname[index])) {
       success = true;
       break;
@@ -41,7 +41,7 @@ int SDL_WaitEvent(SDL_Event *event) {
     printf("SDL_WaitEvent receive wrong event!\n");
     assert(0);
   }
-  e->key.keysym.sym = index;
+  event->key.keysym.sym = index;
 
   return 1;
 }
