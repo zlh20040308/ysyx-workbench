@@ -1,7 +1,6 @@
 #include <NDL.h>
 #include <SDL.h>
 #include <assert.h>
-#include <cstddef>
 #include <stdio.h>
 #include <string.h>
 #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
