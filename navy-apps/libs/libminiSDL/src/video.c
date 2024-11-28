@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+extern int screen_w;
+extern int screen_h;
 
 void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst,
                      SDL_Rect *dstrect) {
@@ -61,6 +63,10 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
 // SDL_UpdateRect 函数
 void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
   // 更新屏幕上的矩形区域
+  if (x + y + w + h == 0) {
+    w = screen_w;
+    h = screen_h;
+  }
   NDL_DrawRect((uint32_t *)(s->pixels + y * s->w + x), x, y, w, h);
 }
 

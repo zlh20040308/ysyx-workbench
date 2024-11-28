@@ -7,9 +7,9 @@
 #include <sys/time.h>
 #include <unistd.h>
 
+int screen_w = 0, screen_h = 0;
 static int evtdev = -1;
 static int fbdev = -1;
-static int screen_w = 0, screen_h = 0;
 static int canvas_w = 0, canvas_h = 0;
 static int canvas_x, canvas_y;
 static int fd_events = -1;
