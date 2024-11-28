@@ -2,20 +2,62 @@
 #include <sdl-video.h>
 #include <assert.h>
 #include <string.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_Rect *dstrect) {
   assert(dst && src);
   assert(dst->format->BitsPerPixel == src->format->BitsPerPixel);
-  assert(0);
+
+  // 计算源和目标区域
+  int src_x = srcrect ? srcrect->x : 0;
+  int src_y = srcrect ? srcrect->y : 0;
+  int dst_x = dstrect ? dstrect->x : 0;
+  int dst_y = dstrect ? dstrect->y : 0;
+  int width = srcrect ? srcrect->w : src->w;
+  int height = srcrect ? srcrect->h : src->h;
+
+  // 确保源和目标区域都在有效范围内
+  if (src_x + width > src->w || src_y + height > src->h ||
+      dst_x + width > dst->w || dst_y + height > dst->h) {
+    fprintf(stderr, "Blit out of bounds\n");
+    return;
+  }
+
+  // 复制像素数据
+  for (int y = 0; y < height; ++y) {
+    memcpy(dst->pixels + (dst_y + y) * dst->w + dst_x,
+           src->pixels + (src_y + y) * src->w + src_x,
+           width * sizeof(uint32_t));
+  }
 }
 
+// SDL_FillRect 函数
 void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
-  assert(0);
+  assert(dst);
+
+  // 计算目标区域
+  int x = dstrect ? dstrect->x : 0;
+  int y = dstrect ? dstrect->y : 0;
+  int width = dstrect ? dstrect->w : dst->w;
+  int height = dstrect ? dstrect->h : dst->h;
+
+  // 确保目标区域在有效范围内
+  if (x + width > dst->w || y + height > dst->h) {
+    fprintf(stderr, "Fill out of bounds\n");
+    return;
+  }
+
+  // 填充矩形区域
+  for (int i = 0; i < height; ++i) {
+    memset(dst->pixels + (y + i) * dst->w + x, color, width * sizeof(uint32_t));
+  }
 }
 
+// SDL_UpdateRect 函数
 void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
-  assert(0);
+  // 更新屏幕上的矩形区域
+  NDL_DrawRect((uint32_t *)(s->pixels + y * s->w + x), x, y, w, h);
 }
 
 // APIs below are already implemented.
