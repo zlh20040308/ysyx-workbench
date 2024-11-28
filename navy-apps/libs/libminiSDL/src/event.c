@@ -1,6 +1,7 @@
 #include <NDL.h>
 #include <SDL.h>
 #include <assert.h>
+#include <stdio.h>
 #define keyname(k) #k,
 
 static const char *keyname[] = {
