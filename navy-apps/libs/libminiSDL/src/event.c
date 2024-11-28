@@ -9,7 +9,13 @@
 static const char *keyname[] = {"NONE", _KEYS(keyname)};
 
 int SDL_PushEvent(SDL_Event *event) {
-  char buf[30] = {0};
+  printf("SDL_PushEvent Unimplement!\n");
+  assert(0);
+  return 0;
+}
+
+int SDL_PollEvent(SDL_Event *event) {
+    char buf[30] = {0};
 
   if (NDL_PollEvent(buf, sizeof(buf)) == 0) {
     return 0;
@@ -40,12 +46,6 @@ int SDL_PushEvent(SDL_Event *event) {
   event->key.keysym.sym = index;
 
   return 1;
-}
-
-int SDL_PollEvent(SDL_Event *event) {
-  printf("SDL_PollEvent Unimplement!\n");
-  assert(0);
-  return 0;
 }
 
 int SDL_WaitEvent(SDL_Event *event) {
