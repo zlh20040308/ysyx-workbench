@@ -76,12 +76,13 @@ int main(int argc, char *argv[], char *envp[]) {
   assert(logo_sf);
 
   set_i_max();
-    while (1) {
-  
-  }
+
 
   while (1) {
     display_menu(i_max);
+        while (1) {
+  
+  }
 
     SDL_Event e;
     do {
