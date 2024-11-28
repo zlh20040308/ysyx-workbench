@@ -23,7 +23,6 @@ int SDL_PollEvent(SDL_Event *ev) {
 
 int SDL_WaitEvent(SDL_Event *event) {
   char buf[30] = {0};
-  printf("ahah\n");
 
   while (NDL_PollEvent(buf, sizeof(buf)) == 0) {
   }
@@ -37,6 +36,7 @@ int SDL_WaitEvent(SDL_Event *event) {
 
   event->type = buf[1] == 'd' ? SDL_KEYDOWN : SDL_KEYUP;
   char *key = buf + 3;
+  printf("key = %s\n", key);
   bool success = false;
   size_t index;
   for (index = 0; index < ARRAY_SIZE(keyname); ++index) {
