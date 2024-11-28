@@ -8,6 +8,7 @@
 #include <unistd.h>
 
 int screen_w = 0, screen_h = 0;
+uint32_t init_time = 0;
 static int evtdev = -1;
 static int fbdev = -1;
 static int canvas_w = 0, canvas_h = 0;
@@ -113,6 +114,7 @@ int NDL_Init(uint32_t flags) {
   if (getenv("NWM_APP")) {
     evtdev = 3;
   }
+  init_time = NDL_GetTicks();
   return 0;
 }
 
