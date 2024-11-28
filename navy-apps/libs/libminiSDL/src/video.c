@@ -40,24 +40,24 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
   assert(dst);
   printf("SDL_FillRect\n");
 
-  // 计算目标区域
-  int x = dstrect ? dstrect->x : 0;
-  int y = dstrect ? dstrect->y : 0;
-  int width = dstrect ? dstrect->w : dst->w;
-  int height = dstrect ? dstrect->h : dst->h;
+  // // 计算目标区域
+  // int x = dstrect ? dstrect->x : 0;
+  // int y = dstrect ? dstrect->y : 0;
+  // int width = dstrect ? dstrect->w : dst->w;
+  // int height = dstrect ? dstrect->h : dst->h;
 
-  // 确保目标区域在有效范围内
-  if (x + width > dst->w || y + height > dst->h) {
-    fprintf(stderr, "Fill out of bounds\n");
-    return;
-  }
+  // // 确保目标区域在有效范围内
+  // if (x + width > dst->w || y + height > dst->h) {
+  //   fprintf(stderr, "Fill out of bounds\n");
+  //   return;
+  // }
 
-  // 填充矩形区域
-  for (int i = 0; i < height; ++i) {
-    for (int j = 0; j < width; ++j) {
-      dst->pixels[(y + i) * dst->w + (x + j)] = color;
-    }
-  }
+  // // 填充矩形区域
+  // for (int i = 0; i < height; ++i) {
+  //   for (int j = 0; j < width; ++j) {
+  //     dst->pixels[(y + i) * dst->w + (x + j)] = color;
+  //   }
+  // }
 }
 
 // SDL_UpdateRect 函数
