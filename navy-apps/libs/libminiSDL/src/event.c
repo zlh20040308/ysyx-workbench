@@ -1,6 +1,7 @@
 #include <NDL.h>
 #include <SDL.h>
 #include <assert.h>
+#include <cstddef>
 #include <stdio.h>
 #include <string.h>
 #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
@@ -27,6 +28,12 @@ int SDL_WaitEvent(SDL_Event *event) {
   while (NDL_PollEvent(buf, sizeof(buf)) == 0) {
   }
   printf("%s\n", buf);
+  for (size_t i = 0; i < 30; ++i) {
+    if (buf[i] == '\n') {
+      buf[i] = '\0';
+      break;
+    }
+  }
 
   event->type = buf[1] == 'd' ? SDL_KEYDOWN : SDL_KEYUP;
   char *key = buf + 3;
