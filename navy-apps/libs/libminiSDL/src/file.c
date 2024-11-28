@@ -2,13 +2,13 @@
 #include <assert.h>
 #include <stdio.h>
 SDL_RWops *SDL_RWFromFile(const char *filename, const char *mode) {
-  printf("Unimplement!\n");
+  printf("SDL_RWFromFile Unimplement!\n");
   assert(0);
   return NULL;
 }
 
 SDL_RWops *SDL_RWFromMem(void *mem, int size) {
-  printf("Unimplement!\n");
+  printf("SDL_RWFromMem Unimplement!\n");
   assert(0);
   return NULL;
 }
