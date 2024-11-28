@@ -24,7 +24,7 @@ int SDL_WaitEvent(SDL_Event *event) {
   char buf[30] = {0};
   printf("ahah\n");
 
-  while (!NDL_PollEvent(buf, sizeof(buf))) {
+  while (NDL_PollEvent(buf, sizeof(buf)) == 0) {
   }
   printf("ahah\n");
 
