@@ -6,10 +6,7 @@
 #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
 #define keyname(k) #k,
 
-static const char *keyname[] = {
-  "NONE",
-  _KEYS(keyname)
-};
+static const char *keyname[] = {"NONE", _KEYS(keyname)};
 
 int SDL_PushEvent(SDL_Event *ev) {
   printf("SDL_PushEvent Unimplement!\n");
@@ -25,8 +22,10 @@ int SDL_PollEvent(SDL_Event *ev) {
 
 int SDL_WaitEvent(SDL_Event *event) {
   char buf[30] = {0};
-  while (!NDL_PollEvent(buf, sizeof(buf)))
-    ;
+  while (!NDL_PollEvent(buf, sizeof(buf))) {
+  }
+  printf("ahah\n");
+
   event->type = buf[1] == 'd' ? SDL_KEYDOWN : SDL_KEYUP;
   char *key = buf + 3;
   bool success = false;
