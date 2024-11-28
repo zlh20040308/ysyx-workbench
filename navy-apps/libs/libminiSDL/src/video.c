@@ -35,6 +35,7 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 // SDL_FillRect 函数
 void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
   assert(dst);
+  printf("SDL_FillRect\n");
 
   // 计算目标区域
   int x = dstrect ? dstrect->x : 0;

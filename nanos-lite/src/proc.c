@@ -34,9 +34,6 @@ void init_proc() {
   // naive_uload(NULL, "/bin/nslider");
   naive_uload(NULL, "/bin/menu");
   
-
-  
-
 }
 
 Context *schedule(Context *prev) { return NULL; }
