@@ -63,7 +63,7 @@ size_t dispinfo_read(void *buf, size_t offset, size_t len) {
 
 size_t fb_write(const void *buf, size_t offset, size_t len) {
   // Calculate the starting point (x1, y1) and ending point (x2, y2)
-  // Log("offset = 0x%8x, len = %d", offset, len);
+  Log("offset = 0x%8x, len = %d", offset, len);
   size_t screen_w_real = screen_w * sizeof(uint32_t);
 
   size_t x1 = offset % screen_w_real;
@@ -82,11 +82,14 @@ size_t fb_write(const void *buf, size_t offset, size_t len) {
     // segment
     io_write(AM_GPU_FBDRAW, x1, y1, buf, len / sizeof(uint32_t), 1, true);
   } else {
+    Log("mid_rows_num = %d", mid_rows_num);
+    while (1) {
+    
+    }
     // Write the first segment
     io_write(AM_GPU_FBDRAW, x1, y1, buf, first_row_len / sizeof(uint32_t), 1, false);
 
     // Middle segment: from (0, y1 + 1) to (screen_w - 1, y2 - 1)
-    Log("mid_rows_num = %d", mid_rows_num);
     if (mid_rows_num > 0) {
       io_write(AM_GPU_FBDRAW, 0, y1 + 1, (const char *)buf + first_row_len,
                screen_w_real, mid_rows_num / sizeof(uint32_t), false);
