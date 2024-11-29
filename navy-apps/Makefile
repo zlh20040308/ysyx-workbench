@@ -170,7 +170,7 @@ $(CLEAN_ALL):
 APPS = nterm
 
 # TESTS = dummy hello file-test timer-test event-test bmp-test fixedptc-test
-TESTS = hello 
+TESTS = hello bmp-test
 
 
 fsimg: $(addprefix apps/, $(APPS)) $(addprefix tests/, $(TESTS))
