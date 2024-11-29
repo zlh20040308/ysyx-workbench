@@ -138,7 +138,7 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
   //           dst->format->BytesPerPixel);
   // }
   NDL_DrawRect((uint32_t *)(s->pixels + y * s->w + x), x, y, w, h);
-    printf("========================\n");
+  printf("x = %d, y = %d, w = %d, h = %d\n", x, y, w, h);
   while (1) {
   }
 }
