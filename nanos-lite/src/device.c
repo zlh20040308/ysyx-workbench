@@ -64,13 +64,13 @@ size_t dispinfo_read(void *buf, size_t offset, size_t len) {
 size_t fb_write(const void *buf, size_t offset, size_t len) {
   // Calculate the starting point (x1, y1) and ending point (x2, y2)
   // Log("offset = 0x%8x, len = 0x%8x", offset, len);
-  size_t screen_w_real = screen_w;
+  size_t screen_w_real = screen_w * sizeof(uint32_t);
 
-  size_t x1 = offset % screen_w_real;
+  size_t x1 = (offset % screen_w_real) / sizeof(uint32_t);
   size_t y1 = offset / screen_w_real;
   Log("offset = %d, screen_w_real = %d", offset, screen_w_real);
 
-  size_t x2 = (offset + len) % screen_w_real;
+  size_t x2 = ((offset + len) % screen_w_real) / sizeof(uint32_t);
   size_t y2 = (offset + len) / screen_w_real;
 
   // Calculate the number of middle rows
