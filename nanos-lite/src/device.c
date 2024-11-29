@@ -58,11 +58,11 @@ size_t events_read(void *buf, size_t offset, size_t len) {
 }
 
 size_t dispinfo_read(void *buf, size_t offset, size_t len) {
-  // return sprintf(buf, "WIDTH :%d\nHEIGHT:%d\n", screen_w, screen_h);
-  sprintf(buf, "WIDTH :%d\nHEIGHT:%d\n", screen_w, screen_h);
-  printf("jajajajjjjjj\n");
+  return sprintf(buf, "WIDTH :%d\nHEIGHT:%d\n", screen_w, screen_h);
+  // sprintf(buf, "WIDTH :%d\nHEIGHT:%d\n", screen_w, screen_h);
+  // printf("jajajajjjjjj\n");
 
-  return len;
+  // return len;
 
 }
 
