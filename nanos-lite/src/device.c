@@ -63,13 +63,14 @@ size_t dispinfo_read(void *buf, size_t offset, size_t len) {
 
 size_t fb_write(const void *buf, size_t offset, size_t len) {
   // Calculate the starting point (x1, y1) and ending point (x2, y2)
-  // Log("offset = 0x%8x, len = %d", offset, len);
+  // Log("offset = 0x%8x, len = 0x%8x", offset, len);
   size_t screen_w_real = screen_w * sizeof(uint32_t);
 
-  size_t x1 = offset % screen_w_real;
+  size_t x1 = (offset % screen_w_real) / sizeof(uint32_t);
   size_t y1 = offset / screen_w_real;
+  // Log("offset = %d, screen_w_real = %d", offset, screen_w_real);
 
-  size_t x2 = (offset + len) % screen_w_real;
+  size_t x2 = ((offset + len) % screen_w_real) / sizeof(uint32_t);
   size_t y2 = (offset + len) / screen_w_real;
 
   // Calculate the number of middle rows
@@ -80,13 +81,18 @@ size_t fb_write(const void *buf, size_t offset, size_t len) {
   if (len <= first_row_len) {
     // If len is less than or equal to screen_w - x1, only write the first
     // segment
+
     io_write(AM_GPU_FBDRAW, x1, y1, buf, len / sizeof(uint32_t), 1, true);
+    // Log("x1 = %d, y1 = %d, len / sizeof(uint32_t) = %d", x1, y1,
+    //     len / sizeof(uint32_t));
   } else {
+    // Log("mid_rows_num = %d", mid_rows_num);
+
     // Write the first segment
-    io_write(AM_GPU_FBDRAW, x1, y1, buf, first_row_len / sizeof(uint32_t), 1, false);
+    io_write(AM_GPU_FBDRAW, x1, y1, buf, first_row_len / sizeof(uint32_t), 1,
+             false);
 
     // Middle segment: from (0, y1 + 1) to (screen_w - 1, y2 - 1)
-    Log("mid_rows_num = %d", mid_rows_num);
     if (mid_rows_num > 0) {
       io_write(AM_GPU_FBDRAW, 0, y1 + 1, (const char *)buf + first_row_len,
                screen_w_real, mid_rows_num / sizeof(uint32_t), false);
@@ -94,10 +100,13 @@ size_t fb_write(const void *buf, size_t offset, size_t len) {
 
     // Last segment: from (0, y2) to (x2, y2)
     size_t last_row_len = x2 + 1; // Length including x2
+    // Log("last_row_len = %d", last_row_len);
     io_write(AM_GPU_FBDRAW, 0, y2,
              (const char *)buf + first_row_len + screen_w_real * mid_rows_num,
              last_row_len / sizeof(uint32_t), 1, true);
   }
+  // Log("offset = %d, len = %d\n", offset, len);
+
   return len;
 }
 

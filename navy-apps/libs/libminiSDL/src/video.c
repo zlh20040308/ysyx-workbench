@@ -6,6 +6,8 @@
 #include <string.h>
 extern int screen_w;
 extern int screen_h;
+extern int canvas_w;
+extern int canvas_h;
 
 void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst,
                      SDL_Rect *dstrect) {
@@ -26,7 +28,6 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst,
     fprintf(stderr, "Blit out of bounds\n");
     return;
   }
-
 
   // 复制像素数据
   for (int y = 0; y < height; ++y) {
@@ -120,10 +121,14 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
 // SDL_UpdateRect 函数
 void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
   // 更新屏幕上的矩形区域
-  if (x + y + w + h == 0) {
-    w = screen_w;
-    h = screen_h;
+  // printf("x = %d, y = %d, w = %d, h = %d\n", x, y, w, h);
+
+  if ((x | y | w | h) == 0) {
+    w = canvas_w;
+    h = canvas_h;
   }
+  // printf("x = %d, y = %d, w = %d, h = %d\n", x, y, w, h);
+  // printf("BytesPerPixel = %d\n", s->format->BytesPerPixel);
   NDL_DrawRect((uint32_t *)(s->pixels + y * s->w + x), x, y, w, h);
 }
 
