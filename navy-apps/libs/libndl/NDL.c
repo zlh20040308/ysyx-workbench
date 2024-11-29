@@ -30,15 +30,16 @@ int NDL_PollEvent(char *buf, int len) {
 }
 
 void NDL_OpenCanvas(int *w, int *h) {
+  printf("%s\n", getenv("NWM_APP"));
   if (getenv("NWM_APP")) {
     int fbctl = 4;
     fbdev = 5;
     screen_w = *w;
     screen_h = *h;
     char buf[64];
-    // while (1) {
+    while (1) {
     
-    // }
+    }
     int len = sprintf(buf, "%d %d", screen_w, screen_h);
     while (1) {
     
