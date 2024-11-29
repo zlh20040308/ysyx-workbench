@@ -11,7 +11,7 @@ int screen_w = 0, screen_h = 0;
 uint32_t init_time = 0;
 static int evtdev = -1;
 static int fbdev = -1;
-int canvas_w = 0, canvas_h = 0;
+static int canvas_w = 0, canvas_h = 0;
 static int canvas_x, canvas_y;
 static int fd_events = -1;
 
@@ -30,22 +30,14 @@ int NDL_PollEvent(char *buf, int len) {
 }
 
 void NDL_OpenCanvas(int *w, int *h) {
-  printf("hahahaha = %d\n", getenv("NWM_APP") == NULL);
   if (getenv("NWM_APP")) {
     int fbctl = 4;
     fbdev = 5;
     screen_w = *w;
     screen_h = *h;
     char buf[64];
-    while (1) {
-    
-    }
     int len = sprintf(buf, "%d %d", screen_w, screen_h);
-    while (1) {
-    
-    }
     // let NWM resize the window and create the frame buffer
-
     write(fbctl, buf, len);
     while (1) {
       // 3 = evtdev
@@ -90,17 +82,13 @@ void NDL_OpenCanvas(int *w, int *h) {
 void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
   // 打开 /dev/fb 文件
   int fbdev = open("/dev/fb", O_WRONLY);
-  // printf("screen_w = %d, screen_h = %d\n", screen_w, screen_h);
-  // printf("canvas_x = %d, canvas_y = %d\n", canvas_x, canvas_y);
-  // printf("x = %d, y = %d, w = %d, h = %d\n", x, y, w, h);
+
   for (int i = 0; i < h; ++i) {
     size_t offset =
         ((x + canvas_x) + (y + canvas_y + i) * screen_w) * sizeof(uint32_t);
 
     lseek(fbdev, offset, SEEK_SET);
 
-    // printf("offset = %d, n = %d\n", offset, w * sizeof(uint32_t));
-    
     write(fbdev, pixels + i * w, w * sizeof(uint32_t));
   }
 

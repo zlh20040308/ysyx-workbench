@@ -8,7 +8,6 @@ size_t ramdisk_read(void *buf, size_t offset, size_t len);
 size_t ramdisk_write(const void *buf, size_t offset, size_t len);
 size_t serial_write(const void *buf, size_t offset, size_t len);
 size_t events_read(void *buf, size_t offset, size_t len);
-size_t dispinfo_write(const void *buf, size_t offset, size_t len);
 size_t dispinfo_read(void *buf, size_t offset, size_t len);
 size_t fb_write(const void *buf, size_t offset, size_t len);
 
@@ -24,7 +23,7 @@ typedef struct {
 size_t screen_w = 0;
 size_t screen_h = 0;
 
-enum { FD_STDIN, FD_STDOUT, FD_STDERR, FD_EVENTS, FD_DISPINFO, FD_FB };
+enum { FD_STDIN, FD_STDOUT, FD_STDERR, FD_EVENTS, FD_FB, FD_DISPINFO };
 
 size_t invalid_read(void *buf, size_t offset, size_t len) {
   panic("should not reach here");
@@ -43,7 +42,7 @@ static Finfo file_table[] __attribute__((used)) = {
     [FD_STDERR] = {"stderr", 0, 0, invalid_read, serial_write},
     [FD_EVENTS] = {"/dev/events", 0, 0, events_read, invalid_write},
     [FD_FB] = {"/dev/fb", 0, 0, invalid_read, fb_write},
-    [FD_DISPINFO] = {"/proc/dispinfo", 0, 0, dispinfo_read, dispinfo_write},
+    [FD_DISPINFO] = {"/proc/dispinfo", 0, 0, dispinfo_read, invalid_write},
 #include "files.h"
 };
 
@@ -62,7 +61,7 @@ void init_fs() {
 }
 
 int fs_open(const char *pathname, int flags, int mode) {
-  // Log("pathname = %s", pathname);
+  Log("pathname = %s", pathname);
   for (int i = 0; i < ARRAY_SIZE(file_table); i++) {
     // Log("file_table[i].name = %s, pathname = %s", file_table[i].name,
     // pathname);
