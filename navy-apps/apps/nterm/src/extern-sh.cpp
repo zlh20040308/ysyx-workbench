@@ -1,3 +1,4 @@
+#include <cstdio>
 #include <nterm.h>
 #include <fcntl.h>
 #include <unistd.h>
@@ -72,6 +73,7 @@ void extern_app_run(const char *app_path) {
         write(write_fd, res, strlen(res));
       }
     }
+    printf("========================\n");
       while (1) {
   
   }
