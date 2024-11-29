@@ -19,10 +19,9 @@ extern size_t get_ramdisk_size();
 
 static uintptr_t loader(PCB *pcb, const char *filename) {
   Elf_Ehdr elf_header;
-  Log("haha, filename = %s", filename);
+  Log("filename = %s", filename);
 
   int elf_fd = fs_open(filename, 0, 0);
-  Log("haha");
   fs_read(elf_fd, &elf_header, sizeof(Elf_Ehdr));
   // ramdisk_read(&elf_header, 0, sizeof(Elf_Ehdr));
   // 使用 assert 对 ELF 文件的魔数和其他字段进行检查

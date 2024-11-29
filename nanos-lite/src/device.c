@@ -1,4 +1,5 @@
 #include <common.h>
+#include <stdio.h> // 包含 sscanf 的声明
 
 #if defined(MULTIPROGRAM) && !defined(TIME_SHARING)
 #define MULTIPROGRAM_YIELD() yield()
@@ -57,6 +58,29 @@ size_t events_read(void *buf, size_t offset, size_t len) {
   return 3 + key_len;
 }
 
+size_t dispinfo_write(void *buf, size_t offset, size_t len) {
+
+  // 临时指针用于遍历字符串
+  const char *ptr = buf;
+
+  // 跳过前导空白字符
+  while (*ptr == ' ') {
+    ptr++;
+  }
+  // 解析第一个整数
+  screen_w = atoi(ptr);
+  // 找到第一个整数后的空格
+  while (*ptr && *ptr != ' ') {
+    ptr++;
+  }
+  // 跳过中间的空白字符
+  while (*ptr == ' ') {
+    ptr++;
+  }
+  // 解析第二个整数
+  screen_h = atoi(ptr);
+  return len;
+}
 size_t dispinfo_read(void *buf, size_t offset, size_t len) {
   return sprintf(buf, "WIDTH :%d\nHEIGHT:%d\n", screen_w, screen_h);
 }
