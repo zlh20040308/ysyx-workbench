@@ -68,7 +68,7 @@ size_t fb_write(const void *buf, size_t offset, size_t len) {
 
   size_t x1 = (offset % screen_w_real) / sizeof(uint32_t);
   size_t y1 = offset / screen_w_real;
-  Log("offset = %d, screen_w_real = %d", offset, screen_w_real);
+  // Log("offset = %d, screen_w_real = %d", offset, screen_w_real);
 
   size_t x2 = ((offset + len) % screen_w_real) / sizeof(uint32_t);
   size_t y2 = (offset + len) / screen_w_real;
@@ -83,10 +83,10 @@ size_t fb_write(const void *buf, size_t offset, size_t len) {
     // segment
 
     io_write(AM_GPU_FBDRAW, x1, y1, buf, len / sizeof(uint32_t), 1, true);
-    Log("x1 = %d, y1 = %d, len / sizeof(uint32_t) = %d", x1, y1,
-        len / sizeof(uint32_t));
+    // Log("x1 = %d, y1 = %d, len / sizeof(uint32_t) = %d", x1, y1,
+    //     len / sizeof(uint32_t));
   } else {
-    Log("mid_rows_num = %d", mid_rows_num);
+    // Log("mid_rows_num = %d", mid_rows_num);
 
     // Write the first segment
     io_write(AM_GPU_FBDRAW, x1, y1, buf, first_row_len / sizeof(uint32_t), 1,
@@ -105,7 +105,7 @@ size_t fb_write(const void *buf, size_t offset, size_t len) {
              (const char *)buf + first_row_len + screen_w_real * mid_rows_num,
              last_row_len / sizeof(uint32_t), 1, true);
   }
-  Log("offset = %d, len = %d\n", offset, len);
+  // Log("offset = %d, len = %d\n", offset, len);
 
   return len;
 }
