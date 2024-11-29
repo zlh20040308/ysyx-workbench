@@ -11,7 +11,7 @@ int screen_w = 0, screen_h = 0;
 uint32_t init_time = 0;
 static int evtdev = -1;
 static int fbdev = -1;
-static int canvas_w = 0, canvas_h = 0;
+int canvas_w = 0, canvas_h = 0;
 static int canvas_x, canvas_y;
 static int fd_events = -1;
 
