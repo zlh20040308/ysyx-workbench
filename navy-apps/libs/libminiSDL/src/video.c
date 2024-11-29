@@ -6,6 +6,8 @@
 #include <string.h>
 extern int screen_w;
 extern int screen_h;
+extern int canvas_w;
+extern int canvas_h;
 
 void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst,
                      SDL_Rect *dstrect) {
@@ -120,14 +122,11 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
 void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
   // 更新屏幕上的矩形区域
   if ((x | y | w | h) == 0) {
-    w = screen_w;
-    h = screen_h;
+    w = canvas_w;
+    h = canvas_h;
   }
   printf("x = %d, y = %d, w = %d, h = %d\n", x, y, w, h);
   printf("BytesPerPixel = %d\n", s->format->BytesPerPixel);
-  while (1) {
-  
-  }
   // switch (dst->format->BytesPerPixel) {
   // case 1: // 8-bit paletted mode
   //   break;
