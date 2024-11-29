@@ -23,7 +23,6 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
   uint32_t width = screen_size >> 16;
   volatile uint32_t *fb = (volatile uint32_t *)(uintptr_t)FB_ADDR;
   uint32_t *from = (uint32_t *)(uintptr_t)(ctl->pixels);
-  printf("x = %d, y = %d, h = %d, w = %d\n", ctl->x, ctl->y, ctl->h, ctl->w);
 
   for (int i = 0; i < ctl->h; i++) {
     for (int j = 0; j < ctl->w; j++) {
