@@ -85,7 +85,7 @@ void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
   printf("screen_w = %d, screen_h = %d\n", screen_w, screen_h);
   printf("canvas_x = %d, canvas_y = %d\n", canvas_x, canvas_y);
   printf("x = %d, y = %d, w = %d, h = %d\n", x, y, w, h);
-  for (int i = 0; i < h/2; ++i) {
+  for (int i = 0; i < h; ++i) {
     size_t offset =
         ((x + canvas_x) + (y + canvas_y + i) * screen_w) * sizeof(uint32_t);
 
@@ -94,9 +94,6 @@ void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
     printf("offset = %d, n = %d\n", offset, w * sizeof(uint32_t));
     
     write(fbdev, pixels + i * w, w * sizeof(uint32_t));
-  }
-  while (1) {
-  
   }
 
   // 关闭文件描述符

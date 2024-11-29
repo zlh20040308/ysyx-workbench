@@ -52,7 +52,6 @@ void refresh_terminal() {
       }
   term->clear();
 
-
   static uint32_t last = 0;
   static int flip = 0;
   uint32_t now = SDL_GetTicks();
