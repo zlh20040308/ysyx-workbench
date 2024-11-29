@@ -26,7 +26,7 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
   printf("x = %d, y = %d, h = %d, w = %d\n", ctl->x, ctl->y, ctl->h, ctl->w);
 
   for (int i = 0; i < ctl->h; i++) {
-    for (int j = 0; j < ctl->w / 2; j++) {
+    for (int j = 0; j < ctl->w / 4; j++) {
       fb[width * (i + ctl->y) + ctl->x + j] = from[i * ctl->w + j];
     }
     while (1) {
