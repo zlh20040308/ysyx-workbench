@@ -1,4 +1,3 @@
-#include <cstdio>
 #define SDL_malloc  malloc
 #define SDL_free    free
 #define SDL_realloc realloc
