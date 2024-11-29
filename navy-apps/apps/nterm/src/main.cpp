@@ -45,9 +45,6 @@ void refresh_terminal() {
         draw_ch(i * font->w, j * font->h, term->getch(i, j), term->foreground(i, j), term->background(i, j));
         needsync = 1;
       }
-        while (1) {
-  
-  }
   term->clear();
 
   static uint32_t last = 0;
