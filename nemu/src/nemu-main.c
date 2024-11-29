@@ -73,8 +73,8 @@ void process_file(const char *filename)
   fclose(file);
 }
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
+  Log("argv[0] = %s", argv[0]);
   /* Initialize the monitor. */
 #ifdef CONFIG_TARGET_AM
   am_init_monitor();
