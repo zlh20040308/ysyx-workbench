@@ -61,7 +61,7 @@ void init_fs() {
 }
 
 int fs_open(const char *pathname, int flags, int mode) {
-  Log("pathname = %s", pathname);
+  // Log("pathname = %s", pathname);
   for (int i = 0; i < ARRAY_SIZE(file_table); i++) {
     // Log("file_table[i].name = %s, pathname = %s", file_table[i].name,
     // pathname);
