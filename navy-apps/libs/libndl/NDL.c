@@ -33,9 +33,7 @@ void NDL_OpenCanvas(int *w, int *h) {
     printf("NWM_APP\n");
 
   if (getenv("NWM_APP")) {
-    // while (1) {
-    
-    // }
+
     int fbctl = 4;
     fbdev = 5;
     screen_w = *w;
@@ -52,6 +50,9 @@ void NDL_OpenCanvas(int *w, int *h) {
       buf[nread] = '\0';
       if (strcmp(buf, "mmap ok") == 0)
         break;
+    }
+        while (1) {
+    
     }
     close(fbctl);
   } else {
