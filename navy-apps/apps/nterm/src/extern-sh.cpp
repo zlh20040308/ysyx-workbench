@@ -54,6 +54,10 @@ static void fork_child(const char *nterm_proc) {
 }
 
 void extern_app_run(const char *app_path) {
+      printf("========================\n");
+      while (1) {
+  
+  }
   int elapse = -1, ntick = 0, last_k = 0;
 
   fork_child(app_path); // fork the child process and setup fds
@@ -73,10 +77,6 @@ void extern_app_run(const char *app_path) {
         write(write_fd, res, strlen(res));
       }
     }
-    printf("========================\n");
-      while (1) {
-  
-  }
 
     refresh_terminal();
   }
