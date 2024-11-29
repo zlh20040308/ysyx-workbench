@@ -129,21 +129,8 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
     w = canvas_w;
     h = canvas_h;
   }
-  printf("x = %d, y = %d, w = %d, h = %d\n", x, y, w, h);
-  printf("BytesPerPixel = %d\n", s->format->BytesPerPixel);
-  // switch (dst->format->BytesPerPixel) {
-  // case 1: // 8-bit paletted mode
-  //   break;
-  // case 2: // 16-bit mode
-  //   break;
-  // case 3: // 24-bit mode
-  //   break;
-  // case 4: // 32-bit mode
-  //   break;
-  // default:
-  //   fprintf(stderr, "Unsupported pixel format: %d bytes per pixel\n",
-  //           dst->format->BytesPerPixel);
-  // }
+  // printf("x = %d, y = %d, w = %d, h = %d\n", x, y, w, h);
+  // printf("BytesPerPixel = %d\n", s->format->BytesPerPixel);
   NDL_DrawRect((uint32_t *)(s->pixels + y * s->w + x), x, y, w, h);
 }
 
