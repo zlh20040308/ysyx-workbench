@@ -82,7 +82,8 @@ void NDL_OpenCanvas(int *w, int *h) {
 void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
   // 打开 /dev/fb 文件
   int fbdev = open("/dev/fb", O_WRONLY);
-  // printf("canvas_x = %d, canvas_y = %d\n", canvas_x, canvas_y);
+  printf("screen_w = %d, screen_h = %d\n", screen_w, screen_h);
+  printf("canvas_x = %d, canvas_y = %d\n", canvas_x, canvas_y);
   printf("x = %d, y = %d, w = %d, h = %d\n", x, y, w, h);
   for (int i = 0; i < h/2; ++i) {
     size_t offset =
