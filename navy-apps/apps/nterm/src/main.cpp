@@ -37,9 +37,7 @@ static void draw_ch(int x, int y, char ch, uint32_t fg, uint32_t bg) {
 }
 
 void refresh_terminal() {
-        while (1) {
   
-  }
   int needsync = 0;
   for (int i = 0; i < W; i ++)
     for (int j = 0; j < H; j ++)
@@ -47,6 +45,9 @@ void refresh_terminal() {
         draw_ch(i * font->w, j * font->h, term->getch(i, j), term->foreground(i, j), term->background(i, j));
         needsync = 1;
       }
+        while (1) {
+  
+  }
   term->clear();
 
   static uint32_t last = 0;
