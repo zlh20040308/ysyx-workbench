@@ -1,3 +1,4 @@
+#include <cstdio>
 #define SDL_malloc  malloc
 #define SDL_free    free
 #define SDL_realloc realloc
@@ -11,7 +12,11 @@ SDL_Surface* IMG_Load_RW(SDL_RWops *src, int freesrc) {
   return NULL;
 }
 
-SDL_Surface* IMG_Load(const char *filename) {
+SDL_Surface *IMG_Load(const char *filename) {
+  printf("IMG_Load upl\n");
+  while (1) {
+  
+  }
   return NULL;
 }
 
