@@ -123,10 +123,7 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
     w = screen_w;
     h = screen_h;
   }
-  printf("BytesPerPixel = %d", s->format->BytesPerPixel);
-  printf("========================\n");
-  while (1) {
-  }
+  printf("BytesPerPixel = %d\n", s->format->BytesPerPixel);
   // switch (dst->format->BytesPerPixel) {
   // case 1: // 8-bit paletted mode
   //   break;
@@ -141,6 +138,9 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
   //           dst->format->BytesPerPixel);
   // }
   NDL_DrawRect((uint32_t *)(s->pixels + y * s->w + x), x, y, w, h);
+    printf("========================\n");
+  while (1) {
+  }
 }
 
 // APIs below are already implemented.
