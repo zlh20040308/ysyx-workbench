@@ -123,9 +123,8 @@ void do_syscall(Context *c) {
     c->GPR2 = fs_open((const char *)a[1], a[2], a[3]);
     break;
   case SYS_read:
-    Log("aajaja");
     c->GPR2 = fs_read(a[1], (void *)a[2], a[3]);
-    Log("return %ld", (long)c->GPR2);
+    // Log("return %ld", (long)c->GPR2);
     while (1) {
     
     }

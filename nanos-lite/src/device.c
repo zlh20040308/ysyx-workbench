@@ -60,6 +60,7 @@ size_t events_read(void *buf, size_t offset, size_t len) {
 size_t dispinfo_read(void *buf, size_t offset, size_t len) {
   Log("offset = %d, len = %d", offset, len);
   len = sprintf(buf, "WIDTH :%d\nHEIGHT:%d\n", screen_w, screen_h);
+  Log("buf = %s", buf);
   return len;
 }
 
