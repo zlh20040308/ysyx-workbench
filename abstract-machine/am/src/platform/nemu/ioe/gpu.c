@@ -3,6 +3,7 @@
 #include <stdio.h>
 
 #define SYNC_ADDR (VGACTL_ADDR + 4)
+uint32_t screen_size;
 
 void __am_gpu_init() {
   // int i;
@@ -14,10 +15,10 @@ void __am_gpu_init() {
   // for (i = 0; i < w * h; i++)
   //   fb[i] = i;
   // outl(SYNC_ADDR, 1);
+  screen_size = inl(VGACTL_ADDR);
 }
 
 void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
-  uint32_t screen_size = inl(VGACTL_ADDR);
   *cfg = (AM_GPU_CONFIG_T){.present = true,
                            .has_accel = false,
                            .width = (int)(screen_size >> 16),
