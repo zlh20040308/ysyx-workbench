@@ -27,7 +27,6 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst,
     return;
   }
 
-
   // 复制像素数据
   for (int y = 0; y < height; ++y) {
     switch (src->format->BytesPerPixel) {
@@ -120,7 +119,7 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
 // SDL_UpdateRect 函数
 void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
   // 更新屏幕上的矩形区域
-  if (x + y + w + h == 0) {
+  if ((x | y | w | h) == 0) {
     w = screen_w;
     h = screen_h;
   }
