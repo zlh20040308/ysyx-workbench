@@ -72,6 +72,9 @@ void extern_app_run(const char *app_path) {
         write(write_fd, res, strlen(res));
       }
     }
+      while (1) {
+  
+  }
 
     refresh_terminal();
   }
