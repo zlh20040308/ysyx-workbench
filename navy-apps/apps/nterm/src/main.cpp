@@ -20,9 +20,7 @@ int main(int argc, char *argv[]) {
   screen = SDL_SetVideoMode(win_w, win_h, 32, SDL_HWSURFACE);
 
   term = new Terminal(W, H);
-  while (1) {
-  
-  }
+
 
   if (argc < 2) { builtin_sh_run(); }
   else { extern_app_run(argv[1]); }
@@ -56,6 +54,9 @@ void refresh_terminal() {
     uint32_t color = (flip ? term->foreground(x, y) : term->background(x, y));
     draw_ch(x * font->w, y * font->h, ' ', 0, color);
     SDL_UpdateRect(screen, 0, 0, 0, 0);
+      while (1) {
+  
+  }
     if (now - last > 500) {
       flip = !flip;
       last = now;
