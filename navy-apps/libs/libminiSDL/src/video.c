@@ -141,6 +141,8 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
   //           dst->format->BytesPerPixel);
   // }
   NDL_DrawRect((uint32_t *)(s->pixels + y * s->w + x), x, y, w, h);
+  printf("BytesPerPixel = %d\n", s->format->BytesPerPixel);
+
 }
 
 // APIs below are already implemented.
