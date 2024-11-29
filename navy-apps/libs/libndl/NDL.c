@@ -32,6 +32,8 @@ int NDL_PollEvent(char *buf, int len) {
 void NDL_OpenCanvas(int *w, int *h) {
   printf("adasdasdasd\n");
   if (getenv("NWM_APP")) {
+  printf("adasdasdasd\n");
+
     printf("NWM_APP\n");
     while (1) {
     
