@@ -30,10 +30,12 @@ int NDL_PollEvent(char *buf, int len) {
 }
 
 void NDL_OpenCanvas(int *w, int *h) {
-    printf("NWM_APP\n");
+  printf("NWM_APP\n");
 
   if (getenv("NWM_APP")) {
-
+    while (1) {
+      printf("jajaja\n");
+    }
     int fbctl = 4;
     fbdev = 5;
     screen_w = *w;
@@ -51,14 +53,10 @@ void NDL_OpenCanvas(int *w, int *h) {
       if (strcmp(buf, "mmap ok") == 0)
         break;
     }
-    while (1) {
-    printf("jajaja\n");
-    }
     close(fbctl);
   } else {
     printf("NWM_APP\n");
     printf("NWM_APP\n");
-
 
     // 定义缓冲区
     char dispinfo_buf[50] = {0};
@@ -102,7 +100,7 @@ void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
     lseek(fbdev, offset, SEEK_SET);
 
     // printf("offset = %d, n = %d\n", offset, w * sizeof(uint32_t));
-    
+
     write(fbdev, pixels + i * w, w * sizeof(uint32_t));
   }
 
