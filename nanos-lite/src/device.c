@@ -100,6 +100,10 @@ size_t fb_write(const void *buf, size_t offset, size_t len) {
              (const char *)buf + first_row_len + screen_w_real * mid_rows_num,
              last_row_len / sizeof(uint32_t), 1, true);
   }
+  Log("offset = %d, len = %d\n", offset, len);
+  while (1) {
+  
+  }
   return len;
 }
 
