@@ -9,7 +9,7 @@ const char *_syscall_names[] = {
     "SYS_kill",  "SYS_getpid", "SYS_close",  "SYS_lseek",  "SYS_brk",
     "SYS_fstat", "SYS_time",   "SYS_signal", "SYS_execve", "SYS_fork",
     "SYS_link",  "SYS_unlink", "SYS_wait",   "SYS_times",  "SYS_gettimeofday"};
-#define STRACE
+// #define STRACE
 
 #ifdef STRACE
 
