@@ -90,11 +90,11 @@ void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
 
     lseek(fbdev, offset, SEEK_SET);
 
-    // printf("offset = %d, n = %d\n", offset, w * sizeof(uint32_t));
+    printf("offset = %d, n = %d\n", offset, w * sizeof(uint32_t));
     
     write(fbdev, pixels + i * w, w * sizeof(uint32_t));
   }
-    while (1) {
+  while (1) {
   
   }
 
