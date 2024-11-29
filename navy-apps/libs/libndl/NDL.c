@@ -68,8 +68,10 @@ void NDL_OpenCanvas(int *w, int *h) {
 
 
     // 读取文件内容
-    size_t bytes_read = read(dispinfo_fd, dispinfo_buf, sizeof(dispinfo_buf));
-    printf("NWM_APP2\n");
+    size_t bytes_read = 0;
+    printf("bytes_read = %d\n", bytes_read);
+    bytes_read = read(dispinfo_fd, dispinfo_buf, sizeof(dispinfo_buf));
+    printf("bytes_read = %d\n", bytes_read);
 
 
     // 关闭文件描述符
