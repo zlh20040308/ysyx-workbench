@@ -95,6 +95,7 @@ size_t fb_write(const void *buf, size_t offset, size_t len) {
 
     // Last segment: from (0, y2) to (x2, y2)
     size_t last_row_len = x2 + 1; // Length including x2
+    Log("last_row_len = %d", last_row_len);
     io_write(AM_GPU_FBDRAW, 0, y2,
              (const char *)buf + first_row_len + screen_w_real * mid_rows_num,
              last_row_len / sizeof(uint32_t), 1, true);
