@@ -81,7 +81,7 @@ size_t fb_write(const void *buf, size_t offset, size_t len) {
   if (len <= first_row_len) {
     // If len is less than or equal to screen_w - x1, only write the first
     // segment
-    io_write(AM_GPU_FBDRAW, x1, y1, buf, len / sizeof(uint32_t), 1, true);
+    io_write(AM_GPU_FBDRAW, x1, y1, buf, len / sizeof(uint32_t), 1, false);
     Log("x1 = %d, y1 = %d, len / sizeof(uint32_t) = %d", x1, y1,
         len / sizeof(uint32_t));
   } else {
