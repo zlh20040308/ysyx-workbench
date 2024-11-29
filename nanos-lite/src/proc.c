@@ -36,8 +36,6 @@ void init_proc() {
   // naive_uload(NULL, "/bin/nterm");
   // naive_uload(NULL, "/bin/bmp-test");
   naive_uload(NULL, "/bin/bird");
-
-  
 }
 
 Context *schedule(Context *prev) { return NULL; }
