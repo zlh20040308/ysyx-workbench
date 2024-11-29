@@ -75,6 +75,8 @@ void process_file(const char *filename)
 
 int main(int argc, char *argv[]) {
   Log("argv[0] = %s", argv[0]);
+  Log("argv[1] = %s", argv[1]);
+
   /* Initialize the monitor. */
 #ifdef CONFIG_TARGET_AM
   am_init_monitor();
