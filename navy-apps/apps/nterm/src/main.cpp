@@ -18,7 +18,7 @@ int main(int argc, char *argv[]) {
   int win_w = font->w * W;
   int win_h = font->h * H;
   printf("win_w = %d, win_h = %d\n", win_w, win_h);
-  // printf("win_w = %d, win_h = %d\n", win_w, win_h);
+  printf("win_w = %d, win_h = %d\n", win_w, win_h);
 
   screen = SDL_SetVideoMode(win_w, win_h, 32, SDL_HWSURFACE);
 
