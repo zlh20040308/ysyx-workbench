@@ -64,12 +64,12 @@ void NDL_OpenCanvas(int *w, int *h) {
 
     // 打开 /proc/dispinfo 文件
     int dispinfo_fd = open("/proc/dispinfo", O_RDONLY);
-    printf("NWM_APP\n");
+    printf("NWM_APP1\n");
 
 
     // 读取文件内容
     size_t bytes_read = read(dispinfo_fd, dispinfo_buf, sizeof(dispinfo_buf));
-    printf("NWM_APP\n");
+    printf("NWM_APP2\n");
 
 
     // 关闭文件描述符
@@ -81,7 +81,7 @@ void NDL_OpenCanvas(int *w, int *h) {
       fprintf(stderr, "Failed to parse dispinfo buffer: %s\n", dispinfo_buf);
       return;
     }
-    printf("NWM_APP\n");
+    printf("NWM_APP3\n");
 
     if (*w == 0 && *h == 0) {
       *w = screen_w;
@@ -91,7 +91,7 @@ void NDL_OpenCanvas(int *w, int *h) {
     canvas_h = *h;
     canvas_x = (screen_w - canvas_w) / 2;
     canvas_y = (screen_h - canvas_h) / 2;
-    printf("NWM_APP\n");
+    printf("NWM_APP4\n");
 
   }
 }
