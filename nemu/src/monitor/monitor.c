@@ -137,7 +137,7 @@ static int parse_args(int argc, char *argv[]) {
       printf("\t-i,--img=IMG_FILE       run img file\n");
       printf("\t-e,--elf=ELF_FILE       load elf file\n");
       printf("\n");
-      exit(0);
+      // exit(0);
     }
   }
   return 0;
