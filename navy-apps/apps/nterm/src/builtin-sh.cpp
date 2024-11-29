@@ -25,9 +25,7 @@ static void sh_handle_cmd(const char *cmd) {}
 void builtin_sh_run() {
   sh_banner();
   sh_prompt();
-    printf("========================\n");
-  while (1) {
-  }
+  
 
   while (1) {
     SDL_Event ev;
@@ -36,6 +34,9 @@ void builtin_sh_run() {
         const char *res = term->keypress(handle_key(&ev));
         if (res) {
           sh_handle_cmd(res);
+            printf("========================\n");
+  while (1) {
+  }
           sh_prompt();
         }
       }
