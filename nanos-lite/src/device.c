@@ -79,6 +79,10 @@ size_t dispinfo_write(void *buf, size_t offset, size_t len) {
   }
   // 解析第二个整数
   screen_h = atoi(ptr);
+  printf("screen_w = %d, screen_h = %d\n", screen_w, screen_h);
+  while (1) {
+  
+  }
   return len;
 }
 size_t dispinfo_read(void *buf, size_t offset, size_t len) {
