@@ -325,8 +325,5 @@ bool Terminal::is_dirty(int x, int y) {
 void Terminal::clear() {
   for (int i = 0; i < w * h; i ++) dirty[i] = false;
   dirty[cursor.x + cursor.y * w] = true;
-        while (1) {
-  
-  }
 }
 

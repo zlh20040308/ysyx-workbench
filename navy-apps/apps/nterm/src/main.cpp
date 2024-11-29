@@ -37,7 +37,6 @@ static void draw_ch(int x, int y, char ch, uint32_t fg, uint32_t bg) {
 }
 
 void refresh_terminal() {
-  
   int needsync = 0;
   for (int i = 0; i < W; i ++)
     for (int j = 0; j < H; j ++)
@@ -55,7 +54,6 @@ void refresh_terminal() {
     uint32_t color = (flip ? term->foreground(x, y) : term->background(x, y));
     draw_ch(x * font->w, y * font->h, ' ', 0, color);
     SDL_UpdateRect(screen, 0, 0, 0, 0);
-
     if (now - last > 500) {
       flip = !flip;
       last = now;

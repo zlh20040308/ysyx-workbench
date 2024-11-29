@@ -123,6 +123,21 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
     w = screen_w;
     h = screen_h;
   }
+  printf("BytesPerPixel = %d", BytesPerPixel);
+
+  // switch (dst->format->BytesPerPixel) {
+  // case 1: // 8-bit paletted mode
+  //   break;
+  // case 2: // 16-bit mode
+  //   break;
+  // case 3: // 24-bit mode
+  //   break;
+  // case 4: // 32-bit mode
+  //   break;
+  // default:
+  //   fprintf(stderr, "Unsupported pixel format: %d bytes per pixel\n",
+  //           dst->format->BytesPerPixel);
+  // }
   NDL_DrawRect((uint32_t *)(s->pixels + y * s->w + x), x, y, w, h);
 }
 
