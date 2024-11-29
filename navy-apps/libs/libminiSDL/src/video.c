@@ -137,10 +137,11 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
   //   fprintf(stderr, "Unsupported pixel format: %d bytes per pixel\n",
   //           dst->format->BytesPerPixel);
   // }
-  NDL_DrawRect((uint32_t *)(s->pixels + y * s->w + x), x, y, w, h);
-  printf("x = %d, y = %d, w = %d, h = %d\n", x, y, w, h);
+    printf("x = %d, y = %d, w = %d, h = %d\n", x, y, w, h);
   while (1) {
   }
+  NDL_DrawRect((uint32_t *)(s->pixels + y * s->w + x), x, y, w, h);
+
 }
 
 // APIs below are already implemented.
