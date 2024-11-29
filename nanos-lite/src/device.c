@@ -68,7 +68,7 @@ size_t fb_write(const void *buf, size_t offset, size_t len) {
 
   size_t x1 = offset % screen_w_real;
   size_t y1 = offset / screen_w_real;
-  Log("offset = %d", offset);
+  Log("offset = %d, screen_w_real = %d", offset, screen_w_real);
 
   size_t x2 = (offset + len) % screen_w_real;
   size_t y2 = (offset + len) / screen_w_real;
