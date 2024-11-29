@@ -64,7 +64,7 @@ void NDL_OpenCanvas(int *w, int *h) {
 
     // 打开 /proc/dispinfo 文件
     int dispinfo_fd = open("/proc/dispinfo", O_RDONLY);
-    printf("NWM_APP1\n");
+    printf("dispinfo_fd = %d\n", dispinfo_fd);
 
 
     // 读取文件内容
