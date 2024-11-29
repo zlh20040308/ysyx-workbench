@@ -89,6 +89,7 @@ void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
   for (int i = 0; i < h; ++i) {
     size_t offset =
         ((x + canvas_x) + (y + canvas_y + i) * screen_w) * sizeof(uint32_t);
+    printf("offset = %d\n", offset);
 
     lseek(fbdev, offset, SEEK_SET);
 
