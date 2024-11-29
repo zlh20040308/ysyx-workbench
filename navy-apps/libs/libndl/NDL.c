@@ -36,9 +36,9 @@ void NDL_OpenCanvas(int *w, int *h) {
     screen_w = *w;
     screen_h = *h;
     char buf[64];
-    while (1) {
+    // while (1) {
     
-    }
+    // }
     int len = sprintf(buf, "%d %d", screen_w, screen_h);
     while (1) {
     
