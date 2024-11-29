@@ -128,7 +128,6 @@ static int parse_args(int argc, char *argv[]) {
       break; // 当命令行指定 -e 参数，将全局静态变量 elf_file 设置成 镜像文件
              // 路径
     default:
-      printf("Unrecogenized option: %c\n", o);
       printf("Usage: %s [OPTION...] IMAGE [args]\n\n", argv[0]);
       printf("\t-b,--batch              run with batch mode\n");
       printf("\t-l,--log=FILE           output log to FILE\n");
@@ -137,7 +136,7 @@ static int parse_args(int argc, char *argv[]) {
       printf("\t-i,--img=IMG_FILE       run img file\n");
       printf("\t-e,--elf=ELF_FILE       load elf file\n");
       printf("\n");
-      // exit(0);
+      exit(0);
     }
   }
   return 0;
