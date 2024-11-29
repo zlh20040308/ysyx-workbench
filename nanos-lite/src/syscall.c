@@ -124,10 +124,7 @@ void do_syscall(Context *c) {
     break;
   case SYS_read:
     c->GPR2 = fs_read(a[1], (void *)a[2], a[3]);
-    // Log("return %ld", (long)c->GPR2);
-    while (1) {
-    
-    }
+    Log("return %ld", (long)c->GPR2);
     break;
   case SYS_write:
     c->GPR2 = fs_write(a[1], (const void *)a[2], a[3]);
