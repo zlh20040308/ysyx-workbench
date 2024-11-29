@@ -32,8 +32,6 @@ int NDL_PollEvent(char *buf, int len) {
 void NDL_OpenCanvas(int *w, int *h) {
   printf("adasdasdasd\n");
   if (getenv("NWM_APP")) {
-  printf("adasdasdasd\n");
-
     printf("NWM_APP\n");
     while (1) {
     
@@ -57,6 +55,8 @@ void NDL_OpenCanvas(int *w, int *h) {
     }
     close(fbctl);
   } else {
+  printf("adasdasdasd\n");
+
     // 定义缓冲区
     char dispinfo_buf[50] = {0};
 
