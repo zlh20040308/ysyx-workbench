@@ -82,7 +82,7 @@ size_t fb_write(const void *buf, size_t offset, size_t len) {
     // segment
     io_write(AM_GPU_FBDRAW, x1, y1, buf, len / sizeof(uint32_t), 1, true);
   } else {
-    // Log("mid_rows_num = %d", mid_rows_num);
+    Log("mid_rows_num = %d", mid_rows_num);
  
     // Write the first segment
     io_write(AM_GPU_FBDRAW, x1, y1, buf, first_row_len / sizeof(uint32_t), 1, false);
