@@ -30,7 +30,7 @@ int NDL_PollEvent(char *buf, int len) {
 }
 
 void NDL_OpenCanvas(int *w, int *h) {
-  static i = 0;
+  static int i = 0;
   i++;
   printf("NWM_APP, i = %d\n", i);
 
