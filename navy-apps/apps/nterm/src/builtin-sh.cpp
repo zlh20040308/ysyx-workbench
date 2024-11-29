@@ -27,7 +27,6 @@ void builtin_sh_run() {
   sh_prompt();
 
   while (1) {
-
     SDL_Event ev;
     if (SDL_PollEvent(&ev)) {
       if (ev.type == SDL_KEYUP || ev.type == SDL_KEYDOWN) {
@@ -37,9 +36,6 @@ void builtin_sh_run() {
           sh_prompt();
         }
       }
-    }
-        printf("========================\n");
-    while (1) {
     }
     refresh_terminal();
   }
