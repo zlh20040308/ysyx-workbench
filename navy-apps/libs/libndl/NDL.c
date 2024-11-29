@@ -51,7 +51,7 @@ void NDL_OpenCanvas(int *w, int *h) {
       if (strcmp(buf, "mmap ok") == 0)
         break;
     }
-        while (1) {
+    while (1) {
     
     }
     close(fbctl);
