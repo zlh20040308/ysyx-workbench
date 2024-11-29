@@ -123,7 +123,7 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
     w = screen_w;
     h = screen_h;
   }
-  printf("BytesPerPixel = %d", dst->format->BytesPerPixel);
+  printf("BytesPerPixel = %d", s->format->BytesPerPixel);
   // switch (dst->format->BytesPerPixel) {
   // case 1: // 8-bit paletted mode
   //   break;
