@@ -96,8 +96,6 @@ void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
     
     write(fbdev, pixels + i * w, w * sizeof(uint32_t));
   }
-   while (1) {
-  }
 
   // 关闭文件描述符
   close(fbdev);
