@@ -23,11 +23,11 @@ static void sh_prompt() { sh_printf("sh> "); }
 static void sh_handle_cmd(const char *cmd) {}
 
 void builtin_sh_run() {
-  printf("========================\n");
-  while (1) {
-  }
   sh_banner();
   sh_prompt();
+    printf("========================\n");
+  while (1) {
+  }
 
   while (1) {
     SDL_Event ev;
