@@ -74,8 +74,6 @@ void NDL_OpenCanvas(int *w, int *h) {
       fprintf(stderr, "Failed to parse dispinfo buffer: %s\n", dispinfo_buf);
       return;
     }
-    printf("NWM_APP3\n");
-
     if (*w == 0 && *h == 0) {
       *w = screen_w;
       *h = screen_h;
@@ -84,8 +82,6 @@ void NDL_OpenCanvas(int *w, int *h) {
     canvas_h = *h;
     canvas_x = (screen_w - canvas_w) / 2;
     canvas_y = (screen_h - canvas_h) / 2;
-    printf("NWM_APP4\n");
-
   }
 }
 
