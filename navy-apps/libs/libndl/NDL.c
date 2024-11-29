@@ -52,7 +52,7 @@ void NDL_OpenCanvas(int *w, int *h) {
         break;
     }
     while (1) {
-    
+    printf("jajaja\n");
     }
     close(fbctl);
   } else {
