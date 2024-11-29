@@ -121,9 +121,7 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
 // SDL_UpdateRect 函数
 void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
   // 更新屏幕上的矩形区域
-  printf("x = %d, y = %d, w = %d, h = %d\n", x, y, w, h);
-
-  printf("x = %d, y = %d, w = %d, h = %d\n", x, y, w, h);
+  // printf("x = %d, y = %d, w = %d, h = %d\n", x, y, w, h);
 
   if ((x | y | w | h) == 0) {
     w = canvas_w;
