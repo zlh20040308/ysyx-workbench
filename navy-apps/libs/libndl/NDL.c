@@ -56,6 +56,8 @@ void NDL_OpenCanvas(int *w, int *h) {
     }
     close(fbctl);
   } else {
+    printf("NWM_APP\n");
+
     // 定义缓冲区
     char dispinfo_buf[50] = {0};
 
