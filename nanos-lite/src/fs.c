@@ -64,7 +64,7 @@ void init_fs() {
       ramdisk_write(init_dispinfo, file_table[i].disk_offset,
                     init_dispinfo_len);
       file_table[i].read(read_dispinfo, 0, 50);
-      printf("read_dispinfo = %s", read_dispinfo);
+      Log("read_dispinfo = %s", read_dispinfo);
       Log("dispinfo file has been set up");
       assert(0);
     }
