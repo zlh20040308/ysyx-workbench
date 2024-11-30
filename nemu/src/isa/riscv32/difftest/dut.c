@@ -23,10 +23,15 @@
 
 bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
   bool success = true;
+  if (ref_r->pc != pc) {
+    Log("pc is different, right = " FMT_WORD ", wrong = " FMT_WORD
+        ", diff = " FMT_WORD,
+        ref_r->pc, pc, ref_r->pc ^ pc);
+    success = false;
+  }
   for (size_t i = 0; i < MUXDEF(CONFIG_RVE, 16, 32); i++) {
     if (!difftest_check_reg(reg_name(i), pc, ref_r->gpr[i], gpr(i))) {
       success = false;
-      break;
     }
   }
   if (!difftest_check_csr(csr_name(MEPC), pc, ref_r->sr[MEPC], sr(MEPC))) {
