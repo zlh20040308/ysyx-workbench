@@ -192,9 +192,9 @@ static int decode_exec(Decode *s) {
   //     Log("src2 == 0");
   //   }
 
-  if (s->pc == 0x83002768) {
-    return 0;
-  }
+  // if (s->pc == 0x83002768) {
+  //   return 0;
+  // }
 
 #define INSTPAT_INST(s) ((s)->isa.inst.val)
 #define INSTPAT_MATCH(s, name, type, ... /* execute body */)                   \
