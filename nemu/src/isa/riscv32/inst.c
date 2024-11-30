@@ -191,10 +191,7 @@ static int decode_exec(Decode *s) {
   //   if (src2 == 0) {
   //     Log("src2 == 0");
   //   }
-  if (s->pc == 0x83002764) {
-    printf("Before process pc = %x\n", s->pc);
-    isa_reg_display();
-  }
+
   if (s->pc == 0x83002768) {
     printf("Before process pc = %x\n", s->pc);
     isa_reg_display();
@@ -333,8 +330,9 @@ static int decode_exec(Decode *s) {
     printf("After process pc = %x\n", s->pc);
     isa_reg_display();
   }
-  if (s->pc == 0x83002768) {
+  if (s->dnpc == 0x83002768) {
     printf("After process pc = %x\n", s->pc);
+    printf("ready to process pc = %x", s->dnpc);
     isa_reg_display();
   }
 
