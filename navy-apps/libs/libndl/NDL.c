@@ -30,6 +30,7 @@ int NDL_PollEvent(char *buf, int len) {
 }
 
 void NDL_OpenCanvas(int *w, int *h) {
+  printf("Just in NDL_OpenCanvas\n");
   if (getenv("NWM_APP")) {
     int fbctl = 4;
     fbdev = 5;
@@ -50,6 +51,7 @@ void NDL_OpenCanvas(int *w, int *h) {
     }
     close(fbctl);
   } else {
+    printf("Just in NDL_OpenCanvas else branch\n");
     // 定义缓冲区
     char dispinfo_buf[50] = {0};
 
@@ -57,13 +59,11 @@ void NDL_OpenCanvas(int *w, int *h) {
     int dispinfo_fd = open("/proc/dispinfo", O_RDONLY);
     printf("dispinfo_fd = %d\n", dispinfo_fd);
 
-
     // 读取文件内容
     size_t bytes_read = 0;
     printf("bytes_read = %d\n", bytes_read);
     bytes_read = read(dispinfo_fd, dispinfo_buf, sizeof(dispinfo_buf));
     printf("bytes_read = %d\n", bytes_read);
-
 
     // 关闭文件描述符
     close(dispinfo_fd);
