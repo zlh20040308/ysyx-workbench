@@ -193,8 +193,7 @@ static int decode_exec(Decode *s) {
   //   }
 
   if (s->pc == 0x83002768) {
-    printf("Before process pc = %x\n", s->pc);
-    isa_reg_display();
+    return 0;
   }
 
 #define INSTPAT_INST(s) ((s)->isa.inst.val)
@@ -326,15 +325,6 @@ static int decode_exec(Decode *s) {
   INSTPAT_END();
 
   R(0) = 0; // reset $zero to 0
-  if (s->pc == 0x83002764) {
-    printf("After process pc = %x\n", s->pc);
-    isa_reg_display();
-  }
-  if (s->dnpc == 0x83002768) {
-    printf("After process pc = %x\n", s->pc);
-    printf("ready to process pc = %x\n", s->dnpc);
-    isa_reg_display();
-  }
 
 #ifdef CONFIG_FTRACE_COND
   const char *funct_name = "???";
