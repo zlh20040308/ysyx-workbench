@@ -124,6 +124,7 @@ void do_syscall(Context *c) {
     break;
   case SYS_read:
     c->GPR2 = fs_read(a[1], (void *)a[2], a[3]);
+    printf("buf = %s\n", (char *)a[2]);
     Log("return %ld", (long)c->GPR2);
     break;
   case SYS_write:
