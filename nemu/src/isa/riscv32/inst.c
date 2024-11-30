@@ -191,6 +191,14 @@ static int decode_exec(Decode *s) {
   //   if (src2 == 0) {
   //     Log("src2 == 0");
   //   }
+  if (s->pc == 0x83002764) {
+    printf("Before process pc = %x\n", s->pc);
+    isa_reg_display();
+  }
+  if (s->pc == 0x83002768) {
+    printf("Before process pc = %x\n", s->pc);
+    isa_reg_display();
+  }
 
 #define INSTPAT_INST(s) ((s)->isa.inst.val)
 #define INSTPAT_MATCH(s, name, type, ... /* execute body */)                   \
@@ -321,10 +329,12 @@ static int decode_exec(Decode *s) {
   INSTPAT_END();
 
   R(0) = 0; // reset $zero to 0
-  if (s->pc == 83002764) {
+  if (s->pc == 0x83002764) {
+    printf("After process pc = %x\n", s->pc);
     isa_reg_display();
   }
   if (s->pc == 0x83002768) {
+    printf("After process pc = %x\n", s->pc);
     isa_reg_display();
   }
 
