@@ -66,7 +66,6 @@ void init_fs() {
       file_table[i].read(read_dispinfo, 0, 50);
       Log("read_dispinfo = %s", read_dispinfo);
       Log("dispinfo file has been set up");
-      assert(0);
     }
     file_table[i].open_offset = 0;
   }

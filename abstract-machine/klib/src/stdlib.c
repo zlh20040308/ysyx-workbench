@@ -1,5 +1,4 @@
 #include <am.h>
-// #include <cstddef>
 #include <stddef.h>
 
 #include <klib-macros.h>
