@@ -101,7 +101,27 @@ void *_sbrk(intptr_t increment) {
 int _read(int fd, void *buf, size_t count) {
   printf("In read, fd = %d, count = %d\n", fd, count);
   int ret = _syscall_(SYS_read, fd, (intptr_t)buf, count);
-  printf("ret = %d, buf = %s%s\n", ret, buf, buf+13);
+  printf("ret = %d\n");
+  printf("buf[ 0] = %c", buf[ 0]);
+  printf("buf[ 1] = %c", buf[ 1]);
+  printf("buf[ 2] = %c", buf[ 2]);
+  printf("buf[ 3] = %c", buf[ 3]);
+  printf("buf[ 4] = %c", buf[ 4]);
+  printf("buf[ 5] = %c", buf[ 5]);
+  printf("buf[ 6] = %c", buf[ 6]);
+  printf("buf[ 7] = %c", buf[ 7]);
+  printf("buf[ 8] = %c", buf[ 8]);
+  printf("buf[ 9] = %c", buf[ 9]);
+  printf("buf[10] = %c", buf[10]);
+  printf("buf[11] = %c", buf[11]);
+  printf("buf[12] = %c", buf[12]);
+  printf("buf[13] = %c", buf[13]);
+  printf("buf[14] = %c", buf[14]);
+  printf("buf[15] = %c", buf[15]);
+  printf("buf[16] = %c", buf[16]);
+  printf("buf[17] = %c", buf[17]);
+  printf("buf[18] = %c", buf[18]);
+  printf("buf[19] = %c", buf[19]);
   return ret;
 }
 
