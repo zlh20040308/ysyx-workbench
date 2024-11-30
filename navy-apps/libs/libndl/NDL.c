@@ -69,7 +69,7 @@ void NDL_OpenCanvas(int *w, int *h) {
     close(dispinfo_fd);
 
     // 解析字符串
-    if (sscanf(dispinfo_buf, "WIDTH :%d\nHEIGHT:%d\n", &screen_w, &screen_h) !=
+    if (sscanf(dispinfo_buf, "WIDTH :%d\nHEIGHT:%d", &screen_w, &screen_h) !=
         2) {
       fprintf(stderr, "Failed to parse dispinfo buffer: %s\n", dispinfo_buf);
       return;
