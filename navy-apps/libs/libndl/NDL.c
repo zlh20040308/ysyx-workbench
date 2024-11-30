@@ -50,40 +50,70 @@ void NDL_OpenCanvas(int *w, int *h) {
         break;
     }
     close(fbctl);
-  } else {
-    printf("Just in NDL_OpenCanvas else branch\n");
-    // 定义缓冲区
-    char dispinfo_buf[50] = {0};
-
-    // 打开 /proc/dispinfo 文件
-    int dispinfo_fd = open("/proc/dispinfo", O_RDONLY);
-    printf("dispinfo_fd = %d\n", dispinfo_fd);
-
-    // 读取文件内容
-    size_t bytes_read = 0;
-    printf("bytes_read = %d\n", bytes_read);
-    bytes_read = read(dispinfo_fd, dispinfo_buf, sizeof(dispinfo_buf));
-    printf("bytes_read = %d, dispinfo_buf = %s\n", bytes_read, dispinfo_buf);
-    exit(1);
-
-    // 关闭文件描述符
-    close(dispinfo_fd);
-
-    // 解析字符串
-    if (sscanf(dispinfo_buf, "WIDTH :%d\nHEIGHT:%d", &screen_w, &screen_h) !=
-        2) {
-      fprintf(stderr, "Failed to parse dispinfo buffer: %s\n", dispinfo_buf);
-      return;
     }
-    if (*w == 0 && *h == 0) {
-      *w = screen_w;
-      *h = screen_h;
-    }
-    canvas_w = *w;
-    canvas_h = *h;
-    canvas_x = (screen_w - canvas_w) / 2;
-    canvas_y = (screen_h - canvas_h) / 2;
-  }
+    // else {
+  //   FILE *file = fopen(filename, "r");
+
+  //   char line[256];
+  //   while (fgets(line, sizeof(line), file)) {
+  //     // 去掉行尾的换行符
+  //     line[strcspn(line, "\n")] = '\0';
+
+  //     // 分割 key 和 value
+  //     char *key = strtok(line, " \t:");
+  //     if (key == NULL) {
+  //       continue;
+  //     }
+
+  //     char *value = strtok(NULL, " \t:");
+  //     if (value == NULL) {
+  //       continue;
+  //     }
+
+  //     // 解析 WIDTH 和 HEIGHT
+  //     if (strcmp(key, "WIDTH") == 0) {
+  //       *width = atoi(value);
+  //     } else if (strcmp(key, "HEIGHT") == 0) {
+  //       *height = atoi(value);
+  //     }
+  //   }
+
+  //   fclose(file);
+  // }
+  // } else {
+  //   printf("Just in NDL_OpenCanvas else branch\n");
+  //   // 定义缓冲区
+  //   char dispinfo_buf[50] = {0};
+
+  //   // 打开 /proc/dispinfo 文件
+  //   int dispinfo_fd = open("/proc/dispinfo", O_RDONLY);
+  //   printf("dispinfo_fd = %d\n", dispinfo_fd);
+
+  //   // 读取文件内容
+  //   size_t bytes_read = 0;
+  //   printf("bytes_read = %d\n", bytes_read);
+  //   bytes_read = read(dispinfo_fd, dispinfo_buf, sizeof(dispinfo_buf));
+  //   printf("bytes_read = %d, dispinfo_buf = %s\n", bytes_read, dispinfo_buf);
+  //   exit(1);
+
+  //   // 关闭文件描述符
+  //   close(dispinfo_fd);
+
+  //   // 解析字符串
+  //   if (sscanf(dispinfo_buf, "WIDTH :%d\nHEIGHT:%d", &screen_w, &screen_h) !=
+  //       2) {
+  //     fprintf(stderr, "Failed to parse dispinfo buffer: %s\n", dispinfo_buf);
+  //     return;
+  //   }
+  //   if (*w == 0 && *h == 0) {
+  //     *w = screen_w;
+  //     *h = screen_h;
+  //   }
+  //   canvas_w = *w;
+  //   canvas_h = *h;
+  //   canvas_x = (screen_w - canvas_w) / 2;
+  //   canvas_y = (screen_h - canvas_h) / 2;
+  // }
 }
 
 void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
