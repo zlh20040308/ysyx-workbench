@@ -101,8 +101,7 @@ void device_update();
 
 extern bool traverse_watchpoints_and_show_changes();
 
-static void trace_and_difftest(Decode *_this, vaddr_t dnpc)
-{
+static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 #ifdef CONFIG_ITRACE_COND
   if (ITRACE_COND)
   {
@@ -114,6 +113,7 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc)
   {
     IFDEF(CONFIG_ITRACE, puts(_this->logbuf));
   }
+  Log("_this->pc = %x, dnpc = %x", _this->pc, dnpc);
   IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));
 #ifdef CONFIG_WATCHPOINT
   bool is_change = traverse_watchpoints_and_show_changes();
