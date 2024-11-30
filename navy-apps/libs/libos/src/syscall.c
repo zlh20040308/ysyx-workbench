@@ -103,7 +103,7 @@ int _read(int fd, void *buf, size_t count) {
   int ret = _syscall_(SYS_read, fd, (intptr_t)buf, count);
   const char *ptr = buf;
   
-  printf("ret = %d\n");
+  printf("ret = %d\n", ret);
   printf("buf[ 0] = %c", ptr[ 0]);
   printf("buf[ 1] = %c", ptr[ 1]);
   printf("buf[ 2] = %c", ptr[ 2]);
