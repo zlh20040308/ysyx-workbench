@@ -23,7 +23,7 @@
 
 bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
   bool success = true;
-  if (ref_r->pc != pc) {
+  if (ref_r->pc == pc) {
     Log("pc is different, right = " FMT_WORD ", wrong = " FMT_WORD
         ", diff = " FMT_WORD,
         ref_r->pc, pc, ref_r->pc ^ pc);
