@@ -99,8 +99,10 @@ void *_sbrk(intptr_t increment) {
 }
 
 int _read(int fd, void *buf, size_t count) {
-  printf("in read\n");
-  return _syscall_(SYS_read, fd, (intptr_t)buf, count);
+  printf("In read, fd = %d, count = %d\n", fd, count);
+  int ret = _syscall_(SYS_read, fd, (intptr_t)buf, count);
+  printf("ret = %d, buf = %s\n", ret, buf);
+  return ret;
 }
 
 int _close(int fd) { return _syscall_(SYS_close, fd, 0, 0); }
