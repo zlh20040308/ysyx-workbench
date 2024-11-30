@@ -193,6 +193,7 @@ static int decode_exec(Decode *s) {
   //   }
 
   if (s->pc == 0x83002768) {
+    printf("HAHAH\n");
     isa_reg_display();
   }
 
