@@ -63,7 +63,8 @@ void NDL_OpenCanvas(int *w, int *h) {
     size_t bytes_read = 0;
     printf("bytes_read = %d\n", bytes_read);
     bytes_read = read(dispinfo_fd, dispinfo_buf, sizeof(dispinfo_buf));
-    printf("bytes_read = %d\n", bytes_read);
+    printf("bytes_read = %d, dispinfo_buf = %s\n", bytes_read, dispinfo_buf);
+    exit(1);
 
     // 关闭文件描述符
     close(dispinfo_fd);
