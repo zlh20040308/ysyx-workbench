@@ -114,7 +114,7 @@ int _read(int fd, void *buf, size_t count) {
   printf("buf[ 7] = %c", ptr[ 7]);
   printf("buf[ 8] = %c", ptr[ 8]);
   printf("buf[ 9] = %c", ptr[ 9]);
-  printf("buf[10] = %c", ptr[10]);
+  // printf("buf[10] = %c", ptr[10]);
   printf("buf[11] = %c", ptr[11]);
   printf("buf[12] = %c", ptr[12]);
   printf("buf[13] = %c", ptr[13]);
