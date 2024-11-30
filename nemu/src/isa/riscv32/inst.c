@@ -322,6 +322,10 @@ static int decode_exec(Decode *s) {
 
   R(0) = 0; // reset $zero to 0
 
+  if (s->dnpc == 0x83002768) {
+    isa_reg_display();
+  }
+
 #ifdef CONFIG_FTRACE_COND
   const char *funct_name = "???";
   size_t rd_type = BITS(INSTPAT_INST(s), 11, 7);
