@@ -332,7 +332,7 @@ static int decode_exec(Decode *s) {
   }
   if (s->dnpc == 0x83002768) {
     printf("After process pc = %x\n", s->pc);
-    printf("ready to process pc = %x", s->dnpc);
+    printf("ready to process pc = %x\n", s->dnpc);
     isa_reg_display();
   }
 
