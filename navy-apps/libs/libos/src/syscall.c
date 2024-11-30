@@ -104,26 +104,26 @@ int _read(int fd, void *buf, size_t count) {
   const char *ptr = buf;
   
   printf("ret = %d\n");
-  printf("buf[ 0] = %c\n", ptr[ 0]);
-  printf("buf[ 1] = %c\n", ptr[ 1]);
-  printf("buf[ 2] = %c\n", ptr[ 2]);
-  printf("buf[ 3] = %c\n", ptr[ 3]);
-  printf("buf[ 4] = %c\n", ptr[ 4]);
-  printf("buf[ 5] = %c\n", ptr[ 5]);
-  printf("buf[ 6] = %c\n", ptr[ 6]);
-  printf("buf[ 7] = %c\n", ptr[ 7]);
-  printf("buf[ 8] = %c\n", ptr[ 8]);
-  printf("buf[ 9] = %c\n", ptr[ 9]);
-  printf("buf[10] = %c\n", ptr[10]);
-  printf("buf[11] = %c\n", ptr[11]);
-  printf("buf[12] = %c\n", ptr[12]);
-  printf("buf[13] = %c\n", ptr[13]);
-  printf("buf[14] = %c\n", ptr[14]);
-  printf("buf[15] = %c\n", ptr[15]);
-  printf("buf[16] = %c\n", ptr[16]);
-  printf("buf[17] = %c\n", ptr[17]);
-  printf("buf[18] = %c\n", ptr[18]);
-  printf("buf[19] = %c\n", ptr[19]);
+  printf("buf[ 0] = %c", ptr[ 0]);
+  printf("buf[ 1] = %c", ptr[ 1]);
+  printf("buf[ 2] = %c", ptr[ 2]);
+  printf("buf[ 3] = %c", ptr[ 3]);
+  printf("buf[ 4] = %c", ptr[ 4]);
+  printf("buf[ 5] = %c", ptr[ 5]);
+  printf("buf[ 6] = %c", ptr[ 6]);
+  printf("buf[ 7] = %c", ptr[ 7]);
+  printf("buf[ 8] = %c", ptr[ 8]);
+  printf("buf[ 9] = %c", ptr[ 9]);
+  // printf("buf[10] = %c", ptr[10]);
+  printf("buf[11] = %c", ptr[11]);
+  printf("buf[12] = %c", ptr[12]);
+  printf("buf[13] = %c", ptr[13]);
+  printf("buf[14] = %c", ptr[14]);
+  printf("buf[15] = %c", ptr[15]);
+  printf("buf[16] = %c", ptr[16]);
+  printf("buf[17] = %c", ptr[17]);
+  printf("buf[18] = %c", ptr[18]);
+  printf("buf[19] = %c", ptr[19]);
   return ret;
 }
 
