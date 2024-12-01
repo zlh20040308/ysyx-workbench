@@ -39,6 +39,16 @@ uint32_t SDL_GetTicks() {
 }
 
 void SDL_Delay(uint32_t ms) {
-  printf("SDL_Delay Unimplement!\n");
-  assert(0);
+  uint32_t start_ticks = SDL_GetTicks();
+  uint32_t wait_time = ms;
+
+  while (1) {
+    uint32_t current_ticks = SDL_GetTicks();
+    uint32_t elapsed_ticks = current_ticks - start_ticks;
+
+    // 使用无符号整数比较
+    if (elapsed_ticks >= wait_time) {
+      return;
+    }
+  }
 }

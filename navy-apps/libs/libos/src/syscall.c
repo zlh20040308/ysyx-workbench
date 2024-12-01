@@ -4,6 +4,7 @@
 #include <sys/time.h>
 #include <time.h>
 #include <unistd.h>
+#include <stdio.h>
 
 // helper macros
 #define _concat(x, y) x##y

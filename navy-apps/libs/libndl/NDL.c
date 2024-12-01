@@ -51,7 +51,7 @@ void NDL_OpenCanvas(int *w, int *h) {
     close(fbctl);
   } else {
     // 定义缓冲区
-    char dispinfo_buf[50] = {0};
+    char dispinfo_buf[300];
 
     // 打开 /proc/dispinfo 文件
     int dispinfo_fd = open("/proc/dispinfo", O_RDONLY);
@@ -63,7 +63,7 @@ void NDL_OpenCanvas(int *w, int *h) {
     close(dispinfo_fd);
 
     // 解析字符串
-    if (sscanf(dispinfo_buf, "WIDTH :%d\nHEIGHT:%d\n", &screen_w, &screen_h) !=
+    if (sscanf(dispinfo_buf, "WIDTH :%d\nHEIGHT:%d", &screen_w, &screen_h) !=
         2) {
       fprintf(stderr, "Failed to parse dispinfo buffer: %s\n", dispinfo_buf);
       return;
@@ -92,7 +92,6 @@ void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
     lseek(fbdev, offset, SEEK_SET);
 
     // printf("offset = %d, n = %d\n", offset, w * sizeof(uint32_t));
-    
     write(fbdev, pixels + i * w, w * sizeof(uint32_t));
   }
 

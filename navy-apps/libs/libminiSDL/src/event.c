@@ -20,7 +20,6 @@ int SDL_PollEvent(SDL_Event *event) {
   if (NDL_PollEvent(buf, sizeof(buf)) == 0) {
     return 0;
   }
-  printf("%s\n", buf);
   for (size_t i = 0; i < 30; ++i) {
     if (buf[i] == '\n') {
       buf[i] = '\0';
@@ -30,7 +29,6 @@ int SDL_PollEvent(SDL_Event *event) {
 
   event->type = buf[1] == 'd' ? SDL_KEYDOWN : SDL_KEYUP;
   char *key = buf + 3;
-  printf("key = %s\n", key);
   bool success = false;
   size_t index;
   for (index = 0; index < ARRAY_SIZE(keyname); ++index) {
