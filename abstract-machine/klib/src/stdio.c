@@ -8,27 +8,18 @@
 #define BUFFER_SIZE 4096
 static char buf[BUFFER_SIZE];
 
-static void write_hex(char *out, size_t *pos, size_t n, uintptr_t val,
-                      size_t *count) {
+static void write_hex(char *out, size_t *pos, size_t n, uintptr_t val) {
   const char *hex_digits = "0123456789abcdef";
-  char buffer[16];
-  int i = 0;
-
   if (val == 0) {
     if (*pos < n)
       out[(*pos)++] = '0';
-    (*count)++;
     return;
   }
 
   while (val) {
-    buffer[i++] = hex_digits[val % 16];
-    val /= 16;
-  }
-  while (i--) {
     if (*pos < n)
-      out[(*pos)++] = buffer[i];
-    (*count)++;
+      out[(*pos)++] = hex_digits[val % 16];
+    val /= 16;
   }
 }
 
@@ -42,25 +33,21 @@ int printf(const char *fmt, ...) {
 }
 
 int vsprintf(char *out, const char *fmt, va_list ap) {
-  int res = 0;
-  res = vsnprintf(out, -1, fmt, ap);
-  return res;
+  return vsnprintf(out, -1, fmt, ap);
 }
 
 int sprintf(char *out, const char *fmt, ...) {
-  int res = 0;
   va_list ap;
   va_start(ap, fmt);
-  res = vsprintf(out, fmt, ap);
+  int res = vsprintf(out, fmt, ap);
   va_end(ap);
   return res;
 }
 
 int snprintf(char *out, size_t n, const char *fmt, ...) {
-  int res = 0;
   va_list ap;
   va_start(ap, fmt);
-  res = vsnprintf(out, n, fmt, ap);
+  int res = vsnprintf(out, n, fmt, ap);
   va_end(ap);
   return res;
 }
@@ -68,7 +55,7 @@ int snprintf(char *out, size_t n, const char *fmt, ...) {
 int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
   int format = 0;
   size_t pos = 0;
-  size_t count = 0;
+
   for (; *fmt; ++fmt) {
     if (format) {
       switch (*fmt) {
@@ -76,18 +63,13 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
         if (pos < n) {
           out[pos++] = (char)va_arg(ap, int);
         }
-        ++count;
         format = 0;
         break;
       }
       case 's': {
         const char *s2 = va_arg(ap, const char *);
-        while (*s2) {
-          if (pos < n) {
-            out[pos++] = *s2;
-            s2++;
-          }
-          ++count;
+        while (*s2 && pos < n) {
+          out[pos++] = *s2++;
         }
         format = 0;
         break;
@@ -95,15 +77,14 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
       case 'd': {
         int num = va_arg(ap, int);
         if (num < 0) {
-          num = -num;
           if (pos < n) {
             out[pos++] = '-';
           }
-          ++count;
+          num = -num;
         }
         long digits = 1;
-        for (long nn = num; nn /= 10; digits++)
-          ;
+        for (long nn = num; nn /= 10; digits++) {
+        }
         for (int i = digits - 1; i >= 0; i--) {
           if (pos + i < n) {
             out[pos + i] = '0' + (num % 10);
@@ -111,28 +92,32 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
           num /= 10;
         }
         pos += digits;
-        count += digits;
         format = 0;
         break;
       }
       case 'x': { // Handle %x
         unsigned int num = va_arg(ap, unsigned int);
-        write_hex(out, &pos, n, num, &count);
+        write_hex(out, &pos, n, num);
         format = 0;
         break;
       }
       case 'p': { // Handle %p
         uintptr_t ptr_val = (uintptr_t)va_arg(ap, void *);
-        if (pos < n)
+        if (pos < n) {
           out[pos++] = '0';
-        if (pos < n)
+        }
+        if (pos < n) {
           out[pos++] = 'x';
-        count += 2;
-        write_hex(out, &pos, n, ptr_val, &count);
+        }
+        write_hex(out, &pos, n, ptr_val);
         format = 0;
         break;
       }
       default:
+        if (pos < n) {
+          out[pos++] = *fmt;
+        }
+        format = 0;
         break;
       }
     } else if (*fmt == '%') {
@@ -141,15 +126,15 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
       if (pos < n) {
         out[pos++] = *fmt;
       }
-      ++count;
     }
   }
 
   if (pos < n) {
     out[pos] = '\0';
+  } else {
+    out[n - 1] = '\0';
   }
-  out[n - 1] = '\0';
-  return count;
+  return pos;
 }
 
 #endif

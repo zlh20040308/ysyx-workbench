@@ -41,58 +41,19 @@ static uint32_t *vgactl_port_base = NULL;
 static SDL_Renderer *renderer = NULL;
 static SDL_Texture *texture = NULL;
 
-// static void init_screen() {
-//   SDL_Window *window = NULL;
-//   char title[128];
-//   sprintf(title, "%s-NEMU", str(__GUEST_ISA__));
-//   SDL_Init(SDL_INIT_VIDEO);
-//   SDL_CreateWindowAndRenderer(
-//       SCREEN_W * (MUXDEF(CONFIG_VGA_SIZE_400x300, 2, 1)),
-//       SCREEN_H * (MUXDEF(CONFIG_VGA_SIZE_400x300, 2, 1)), 0, &window,
-//       &renderer);
-//   SDL_SetWindowTitle(window, title);
-//   texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888,
-//                               SDL_TEXTUREACCESS_STATIC, SCREEN_W, SCREEN_H);
-//   SDL_RenderPresent(renderer);
-// }
-
 static void init_screen() {
   SDL_Window *window = NULL;
   char title[128];
   sprintf(title, "%s-NEMU", str(__GUEST_ISA__));
-  
-  // 初始化 SDL 视频子系统
-  if (SDL_Init(SDL_INIT_VIDEO) != 0) {
-    printf("SDL_Init Error: %s\n", SDL_GetError());
-    exit(1); // 终止程序，提示初始化失败
-  }
-
-  // 创建 SDL 窗口和渲染器
-  if (SDL_CreateWindowAndRenderer(
-        SCREEN_W * (MUXDEF(CONFIG_VGA_SIZE_400x300, 2, 1)),
-        SCREEN_H * (MUXDEF(CONFIG_VGA_SIZE_400x300, 2, 1)), 0, &window, &renderer) != 0) {
-    printf("SDL_CreateWindowAndRenderer Error: %s\n", SDL_GetError());
-    SDL_Quit(); // 清理 SDL 子系统
-    exit(1);
-  }
-
-  // 设置窗口标题
+  SDL_Init(SDL_INIT_VIDEO);
+  SDL_CreateWindowAndRenderer(
+      SCREEN_W * (MUXDEF(CONFIG_VGA_SIZE_400x300, 2, 1)),
+      SCREEN_H * (MUXDEF(CONFIG_VGA_SIZE_400x300, 2, 1)), 0, &window,
+      &renderer);
   SDL_SetWindowTitle(window, title);
-
-  // 创建纹理
   texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888,
                               SDL_TEXTUREACCESS_STATIC, SCREEN_W, SCREEN_H);
-  if (texture == NULL) {
-    printf("SDL_CreateTexture Error: %s\n", SDL_GetError());
-    SDL_DestroyRenderer(renderer); // 清理渲染器
-    SDL_DestroyWindow(window); // 清理窗口
-    SDL_Quit();
-    exit(1);
-  }
-
-  // 初始化渲染器
   SDL_RenderPresent(renderer);
-  printf("SDL initialization successful. Renderer and texture are ready.\n");
 }
 
 static inline void update_screen() {

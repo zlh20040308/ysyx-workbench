@@ -58,7 +58,10 @@ size_t events_read(void *buf, size_t offset, size_t len) {
 }
 
 size_t dispinfo_read(void *buf, size_t offset, size_t len) {
-  return sprintf(buf, "WIDTH :%d\nHEIGHT:%d\n", screen_w, screen_h);
+  Log("offset = %d, len = %d", offset, len);
+  len = sprintf(buf, "WIDTH :%d\nHEIGHT:%d", screen_w, screen_h);
+  Log("buf = %s, len = %d", buf, len);
+  return len;
 }
 
 size_t fb_write(const void *buf, size_t offset, size_t len) {
