@@ -11,11 +11,7 @@ SDL_Surface* IMG_Load_RW(SDL_RWops *src, int freesrc) {
   return NULL;
 }
 
-SDL_Surface *IMG_Load(const char *filename) {
-  printf("IMG_Load upl\n");
-  while (1) {
-  
-  }
+SDL_Surface* IMG_Load(const char *filename) {
   return NULL;
 }
 

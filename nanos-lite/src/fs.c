@@ -23,7 +23,7 @@ typedef struct {
 size_t screen_w = 0;
 size_t screen_h = 0;
 
-enum { FD_STDIN, FD_STDOUT, FD_STDERR, FD_EVENTS, FD_FB };
+enum { FD_STDIN, FD_STDOUT, FD_STDERR, FD_EVENTS, FD_FB, FD_DISPINFO };
 
 size_t invalid_read(void *buf, size_t offset, size_t len) {
   panic("should not reach here");
@@ -42,6 +42,7 @@ static Finfo file_table[] __attribute__((used)) = {
     [FD_STDERR] = {"stderr", 0, 0, invalid_read, serial_write},
     [FD_EVENTS] = {"/dev/events", 0, 0, events_read, invalid_write},
     [FD_FB] = {"/dev/fb", 0, 0, invalid_read, fb_write},
+    [FD_DISPINFO] = {"/proc/dispinfo", 0, 0, dispinfo_read, invalid_write},
 #include "files.h"
 };
 
@@ -55,18 +56,6 @@ void init_fs() {
 
   // Log("screen_w = %d, screen_h = %d", screen_w, screen_h);
   for (int i = 0; i < ARRAY_SIZE(file_table); i++) {
-    if (strcmp(file_table[i].name, "/proc/dispinfo") == 0) {
-      file_table[i].read = dispinfo_read;
-      char init_dispinfo[50];
-      char read_dispinfo[50];
-      size_t init_dispinfo_len =
-          sprintf(init_dispinfo, "WIDTH :%d\nHEIGHT:%d", screen_w, screen_h);
-      ramdisk_write(init_dispinfo, file_table[i].disk_offset,
-                    init_dispinfo_len);
-      file_table[i].read(read_dispinfo, 0, 50);
-      Log("read_dispinfo = %s", read_dispinfo);
-      Log("dispinfo file has been set up");
-    }
     file_table[i].open_offset = 0;
   }
 }
