@@ -33,7 +33,7 @@
 #define OUT_OF_FUNCT 2
 
 #ifdef CONFIG_FTRACE_COND
-#define RET_SPECE_BUF_SIZE 4096
+#define RET_SPECE_BUF_SIZE 1024
 extern const void *string_table;
 extern const Elf32_Sym *symbol_table;
 extern Elf32_Word sym_tbl_nums;
@@ -338,7 +338,7 @@ static int decode_exec(Decode *s) {
     funct_name = find_funct_symbol(s->pc, &pos);
     printf("ret [%s]\n", funct_name);
     //     Log("ret_space_buf_ptr = %d", ret_space_buf_ptr);
-    Assert(ret_space_buf_ptr - 1 < RET_SPECE_BUF_SIZE,
+    Assert(ret_space_buf_ptr - 1 < 1024,
            "Assertion failed: Out of bound,ret_space_buf_ptr = %d",
            ret_space_buf_ptr);
     call_funct_times -= ret_space_buf[ret_space_buf_ptr - 1];
