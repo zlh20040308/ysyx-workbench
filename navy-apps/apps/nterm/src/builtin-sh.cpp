@@ -20,7 +20,9 @@ static void sh_banner() {
 
 static void sh_prompt() { sh_printf("sh> "); }
 
-static void sh_handle_cmd(const char *cmd) { execve(cmd, NULL, NULL); }
+static void sh_handle_cmd(const char *cmd) {
+  execve(cmd, NULL, NULL);
+}
 
 void builtin_sh_run() {
   sh_banner();
