@@ -116,7 +116,7 @@ void do_syscall(Context *c) {
 
   switch (a[0]) {
   case SYS_exit:
-    naive_uload(NULL, "/bin/menu");
+    naive_uload(NULL, "/bin/nterm");
     halt(c->GPR2);
     break;
   case SYS_yield:
