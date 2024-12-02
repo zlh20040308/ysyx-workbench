@@ -8,6 +8,8 @@ extern int screen_w;
 extern int screen_h;
 extern int canvas_w;
 extern int canvas_h;
+#define PIXEL_BUF_SIZE 120000
+static uint32_t pixel_buf[PIXEL_BUF_SIZE];
 
 void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst,
                      SDL_Rect *dstrect) {
@@ -28,34 +30,39 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst,
     fprintf(stderr, "Blit out of bounds\n");
     return;
   }
+  // typedef struct {
+  // 	SDL_Palette *palette;
+  // 	uint8_t BitsPerPixel;
+  // 	uint8_t BytesPerPixel;
+  // 	uint8_t Rloss, Gloss, Bloss, Aloss;
+  // 	uint8_t Rshift, Gshift, Bshift, Ashift;
+  // 	uint32_t Rmask, Gmask, Bmask, Amask;
+  // } SDL_PixelFormat;
+
+  // typedef struct {
+  // 	uint32_t flags;
+  // 	SDL_PixelFormat *format;
+  // 	int w, h;
+  // 	uint16_t pitch;
+  // 	uint8_t *pixels;
+  // } SDL_Surface;
+  printf("width = %d\n", width);
+  printf("pitch = %d\n", src->pitch);
+  printf("SDL_BlitSurface\n");
+  printf("BitsPerPixel = %d, BytesPerPixel = %d\n", src->format->BitsPerPixel,
+         src->format->BytesPerPixel);
+  printf("ncolors = %d\n", src->format->palette->ncolors);
+  for (int i = 0; i < src->format->palette->ncolors; ++i) {
+    printf("color[%d] = 0x%08x\n", i, src->format->palette->colors[i]);
+  }
+  printf("height = %d\n", height);
 
   // 复制像素数据
   for (int y = 0; y < height; ++y) {
     switch (src->format->BytesPerPixel) {
     case 1: // 8-bit paletted mode
-      memcpy((uint8_t *)dst->pixels + (dst_y + y) * dst->pitch + dst_x,
-             (uint8_t *)src->pixels + (src_y + y) * src->pitch + src_x,
-             width * sizeof(uint8_t));
-      break;
-    case 2: // 16-bit mode
-      memcpy((uint16_t *)dst->pixels + (dst_y + y) * (dst->pitch / 2) + dst_x,
-             (uint16_t *)src->pixels + (src_y + y) * (src->pitch / 2) + src_x,
-             width * sizeof(uint16_t));
-      break;
-    case 3: // 24-bit mode
-      // 24-bit mode is not directly supported by SDL, but we can handle it
-      // manually
-      uint8_t *src_pixel =
-          (uint8_t *)src->pixels + (src_y + y) * src->pitch + src_x * 3;
-      uint8_t *dst_pixel =
-          (uint8_t *)dst->pixels + (dst_y + y) * dst->pitch + dst_x * 3;
-      for (int x = 0; x < width; ++x) {
-        dst_pixel[0] = src_pixel[0]; // Blue
-        dst_pixel[1] = src_pixel[1]; // Green
-        dst_pixel[2] = src_pixel[2]; // Red
-        src_pixel += 3;
-        dst_pixel += 3;
-      }
+      memcpy(dst->pixels + (dst_y + y) * dst->pitch + dst_x,
+             src->pixels + (src_y + y) * src->pitch + src_x, width);
       break;
     case 4: // 32-bit mode
       memcpy((uint32_t *)dst->pixels + (dst_y + y) * (dst->pitch / 4) + dst_x,
@@ -86,26 +93,25 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
     return;
   }
 
+  uint8_t palette_index = -1;
+  if (dst->format->BytesPerPixel == 1) {
+    for (uint8_t k = 0; k < dst->format->palette->ncolors; ++k) {
+      if (dst->format->palette->colors[k].val == color) {
+        palette_index = k;
+        break;
+      }
+    }
+  }
+  if (palette_index == -1) {
+    assert(0);
+  }
+
   // 填充矩形区域
   for (int i = 0; i < height; ++i) {
     for (int j = 0; j < width; ++j) {
       switch (dst->format->BytesPerPixel) {
       case 1: // 8-bit paletted mode
-        ((uint8_t *)dst->pixels)[(y + i) * dst->pitch + (x + j)] =
-            (uint8_t)color;
-        break;
-      case 2: // 16-bit mode
-        ((uint16_t *)dst->pixels)[(y + i) * (dst->pitch / 2) + (x + j)] =
-            (uint16_t)color;
-        break;
-      case 3: // 24-bit mode
-        // 24-bit mode is not directly supported by SDL, but we can handle it
-        // manually
-        uint8_t *pixel =
-            (uint8_t *)dst->pixels + (y + i) * dst->pitch + (x + j) * 3;
-        pixel[0] = (color & 0x0000FF);       // Blue
-        pixel[1] = (color & 0x00FF00) >> 8;  // Green
-        pixel[2] = (color & 0xFF0000) >> 16; // Red
+        dst->pixels[(y + i) * dst->pitch + (x + j)] = palette_index;
         break;
       case 4: // 32-bit mode
         ((uint32_t *)dst->pixels)[(y + i) * (dst->pitch / 4) + (x + j)] = color;
@@ -121,7 +127,7 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
 // SDL_UpdateRect 函数
 void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
   // 更新屏幕上的矩形区域
-  // printf("x = %d, y = %d, w = %d, h = %d\n", x, y, w, h);
+  printf("x = %d, y = %d, w = %d, h = %d\n", x, y, w, h);
 
   if ((x | y | w | h) == 0) {
     w = canvas_w;
@@ -129,7 +135,24 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
   }
   // printf("x = %d, y = %d, w = %d, h = %d\n", x, y, w, h);
   // printf("BytesPerPixel = %d\n", s->format->BytesPerPixel);
-  NDL_DrawRect((uint32_t *)(s->pixels + y * s->w + x), x, y, w, h);
+  switch (s->format->BytesPerPixel) {
+  case 1: // 8-bit paletted mode
+    assert(w * h <= PIXEL_BUF_SIZE);
+    for (size_t i = 0; i < h; ++i) {
+      for (size_t j = 0; j < w; ++j) {
+        pixel_buf[i * w + j] =
+            s->format->palette->colors[s->pixels[i * w + j]].val;
+      }
+    }
+    NDL_DrawRect(pixel_buf, x, y, w, h);
+    break;
+  case 4: // 32-bit mode
+    NDL_DrawRect((uint32_t *)(s->pixels + y * s->w + x), x, y, w, h);
+    break;
+  default:
+    fprintf(stderr, "Unsupported pixel format: %d bytes per pixel\n",
+            s->format->BytesPerPixel);
+  }
 }
 
 // APIs below are already implemented.
