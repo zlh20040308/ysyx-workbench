@@ -7,6 +7,7 @@
 #define keyname(k) #k,
 
 static const char *keyname[] = {"NONE", _KEYS(keyname)};
+uint8_t keys_state[256];
 
 int SDL_PushEvent(SDL_Event *event) {
   printf("SDL_PushEvent Unimplement!\n");
@@ -15,7 +16,7 @@ int SDL_PushEvent(SDL_Event *event) {
 }
 
 int SDL_PollEvent(SDL_Event *event) {
-    char buf[30] = {0};
+  char buf[30] = {0};
 
   if (NDL_PollEvent(buf, sizeof(buf)) == 0) {
     return 0;
@@ -41,6 +42,7 @@ int SDL_PollEvent(SDL_Event *event) {
     printf("SDL_WaitEvent receive wrong event!\n");
     assert(0);
   }
+  keys_state[index] = buf[1] == 'd' ? 1 : 0;
   event->key.keysym.sym = index;
 
   return 1;
@@ -74,6 +76,7 @@ int SDL_WaitEvent(SDL_Event *event) {
     printf("SDL_WaitEvent receive wrong event!\n");
     assert(0);
   }
+  keys_state[index] = buf[1] == 'd' ? 1 : 0;
   event->key.keysym.sym = index;
 
   return 1;
@@ -86,7 +89,13 @@ int SDL_PeepEvents(SDL_Event *ev, int numevents, int action, uint32_t mask) {
 }
 
 uint8_t *SDL_GetKeyState(int *numkeys) {
-  printf("SDL_GetKeyState Unimplement!\n");
-  assert(0);
-  return NULL;
+  if (numkeys != NULL) {
+    for (int i = 0; i < 256; i++) {
+      if (keys_state > 0) {
+        (*numkeys)++;
+      }
+    }
+  }
+
+  return keys_state;
 }

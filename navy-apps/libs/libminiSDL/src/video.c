@@ -46,16 +46,16 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst,
   // 	uint16_t pitch;
   // 	uint8_t *pixels;
   // } SDL_Surface;
-  printf("width = %d\n", width);
-  printf("pitch = %d\n", src->pitch);
-  printf("SDL_BlitSurface\n");
-  printf("BitsPerPixel = %d, BytesPerPixel = %d\n", src->format->BitsPerPixel,
-         src->format->BytesPerPixel);
-  printf("ncolors = %d\n", src->format->palette->ncolors);
-  for (int i = 0; i < src->format->palette->ncolors; ++i) {
-    printf("color[%d] = 0x%08x\n", i, src->format->palette->colors[i]);
-  }
-  printf("height = %d\n", height);
+  // printf("width = %d\n", width);
+  // printf("pitch = %d\n", src->pitch);
+  // printf("SDL_BlitSurface\n");
+  // printf("BitsPerPixel = %d, BytesPerPixel = %d\n", src->format->BitsPerPixel,
+  //        src->format->BytesPerPixel);
+  // printf("ncolors = %d\n", src->format->palette->ncolors);
+  // for (int i = 0; i < src->format->palette->ncolors; ++i) {
+  //   printf("color[%d] = 0x%08x\n", i, src->format->palette->colors[i]);
+  // }
+  // printf("height = %d\n", height);
 
   // 复制像素数据
   for (int y = 0; y < height; ++y) {
