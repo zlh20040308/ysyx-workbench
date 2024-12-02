@@ -17,9 +17,6 @@ void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
 }
 
 void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
-  if (ctl->sync) {
-    outl(SYNC_ADDR, 1);
-  }
   uint32_t width = screen_size >> 16;
   volatile uint32_t *fb = (volatile uint32_t *)(uintptr_t)FB_ADDR;
   uint32_t *from = (uint32_t *)(uintptr_t)(ctl->pixels);
@@ -28,6 +25,9 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
     for (int j = 0; j < ctl->w; j++) {
       fb[width * (i + ctl->y) + ctl->x + j] = from[i * ctl->w + j];
     }
+  }
+  if (ctl->sync) {
+    outl(SYNC_ADDR, 1);
   }
 }
 
