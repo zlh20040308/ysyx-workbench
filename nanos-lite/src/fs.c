@@ -63,10 +63,10 @@ void init_fs() {
 int fs_open(const char *pathname, int flags, int mode) {
   // Log("pathname = %s", pathname);
   for (int i = 0; i < ARRAY_SIZE(file_table); i++) {
-    // Log("file_table[i].name = %s, pathname = %s", file_table[i].name,
-    // pathname);
+    // Log("file_table[i].name = %s, pathname = %s", file_table[i].name, pathname);
 
-    if (strcmp(file_table[i].name, pathname) == 0) {
+    if (strncmp(file_table[i].name, pathname, strlen(file_table[i].name)) ==
+        0) {
       file_table[i].open_offset = 0;
       return i;
     }

@@ -1,6 +1,7 @@
 #include "syscall.h"
 #include <common.h>
 #include <fs.h>
+#include <proc.h>
 #include <stdint.h>
 #include <stdio.h>
 
@@ -99,6 +100,8 @@ void print_syscall_info(Context *c) {
 }
 #endif
 
+extern void naive_uload(PCB *pcb, const char *filename);
+
 void do_syscall(Context *c) {
   uintptr_t a[4];
   a[0] = c->GPR1; // 系统调用号
@@ -113,6 +116,7 @@ void do_syscall(Context *c) {
 
   switch (a[0]) {
   case SYS_exit:
+    naive_uload(NULL, "/bin/nterm");
     halt(c->GPR2);
     break;
   case SYS_yield:
@@ -142,6 +146,10 @@ void do_syscall(Context *c) {
     struct timeval *tv = (struct timeval *)(c->GPR2);
     tv->tv_sec = upt.us / 1000000;
     tv->tv_usec = upt.us % 1000000;
+    break;
+  case SYS_execve:
+    naive_uload(NULL, (const char *)a[1]);
+    c->GPR2 = 0;
     break;
   default:
     panic("Unhandled syscall ID = %d", a[0]);
