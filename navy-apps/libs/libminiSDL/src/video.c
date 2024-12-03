@@ -101,8 +101,9 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
   printf("SDL_FillRect5\n");
   if (dst->format->BytesPerPixel == 1) {
     printf("ncolors = %d\n", dst->format->palette->ncolors);
-    for (uint8_t k = 0; k < dst->format->palette->ncolors; ++k) {
-      printf("k = %d\n", k);
+    assert(0);
+    for (uint16_t k = 0; k < dst->format->palette->ncolors; ++k) {
+      // printf("k = %d\n", k);
       if (dst->format->palette->colors[k].val == color) {
         palette_index = k;
         break;
