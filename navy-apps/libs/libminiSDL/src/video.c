@@ -108,6 +108,8 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
   if (palette_index == -1) {
     assert(0);
   }
+  printf("SDL_FillRect\n");
+
 
   // 填充矩形区域
   for (int i = 0; i < height; ++i) {
