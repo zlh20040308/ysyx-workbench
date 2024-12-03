@@ -19,23 +19,7 @@ int SDL_RemoveTimer(SDL_TimerID id) {
 }
 
 uint32_t SDL_GetTicks() {
-  // 确保 SDL 已经初始化
-  assert(init_time != 0);
-
-  // 获取当前时间
-  uint32_t current_time = NDL_GetTicks();
-
-  // 计算自 SDL 初始化以来的毫秒数
-  uint32_t elapsed_time = current_time - init_time;
-
-  // 处理可能的溢出情况
-  if (current_time < init_time) {
-    // 如果当前时间小于初始化时间，说明发生了回绕
-    // 这里假设回绕发生在 49.7 天（约 2^32 毫秒）之后
-    elapsed_time = (UINT32_MAX - init_time) + current_time + 1;
-  }
-
-  return elapsed_time;
+  return NDL_GetTicks();
 }
 
 void SDL_Delay(uint32_t ms) {
@@ -43,15 +27,5 @@ void SDL_Delay(uint32_t ms) {
     return;
   }
   uint32_t start_ticks = SDL_GetTicks();
-  uint32_t wait_time = ms;
-
-  while (1) {
-    uint32_t current_ticks = SDL_GetTicks();
-    uint32_t elapsed_ticks = current_ticks - start_ticks;
-
-    // 使用无符号整数比较
-    if (elapsed_ticks >= wait_time) {
-      return;
-    }
-  }
+  while (SDL_GetTicks() - start_ticks <= ms);
 }
