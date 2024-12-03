@@ -47,8 +47,6 @@ static size_t call_funct_times = 0;
 RET_SPECE_BUF_T ret_space_buf_list;
 
 int list_init() {
-  Log("list_init");
-  exit(1);
   ret_space_buf_list.ptr = NULL;
   return 0;
 }
