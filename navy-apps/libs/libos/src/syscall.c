@@ -1,10 +1,10 @@
 #include "syscall.h"
 #include <assert.h>
+#include <stdio.h>
 #include <sys/stat.h>
 #include <sys/time.h>
 #include <time.h>
 #include <unistd.h>
-#include <stdio.h>
 
 // helper macros
 #define _concat(x, y) x##y
@@ -60,9 +60,7 @@ intptr_t _syscall_(intptr_t type, intptr_t a0, intptr_t a1, intptr_t a2) {
   return ret;
 }
 
-void _exit(int status) {
-  _syscall_(SYS_exit, status, 0, 0);
-}
+void _exit(int status) { _syscall_(SYS_exit, status, 0, 0); }
 
 int _yield() { return _syscall_(SYS_yield, 0, 0, 0); }
 
@@ -107,7 +105,8 @@ off_t _lseek(int fd, off_t offset, int whence) {
 }
 
 int _gettimeofday(struct timeval *tv, struct timezone *tz) {
-  return _syscall_(SYS_gettimeofday, (intptr_t)tv, (intptr_t)tz, 0);
+  _syscall_(SYS_gettimeofday, (intptr_t)tv, (intptr_t)tz, 0);
+  return 0;
 }
 
 int _execve(const char *fname, char *const argv[], char *const envp[]) {
