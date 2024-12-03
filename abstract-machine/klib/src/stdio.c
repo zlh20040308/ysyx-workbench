@@ -8,29 +8,11 @@
 #define BUFFER_SIZE 4096
 static char buf[BUFFER_SIZE];
 
-static void write_hex(char *out, size_t *pos, size_t n, uintptr_t val,
-                      size_t *count) {
-  const char *hex_digits = "0123456789abcdef";
-  char buffer[16];
-  int i = 0;
+static void write_char(char *out, size_t *pos, size_t n, char c, size_t *count);
+static void write_string(char *out, size_t *pos, size_t n, const char *str, size_t *count);
+static void write_signed_decimal(char *out, size_t *pos, size_t n, int val, size_t *count);
+static void write_hexadecimal(char *out, size_t *pos, size_t n, unsigned int val, size_t *count);
 
-  if (val == 0) {
-    if (*pos < n)
-      out[(*pos)++] = '0';
-    (*count)++;
-    return;
-  }
-
-  while (val) {
-    buffer[i++] = hex_digits[val % 16];
-    val /= 16;
-  }
-  while (i--) {
-    if (*pos < n)
-      out[(*pos)++] = buffer[i];
-    (*count)++;
-  }
-}
 
 int printf(const char *fmt, ...) {
   va_list ap;
@@ -66,90 +48,104 @@ int snprintf(char *out, size_t n, const char *fmt, ...) {
 }
 
 int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
+  size_t pos = 0, count = 0;
   int format = 0;
-  size_t pos = 0;
-  size_t count = 0;
-  for (; *fmt; ++fmt) {
+
+  while (*fmt) {
     if (format) {
       switch (*fmt) {
-      case 'c': {
-        if (pos < n) {
-          out[pos++] = (char)va_arg(ap, int);
+        case 'c': { // %c
+          write_char(out, &pos, n, (char)va_arg(ap, int), &count);
+          break;
         }
-        ++count;
-        format = 0;
-        break;
-      }
-      case 's': {
-        const char *s2 = va_arg(ap, const char *);
-        while (*s2) {
-          if (pos < n) {
-            out[pos++] = *s2;
-            s2++;
-          }
-          ++count;
+        case 's': { // %s
+          write_string(out, &pos, n, va_arg(ap, const char *), &count);
+          break;
         }
-        format = 0;
-        break;
-      }
-      case 'd': {
-        int num = va_arg(ap, int);
-        if (num < 0) {
-          num = -num;
-          if (pos < n) {
-            out[pos++] = '-';
-          }
-          ++count;
+        case 'd': { // %d
+          write_signed_decimal(out, &pos, n, va_arg(ap, int), &count);
+          break;
         }
-        long digits = 1;
-        for (long nn = num; nn /= 10; digits++)
-          ;
-        for (int i = digits - 1; i >= 0; i--) {
-          if (pos + i < n) {
-            out[pos + i] = '0' + (num % 10);
-          }
-          num /= 10;
+        case 'x': { // %x
+          write_hexadecimal(out, &pos, n, va_arg(ap, unsigned int), &count);
+          break;
         }
-        pos += digits;
-        count += digits;
-        format = 0;
-        break;
+        case 'p': { // %p
+          write_string(out, &pos, n, "0x", &count);
+          write_hexadecimal(out, &pos, n, (uintptr_t)va_arg(ap, void *), &count);
+          break;
+        }
+        default: { // unknown
+          write_char(out, &pos, n, *fmt, &count);
+          break;
+        }
       }
-      case 'x': { // Handle %x
-        unsigned int num = va_arg(ap, unsigned int);
-        write_hex(out, &pos, n, num, &count);
-        format = 0;
-        break;
-      }
-      case 'p': { // Handle %p
-        uintptr_t ptr_val = (uintptr_t)va_arg(ap, void *);
-        if (pos < n)
-          out[pos++] = '0';
-        if (pos < n)
-          out[pos++] = 'x';
-        count += 2;
-        write_hex(out, &pos, n, ptr_val, &count);
-        format = 0;
-        break;
-      }
-      default:
-        break;
-      }
+      format = 0;
     } else if (*fmt == '%') {
       format = 1;
     } else {
-      if (pos < n) {
-        out[pos++] = *fmt;
-      }
-      ++count;
+      write_char(out, &pos, n, *fmt, &count);
     }
+    fmt++;
   }
 
   if (pos < n) {
-    out[pos] = '\0';
+    out[pos] = '\0'; 
+  } else if (n > 0) {
+    out[n - 1] = '\0'; 
   }
-  out[n - 1] = '\0';
   return count;
 }
+
+static void write_char(char *out, size_t *pos, size_t n, char c, size_t *count) {
+  if (*pos < n) {
+    out[(*pos)++] = c;
+  }
+  (*count)++;
+}
+
+static void write_string(char *out, size_t *pos, size_t n, const char *str, size_t *count) {
+  while (*str) {
+    write_char(out, pos, n, *str++, count);
+  }
+}
+
+static void write_signed_decimal(char *out, size_t *pos, size_t n, int val, size_t *count) {
+  if (val < 0) {
+    write_char(out, pos, n, '-', count);
+    val = -val;
+  }
+  char buffer[16];
+  int i = 0;
+  do {
+    buffer[i++] = '0' + val % 10;
+    val /= 10;
+  } while (val > 0);
+
+  while (i--) {
+    write_char(out, pos, n, buffer[i], count);
+  }
+}
+
+static void write_hexadecimal(char *out, size_t *pos, size_t n, unsigned int val, size_t *count) {
+  const char *hex_digits = "0123456789abcdef";
+  char buffer[16];
+  int i = 0;
+
+  if (val == 0) {
+    write_char(out, pos, n, '0', count);
+    return;
+  }
+
+  while (val > 0) {
+    buffer[i++] = hex_digits[val % 16];
+    val /= 16;
+  }
+
+  while (i--) {
+    write_char(out, pos, n, buffer[i], count);
+  }
+}
+
 
 #endif
