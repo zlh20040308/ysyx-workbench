@@ -49,7 +49,7 @@ int SDL_PollEvent(SDL_Event *event) {
 }
 
 int SDL_WaitEvent(SDL_Event *event) {
-  char buf[30] = {0};
+  char buf[400] = {0};
 
   while (NDL_PollEvent(buf, sizeof(buf)) == 0) {
   }
