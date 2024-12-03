@@ -5,10 +5,9 @@
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
 size_t strlen(const char *s) {
-  size_t i = 0;
-  while (s[i] != '\0')
-    ++i;
-  return i;
+  const char *p = s;
+  while (*p) ++p;
+  return p - s;
 }
 
 char *strcpy(char *dst, const char *src) {
@@ -22,58 +21,37 @@ char *strcpy(char *dst, const char *src) {
 
 char *strncpy(char *dst, const char *src, size_t n) {
   size_t i = 0;
-  for (; src[i] != '\0' && i < n; i++) {
+  for (; i < n && src[i] != '\0'; i++) {
     dst[i] = src[i];
   }
-  dst[i++] = '\0';
   for (; i < n; i++) {
     dst[i] = '\0';
   }
   return dst;
 }
 
+
 char *strcat(char *dst, const char *src) {
-  size_t dst_len = strlen(dst);
-  size_t src_len = strlen(src);
-  size_t i = 0;
-  for (; i < src_len; i++) {
-    dst[dst_len + i] = src[i];
-  }
-  dst[dst_len + i] = '\0';
+  char *d = dst + strlen(dst);
+  while ((*d++ = *src++));
   return dst;
 }
 
 int strcmp(const char *s1, const char *s2) {
-  for (size_t i = 0; s1[i] != '\0' && s2[i] != '\0'; i++) {
-    if (s1[i] < s2[i]) {
-      return -1;
-    }
-    if (s1[i] > s2[i]) {
-      return 1;
-    }
+  while (*s1 && (*s1 == *s2)) {
+    ++s1;
+    ++s2;
   }
-  size_t s1_len = strlen(s1);
-  size_t s2_len = strlen(s2);
-  if (s1_len < s2_len) {
-    return -1;
-  }
-  if (s1_len > s2_len) {
-    return 1;
-  }
-
-  return 0;
+  return *(unsigned char *)s1 - *(unsigned char *)s2;
 }
 
 int strncmp(const char *s1, const char *s2, size_t n) {
-  for (size_t i = 0; i < n; i++) {
-    if (s1[i] < s2[i]) {
-      return -1;
-    }
-    if (s1[i] > s2[i]) {
-      return 1;
-    }
+  while (n && *s1 && (*s1 == *s2)) {
+    ++s1;
+    ++s2;
+    --n;
   }
-  return 0;
+  return n == 0 ? 0 : (*(unsigned char *)s1 - *(unsigned char *)s2);
 }
 
 void *memset(void *s, int c, size_t n) {
@@ -89,17 +67,16 @@ void *memmove(void *dst, const void *src, size_t n) {
   const unsigned char *s = src;
 
   if (d < s) {
-    // 如果 dst 在 src 之前，直接从前往后复制
-    for (size_t i = 0; i < n; i++) {
-      d[i] = s[i];
+    while (n--) {
+      *d++ = *s++;
     }
   } else {
-    // 如果 dst 在 src 之后，反向复制以避免重叠
-    for (size_t i = n; i > 0; i--) {
-      d[i - 1] = s[i - 1];
+    d += n;
+    s += n;
+    while (n--) {
+      *--d = *--s;
     }
   }
-
   return dst;
 }
 
