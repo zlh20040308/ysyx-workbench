@@ -80,9 +80,8 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst,
 // SDL_FillRect 函数
 void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
   assert(dst);
-  assert(0);
-  printf("SDL_FillRect\n");
-  printf("SDL_FillRect\n");
+  printf("SDL_FillRect1\n");
+  printf("SDL_FillRect2\n");
 
 
   // 计算目标区域
@@ -90,17 +89,17 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
   int y = dstrect ? dstrect->y : 0;
   int width = dstrect ? dstrect->w : dst->w;
   int height = dstrect ? dstrect->h : dst->h;
-  printf("SDL_FillRect\n");
+  printf("SDL_FillRect3\n");
 
   // 确保目标区域在有效范围内
   if (x + width > dst->w || y + height > dst->h) {
     fprintf(stderr, "Fill out of bounds\n");
     return;
   }
-  printf("SDL_FillRect\n");
+  printf("SDL_FillRect4\n");
 
   uint8_t palette_index = -1;
-  printf("SDL_FillRect\n");
+  printf("SDL_FillRect5\n");
   if (dst->format->BytesPerPixel == 1) {
     for (uint8_t k = 0; k < dst->format->palette->ncolors; ++k) {
       if (dst->format->palette->colors[k].val == color) {
@@ -109,11 +108,11 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
       }
     }
   }
-  printf("SDL_FillRect\n");
+  printf("SDL_FillRect6\n");
   if (palette_index == -1) {
     assert(0);
   }
-  printf("SDL_FillRect\n");
+  printf("SDL_FillRect7\n");
 
 
   // 填充矩形区域
