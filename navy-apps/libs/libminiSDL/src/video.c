@@ -81,6 +81,8 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst,
 void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
   assert(dst);
   printf("SDL_FillRect\n");
+  printf("SDL_FillRect\n");
+
 
   // 计算目标区域
   int x = dstrect ? dstrect->x : 0;
@@ -110,6 +112,7 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
   // 填充矩形区域
   for (int i = 0; i < height; ++i) {
     for (int j = 0; j < width; ++j) {
+      printf("%d\n", j);
       switch (dst->format->BytesPerPixel) {
       case 1: // 8-bit paletted mode
         dst->pixels[(y + i) * dst->pitch + (x + j)] = palette_index;
