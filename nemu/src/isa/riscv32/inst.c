@@ -23,6 +23,8 @@
 #include <elf.h>
 #include <stddef.h>
 #include <stdint.h>
+#include <string.h>
+#include <time.h>
 
 #define R(i) gpr(i)
 #define CSRs(i) sr(i)
@@ -33,13 +35,58 @@
 #define OUT_OF_FUNCT 2
 
 #ifdef CONFIG_FTRACE_COND
+
 #define RET_SPECE_BUF_SIZE 1024
 extern const void *string_table;
 extern const Elf32_Sym *symbol_table;
 extern Elf32_Word sym_tbl_nums;
 static size_t call_funct_times = 0;
-static uint32_t ret_space_buf[RET_SPECE_BUF_SIZE] = {0};
-static uint32_t ret_space_buf_ptr = 0;
+
+RET_SPECE_BUF_T ret_space_buf_list;
+
+int list_init() {
+  ret_space_buf_list.ptr = NULL;
+  return 0;
+}
+int list_pop() {
+  if (ret_space_buf_list.ptr == NULL) {
+    return 0;
+  }
+  RET_SPECE_NODE *temp = ret_space_buf_list.ptr;
+  ret_space_buf_list.ptr = temp->ptr;
+  free(temp);
+  temp = NULL;
+  return 0;
+}
+int list_add(size_t i) {
+  RET_SPECE_NODE *node = malloc(sizeof(RET_SPECE_NODE));
+  node->num = i;
+  node->ptr = NULL;
+  if (ret_space_buf_list.ptr == NULL) {
+    ret_space_buf_list.ptr = node;
+  } else {
+    node->ptr = ret_space_buf_list.ptr;
+    ret_space_buf_list.ptr = node;
+  }
+  return 0;
+}
+int list_destroy(RET_SPECE_BUF_T *list) {
+  if (list->ptr == NULL) {
+    return 0;
+  }
+  RET_SPECE_NODE *current = list->ptr;
+  RET_SPECE_NODE *next;
+
+  while (current != NULL) {
+    next = current->ptr;
+    free(current);
+    current = next;
+  }
+
+  list->ptr = NULL;
+  return 0;
+}
+
 #endif
 
 extern const char *find_funct_symbol(uint32_t addr, char *pos);
@@ -331,40 +378,33 @@ static int decode_exec(Decode *s) {
   bool is_ret = INSTPAT_INST(s) == 0x00008067;
   char pos = 0;
   if (is_ret) {
+    Assert(ret_space_buf_list.ptr != NULL, "ret_space_buf_list.ptr is NULL!");
     printf(FMT_WORD ": ", s->pc);
     for (size_t i = 0; i < call_funct_times; i++) {
       printf("  ");
     }
     funct_name = find_funct_symbol(s->pc, &pos);
     printf("ret [%s]\n", funct_name);
-    //     Log("ret_space_buf_ptr = %d", ret_space_buf_ptr);
-    Assert(ret_space_buf_ptr - 1 < 1024,
-           "Assertion failed: Out of bound,ret_space_buf_ptr = %d",
-           ret_space_buf_ptr);
-    call_funct_times -= ret_space_buf[ret_space_buf_ptr - 1];
-    ret_space_buf[--ret_space_buf_ptr] = 0;
+    call_funct_times -= ret_space_buf_list.ptr->num;
+    list_pop();
   } else if (is_jal || is_jalr) {
     funct_name = find_funct_symbol(s->dnpc, &pos);
-    if (rd_type == 0) { // no ra
-      if (pos == FUNCT_HEAD) {
-        ret_space_buf[ret_space_buf_ptr - 1]++;
-        ++call_funct_times;
-        printf(FMT_WORD ": ", s->pc);
-        for (size_t i = 0; i < call_funct_times; i++) {
-          printf("  ");
-        }
-        printf("call [%s@" FMT_WORD "]\n", funct_name, s->dnpc);
+    if (rd_type == 0 && pos == FUNCT_HEAD) { // no ra
+      ret_space_buf_list.ptr->num++;
+      ++call_funct_times;
+      printf(FMT_WORD ": ", s->pc);
+      for (size_t i = 0; i < call_funct_times; i++) {
+        printf("  ");
       }
-    } else if (rd_type == 1) { // normal
-      if (pos == FUNCT_HEAD) {
-        ret_space_buf[ret_space_buf_ptr++]++;
-        ++call_funct_times;
-        printf(FMT_WORD ": ", s->pc);
-        for (size_t i = 0; i < call_funct_times; i++) {
-          printf("  ");
-        }
-        printf("call [%s@" FMT_WORD "]\n", funct_name, s->dnpc);
+      printf("call [%s@" FMT_WORD "]\n", funct_name, s->dnpc);
+    } else if (rd_type == 1 && pos == FUNCT_HEAD) { // normal
+      list_add(1);
+      ++call_funct_times;
+      printf(FMT_WORD ": ", s->pc);
+      for (size_t i = 0; i < call_funct_times; i++) {
+        printf("  ");
       }
+      printf("call [%s@" FMT_WORD "]\n", funct_name, s->dnpc);
     }
   }
 #endif

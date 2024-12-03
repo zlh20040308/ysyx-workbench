@@ -142,6 +142,7 @@ static int parse_args(int argc, char *argv[]) {
   return 0;
 }
 #ifdef CONFIG_FTRACE_COND
+extern int list_init();
 static long parse_elf() {
 
   if (elf_file == NULL) {
@@ -240,6 +241,7 @@ void init_monitor(int argc, char *argv[]) {
 
 #ifdef CONFIG_FTRACE_COND
   parse_elf();
+  list_init();
 #endif
 
   /* Initialize differential testing. */

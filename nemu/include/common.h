@@ -48,6 +48,19 @@ typedef MUXDEF(PMEM64, uint64_t, uint32_t) paddr_t;
 #define FMT_PADDR MUXDEF(PMEM64, "0x%016" PRIx64, "0x%08" PRIx32)
 typedef uint16_t ioaddr_t;
 
+#ifdef CONFIG_FTRACE_COND
+typedef struct RET_SPECE_NODE RET_SPECE_NODE;
+
+struct RET_SPECE_NODE {
+  size_t num;
+  RET_SPECE_NODE *ptr;
+};
+
+typedef struct {
+  RET_SPECE_NODE *ptr;
+} RET_SPECE_BUF_T;
+#endif
+
 #include <debug.h>
 
 #endif

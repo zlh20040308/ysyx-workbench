@@ -2,13 +2,13 @@
  * Copyright (c) 2014-2022 Zihao Yu, Nanjing University
  *
  * NEMU is licensed under Mulan PSL v2.
- * You can use this software according to the terms and conditions of the Mulan PSL v2.
- * You may obtain a copy of Mulan PSL v2 at:
+ * You can use this software according to the terms and conditions of the Mulan
+ *PSL v2. You may obtain a copy of Mulan PSL v2 at:
  *          http://license.coscl.org.cn/MulanPSL2
  *
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
- * EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
- * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY
+ *KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
+ *NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
  *
  * See the Mulan PSL v2 for more details.
  ***************************************************************************************/
@@ -27,13 +27,16 @@
 // #define BUFFER_SIZE 5
 #define BUFFER_SIZE 200
 
+#ifdef CONFIG_FTRACE_COND
+extern int list_destroy(RET_SPECE_BUF_T *list);
+#endif
+
 CPU_state cpu = {};
 uint64_t g_nr_guest_inst = 0;
 static uint64_t g_timer = 0; // unit: us
 static bool g_print_step = false;
 
-typedef struct
-{
+typedef struct {
   char buffer[BUFFER_SIZE][128];
   int read_index;
   int write_index;
@@ -43,35 +46,28 @@ typedef struct
 static IRB iringbuf;
 
 // 初始化缓冲区
-void init_iringbuf()
-{
+void init_iringbuf() {
   iringbuf.read_index = 0;
   iringbuf.write_index = 0;
   iringbuf.size = 0;
 }
 
 // 写入数据
-void write_iringbuf(const char *data)
-{
+void write_iringbuf(const char *data) {
   memcpy(iringbuf.buffer[iringbuf.write_index], data, 128);
   iringbuf.write_index = (iringbuf.write_index + 1) % BUFFER_SIZE;
 
-  if (iringbuf.size < BUFFER_SIZE)
-  {
+  if (iringbuf.size < BUFFER_SIZE) {
     iringbuf.size++;
-  }
-  else
-  {
+  } else {
     // 如果缓冲区已满，移动读指针
     iringbuf.read_index = (iringbuf.read_index + 1) % BUFFER_SIZE;
   }
 }
 
 // 读取数据
-bool read_iringbuf(char *data)
-{
-  if (iringbuf.size == 0)
-  {
+bool read_iringbuf(char *data) {
+  if (iringbuf.size == 0) {
     // 缓冲区为空
     return false;
   }
@@ -82,17 +78,14 @@ bool read_iringbuf(char *data)
 }
 
 // 遍历缓冲区数据
-void traverse_iringbuf()
-{
-  if (iringbuf.size == 0)
-  {
+void traverse_iringbuf() {
+  if (iringbuf.size == 0) {
     Log("iringbuf is empty\n");
     return;
   }
 
   int index = iringbuf.read_index;
-  for (int i = 0; i < iringbuf.size; i++)
-  {
+  for (int i = 0; i < iringbuf.size; i++) {
     Log("%s\n", iringbuf.buffer[(index + i) % BUFFER_SIZE]);
   }
 }
@@ -101,31 +94,26 @@ void device_update();
 
 extern bool traverse_watchpoints_and_show_changes();
 
-static void trace_and_difftest(Decode *_this, vaddr_t dnpc)
-{
+static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 #ifdef CONFIG_ITRACE_COND
-  if (ITRACE_COND)
-  {
+  if (ITRACE_COND) {
     log_write("%s\n", _this->logbuf);
     write_iringbuf(_this->logbuf);
   }
 #endif
-  if (g_print_step)
-  {
+  if (g_print_step) {
     IFDEF(CONFIG_ITRACE, puts(_this->logbuf));
   }
   IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));
 #ifdef CONFIG_WATCHPOINT
   bool is_change = traverse_watchpoints_and_show_changes();
-  if (is_change)
-  {
+  if (is_change) {
     nemu_state.state = NEMU_STOP;
   }
 #endif
 }
 
-static void exec_once(Decode *s, vaddr_t pc)
-{
+static void exec_once(Decode *s, vaddr_t pc) {
   s->pc = pc;
   s->snpc = pc;
   isa_exec_once(s);
@@ -137,8 +125,7 @@ static void exec_once(Decode *s, vaddr_t pc)
   int ilen = s->snpc - s->pc;
   int i;
   uint8_t *inst = (uint8_t *)&s->isa.inst.val;
-  for (i = ilen - 1; i >= 0; i--)
-  {
+  for (i = ilen - 1; i >= 0; i--) {
     p += snprintf(p, 4, " %02x", inst[i]);
   }
   int ilen_max = MUXDEF(CONFIG_ISA_x86, 8, 4);
@@ -153,7 +140,8 @@ static void exec_once(Decode *s, vaddr_t pc)
   void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
 
   disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
-              MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
+              MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc),
+              (uint8_t *)&s->isa.inst.val, ilen);
   // Log("%s", s->logbuf);
 
 #else
@@ -162,11 +150,9 @@ static void exec_once(Decode *s, vaddr_t pc)
 #endif
 }
 
-static void execute(uint64_t n)
-{
+static void execute(uint64_t n) {
   Decode s;
-  for (; n > 0; n--)
-  {
+  for (; n > 0; n--) {
     exec_once(&s, cpu.pc);
     g_nr_guest_inst++;
     trace_and_difftest(&s, cpu.pc);
@@ -176,20 +162,20 @@ static void execute(uint64_t n)
   }
 }
 
-static void statistic()
-{
+static void statistic() {
   IFNDEF(CONFIG_TARGET_AM, setlocale(LC_NUMERIC, ""));
 #define NUMBERIC_FMT MUXDEF(CONFIG_TARGET_AM, "%", "%'") PRIu64
   Log("host time spent = " NUMBERIC_FMT " us", g_timer);
   Log("total guest instructions = " NUMBERIC_FMT, g_nr_guest_inst);
   if (g_timer > 0)
-    Log("simulation frequency = " NUMBERIC_FMT " inst/s", g_nr_guest_inst * 1000000 / g_timer);
+    Log("simulation frequency = " NUMBERIC_FMT " inst/s",
+        g_nr_guest_inst * 1000000 / g_timer);
   else
-    Log("Finish running in less than 1 us and can not calculate the simulation frequency");
+    Log("Finish running in less than 1 us and can not calculate the simulation "
+        "frequency");
 }
 
-void assert_fail_msg()
-{
+void assert_fail_msg() {
   isa_reg_display();
   statistic();
 }
@@ -197,11 +183,11 @@ void assert_fail_msg()
 /* Simulate how the CPU works. */
 void cpu_exec(uint64_t n) {
   g_print_step = (n < MAX_INST_TO_PRINT);
-  switch (nemu_state.state)
-  {
+  switch (nemu_state.state) {
   case NEMU_END:
   case NEMU_ABORT:
-    printf("Program execution has ended. To restart the program, exit NEMU and run again.\n");
+    printf("Program execution has ended. To restart the program, exit NEMU and "
+           "run again.\n");
     return;
   default:
     nemu_state.state = NEMU_RUNNING;
@@ -214,17 +200,20 @@ void cpu_exec(uint64_t n) {
   uint64_t timer_end = get_time();
   g_timer += timer_end - timer_start;
 
-  switch (nemu_state.state)
-  {
+  switch (nemu_state.state) {
   case NEMU_RUNNING:
     nemu_state.state = NEMU_STOP;
     break;
   case NEMU_END:
   case NEMU_ABORT:
     Log("nemu: %s at pc = " FMT_WORD,
-        (nemu_state.state == NEMU_ABORT ? ANSI_FMT("ABORT", ANSI_FG_RED) : (nemu_state.halt_ret == 0 ? ANSI_FMT("HIT GOOD TRAP", ANSI_FG_GREEN) : ANSI_FMT("HIT BAD TRAP", ANSI_FG_RED))),
+        (nemu_state.state == NEMU_ABORT
+             ? ANSI_FMT("ABORT", ANSI_FG_RED)
+             : (nemu_state.halt_ret == 0
+                    ? ANSI_FMT("HIT GOOD TRAP", ANSI_FG_GREEN)
+                    : ANSI_FMT("HIT BAD TRAP", ANSI_FG_RED))),
         nemu_state.halt_pc);
-#ifdef CONFIG_ITRACE_COND 
+#ifdef CONFIG_ITRACE_COND
     traverse_iringbuf();
 #endif
     // fall through
