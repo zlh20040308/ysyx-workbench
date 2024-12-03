@@ -80,7 +80,6 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst,
 // SDL_FillRect 函数
 void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
   assert(dst);
-  printf("SDL_FillRect\n");
 
   // 计算目标区域
   int x = dstrect ? dstrect->x : 0;
@@ -96,7 +95,8 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
 
   uint8_t palette_index = -1;
   if (dst->format->BytesPerPixel == 1) {
-    for (uint8_t k = 0; k < dst->format->palette->ncolors; ++k) {
+    for (int k = 0; k < dst->format->palette->ncolors; ++k) {
+      // printf("k = %d\n", k);
       if (dst->format->palette->colors[k].val == color) {
         palette_index = k;
         break;

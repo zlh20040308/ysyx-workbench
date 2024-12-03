@@ -16,12 +16,14 @@ int SDL_PushEvent(SDL_Event *event) {
 }
 
 int SDL_PollEvent(SDL_Event *event) {
-  char buf[30] = {0};
+  char buf[400];
 
   if (NDL_PollEvent(buf, sizeof(buf)) == 0) {
+    event->type = SDL_KEYUP;
+    event->key.keysym.sym = SDLK_NONE;
     return 0;
   }
-  for (size_t i = 0; i < 30; ++i) {
+  for (size_t i = 0; i < 400; ++i) {
     if (buf[i] == '\n') {
       buf[i] = '\0';
       break;
@@ -49,36 +51,7 @@ int SDL_PollEvent(SDL_Event *event) {
 }
 
 int SDL_WaitEvent(SDL_Event *event) {
-  char buf[30] = {0};
-
-  while (NDL_PollEvent(buf, sizeof(buf)) == 0) {
-  }
-  printf("%s\n", buf);
-  for (size_t i = 0; i < 30; ++i) {
-    if (buf[i] == '\n') {
-      buf[i] = '\0';
-      break;
-    }
-  }
-
-  event->type = buf[1] == 'd' ? SDL_KEYDOWN : SDL_KEYUP;
-  char *key = buf + 3;
-  printf("key = %s\n", key);
-  bool success = false;
-  size_t index;
-  for (index = 0; index < ARRAY_SIZE(keyname); ++index) {
-    if (strcmp(key, keyname[index]) == 0) {
-      success = true;
-      break;
-    }
-  }
-  if (!success) {
-    printf("SDL_WaitEvent receive wrong event!\n");
-    assert(0);
-  }
-  keys_state[index] = buf[1] == 'd' ? 1 : 0;
-  event->key.keysym.sym = index;
-
+  while (SDL_PollEvent(event) == 0);
   return 1;
 }
 
