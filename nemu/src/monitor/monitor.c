@@ -192,6 +192,7 @@ static long parse_elf() {
   return size;
 }
 
+
 const char *find_funct_symbol(uint32_t addr, char *pos) {
   *pos = OUT_OF_FUNCT;
   for (size_t i = 0; i < sym_tbl_nums; i++) {
@@ -240,7 +241,7 @@ void init_monitor(int argc, char *argv[]) {
 
 #ifdef CONFIG_FTRACE_COND
   parse_elf();
-  int list_init();
+  list_init();
 #endif
 
   /* Initialize differential testing. */
