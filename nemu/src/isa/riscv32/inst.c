@@ -435,7 +435,7 @@ static int decode_exec(Decode *s) {
     funct_name = find_funct_symbol(s->dnpc, &pos);
     if (rd_type == 0 && pos == FUNCT_HEAD) { // no ra
       // ret_space_buf[ret_space_buf_ptr - 1]++;
-      ret_space_buf_list.ptr->ptr->num++;
+      ret_space_buf_list.ptr->num++;
       ++call_funct_times;
       printf(FMT_WORD ": ", s->pc);
       for (size_t i = 0; i < call_funct_times; i++) {
