@@ -123,6 +123,8 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
       }
     }
   }
+  printf("SDL_FillRect out\n");
+
 }
 
 // SDL_UpdateRect 函数
