@@ -122,7 +122,7 @@ static int cmd_p(char *args)
   }
   bool success = true;
   word_t val_expr = expr(args, &success);
-  Log("success = %d\n", success);
+  Log("success = %d", success);
   if (success)
   {
     printf("0x%08x\n", val_expr);
