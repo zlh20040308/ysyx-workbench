@@ -160,7 +160,7 @@ static bool make_token(char *e)
 
         if (nr_token == EXPR_LENGTH)
         {
-          printf("Your expersion is too long!\n");
+          printf("Your expresion is too long!\n");
           return false;
         }
 
