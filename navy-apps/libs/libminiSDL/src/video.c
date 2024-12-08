@@ -1,6 +1,7 @@
 #include <NDL.h>
 #include <assert.h>
 #include <sdl-video.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -93,18 +94,27 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
     return;
   }
 
-  uint8_t palette_index = -1;
+  uint8_t palette_index = 0;
   if (dst->format->BytesPerPixel == 1) {
+    bool found = false;
+    SDL_Color clr;
+    clr.a = (color >> 24) & 0xFF;
+    clr.r = (color >> 16) & 0xFF;
+    clr.g = (color >> 8) & 0xFF;
+    clr.b = color & 0xFF;
     for (int k = 0; k < dst->format->palette->ncolors; ++k) {
-      // printf("k = %d\n", k);
-      if (dst->format->palette->colors[k].val == color) {
-        palette_index = k;
+      if (dst->format->palette->colors[k].r == clr.r &&
+          dst->format->palette->colors[k].g == clr.g &&
+          dst->format->palette->colors[k].b == clr.b &&
+          dst->format->palette->colors[k].a == clr.a) {
+        palette_index = (uint8_t)k;
+        found = true;
         break;
       }
     }
-  }
-  if (palette_index == -1) {
-    assert(0);
+    if (!found) {
+      return;
+    }
   }
 
   // 填充矩形区域
